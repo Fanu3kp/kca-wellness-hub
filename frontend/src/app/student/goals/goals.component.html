@@ -1,0 +1,33 @@
+<section class="goals-page">
+  <div class="goals-hero">
+    <div><span class="eyebrow light">OUR DIRECTION</span><h1>Vision, mission and goals.</h1><p>The Peer Counselling, Guidance and Counselling programme exists to make support visible, approachable and available across every KCA campus.</p></div>
+    <app-badge tone="calm">Student wellbeing</app-badge>
+  </div>
+
+  <div class="purpose-grid">
+    @for (item of purpose; track item.id) {
+      <app-card class="purpose-card" [style.--purpose-accent]="item.tone === 'teal' ? '#147d64' : '#6748a8'">
+        <span class="purpose-icon"><app-ui-icon [name]="item.icon" /></span>
+        <div><span class="eyebrow">{{ item.eyebrow }}</span><h2>{{ item.title }}</h2><p>{{ item.text }}</p></div>
+      </app-card>
+    }
+  </div>
+
+  <section class="goals-section">
+    <div class="goals-section-heading"><div><span class="eyebrow">WHAT WE ARE BUILDING</span><h2>Goals for peer and professional support</h2><p>Our work combines student connection with confidential professional care, so every student can find the right next step.</p></div></div>
+    <div class="counselling-grid">
+      @for (area of counsellingAreas; track area.title) {
+        <app-card class="counselling-card" [style.--counselling-accent]="area.tone === 'teal' ? '#147d64' : '#6748a8'">
+          <div class="counselling-card-head"><span class="counselling-icon"><app-ui-icon [name]="area.icon" /></span><div><h3>{{ area.title }}</h3><p>{{ area.subtitle }}</p></div></div>
+          <ul class="goal-list">
+            @for (goal of area.goals; track goal) {
+              <li><app-ui-icon name="check" /><span>{{ goal }}</span></li>
+            }
+          </ul>
+        </app-card>
+      }
+    </div>
+  </section>
+
+  <section class="commitment-band"><div><app-ui-icon name="shield" /><div><strong>Private, respectful and student-focused</strong><span>Peer support listens and refers. Guidance and Counselling provides professional care within clear confidentiality boundaries.</span></div></div><a class="button button-light" routerLink="/student/quick-help">Find the right support <app-ui-icon name="arrow" /></a></section>
+</section>

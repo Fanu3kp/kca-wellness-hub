@@ -1,0 +1,46 @@
+.feature-page { margin: 0 auto; max-width: 1240px; padding: 4rem 1.25rem 5rem; }
+.feature-heading { align-items: end; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 2.2rem; }
+.feature-heading h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.05; margin: 0; max-width: 680px; }
+.feature-heading p { color: var(--muted); line-height: 1.6; margin: 0; max-width: 650px; }
+.eyebrow { color: var(--brand); display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; }
+.quick-help-layout { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+.concern-panel, .recommendation-panel { background: white; border: 1px solid var(--line); border-radius: 18px; padding: 1.3rem; }
+.panel-heading h2, .recommendation-heading h2 { font-size: 1.25rem; margin: 0; }
+.panel-heading p { color: var(--muted); font-size: .8rem; margin: .35rem 0 1rem; }
+.concern-grid { display: grid; gap: .5rem; }
+.concern-grid button { align-items: center; background: #f8f6f0; border: 1px solid #e0ddd0; border-radius: 10px; color: #0A1F44; cursor: pointer; display: flex; font-size: .8rem; font-weight: 750; justify-content: space-between; min-height: 44px; padding: .6rem .75rem; text-align: left; }
+.concern-grid button:hover, .concern-grid button.selected { background: #f5f2e8; border-color: #a0aab5; color: var(--brand-dark); }
+.concern-grid svg { height: .85rem; width: .85rem; opacity: .6; }
+.recommendation-heading { align-items: flex-start; display: flex; justify-content: space-between; }
+.reset-link { background: transparent; border: 0; color: var(--brand); cursor: pointer; font-size: .75rem; font-weight: 850; padding: .25rem; }
+.recommendation-list { display: grid; gap: .65rem; margin-top: 1rem; }
+.recommendation-card { align-items: center; background: #f8f6f0; border: 1px solid #e0ddd0; border-radius: 13px; display: grid; gap: .7rem; grid-template-columns: auto 1fr auto; padding: .8rem; text-decoration: none; }
+.recommendation-card:hover { border-color: #a0aab5; }
+.recommendation-card.urgent { background: #faf5ed; border-color: #e8c8c0; }
+.recommendation-icon { align-items: center; background: #f5f2e8; border-radius: 10px; color: var(--brand); display: flex; height: 38px; justify-content: center; width: 38px; }
+.urgent .recommendation-icon { background: #f5ede5; color: var(--danger); }
+.recommendation-icon svg { height: 1.1rem; width: 1.1rem; }
+.recommendation-card strong { display: block; font-size: .83rem; }
+.recommendation-card p { color: var(--muted); font-size: .72rem; line-height: 1.4; margin: .25rem 0 0; }
+.recommendation-card > svg { color: var(--brand); height: .9rem; width: .9rem; }
+.empty-prompt { align-items: center; color: var(--muted); display: flex; flex-direction: column; justify-content: center; min-height: 300px; text-align: center; }
+.empty-prompt svg { color: var(--brand); height: 2rem; margin-bottom: .8rem; width: 2rem; }
+.empty-prompt h2 { color: var(--ink); font-size: 1.2rem; margin: 0; }
+.empty-prompt p { font-size: .8rem; line-height: 1.5; margin: .4rem 0 0; max-width: 260px; }
+.unsure-section { align-items: center; background: #f5f2e8; border-radius: 20px; display: grid; gap: 2rem; grid-template-columns: .8fr 1.2fr; margin-top: 1.25rem; padding: 1.5rem; }
+.unsure-copy h2 { font-size: 1.6rem; margin: 0; }
+.unsure-copy p { color: var(--muted); line-height: 1.5; }
+.button { align-items: center; background: var(--brand); border: 0; border-radius: 11px; color: white; cursor: pointer; display: inline-flex; font-weight: 850; gap: .45rem; justify-content: center; min-height: 44px; padding: .65rem .9rem; }
+.button svg { height: 1rem; width: 1rem; }
+.button-quiet { background: white; color: var(--brand-dark); box-shadow: inset 0 0 0 1px #c9c9c0; }
+.unsure-card { background: white; border-radius: 15px; padding: 1.1rem; }
+.unsure-progress { background: #e0ddd0; border-radius: 999px; height: 7px; overflow: hidden; }
+.unsure-progress span { background: var(--brand); border-radius: inherit; display: block; height: 100%; transition: width .2s ease; }
+.question-count { color: var(--brand); font-size: .68rem; font-weight: 900; margin: 1rem 0 .4rem; text-transform: uppercase; }
+.unsure-card h3 { font-size: 1.15rem; margin-bottom: 1rem; }
+.unsure-options { display: grid; gap: .5rem; }
+.unsure-options button { background: #f8f6f0; border: 1px solid #e0ddd0; border-radius: 10px; color: #0A1F44; cursor: pointer; font-size: .8rem; font-weight: 750; min-height: 42px; padding: .55rem .75rem; text-align: left; }
+.unsure-options button:hover { background: #f5f2e8; border-color: #a0aab5; }
+.unsure-actions { display: flex; justify-content: flex-end; margin-top: 1rem; }
+@media (max-width: 850px) { .quick-help-layout, .unsure-section { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .feature-page { padding: 2.5rem .85rem 4rem; } .feature-heading { align-items: flex-start; flex-direction: column; } .concern-panel, .recommendation-panel { padding: 1rem; } }

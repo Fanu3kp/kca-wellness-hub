@@ -1,0 +1,78 @@
+<section class="campus-detail" *ngIf="campus as campus">
+  <div class="campus-hero" [style.--campus-accent]="campus.accent">
+    <div class="campus-hero-inner">
+      <div>
+        <span class="eyebrow">CAMPUS PROFILE</span>
+        <h1>{{ campus.name }}</h1>
+        <p>{{ campus.description }}</p>
+        <app-badge tone="calm">{{ supportLabel }}</app-badge>
+      </div>
+      <div class="campus-hero-meta">
+        <div><app-ui-icon name="home" /><span>{{ campus.location }}</span></div>
+        <div><app-ui-icon name="phone" /><span>{{ campus.phone }}</span></div>
+        <div><app-ui-icon name="mail" /><span>{{ campus.email }}</span></div>
+        <div><app-ui-icon name="clock" /><span>Mon–Fri, 9:00–16:00 EAT</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="campus-sections">
+    <section class="campus-features">
+      <div class="mini-heading"><div><span class="eyebrow">CAMPUS FEATURES</span><h2>Support options at {{ campus.shortName }}</h2></div></div>
+      <div class="feature-grid">
+        @if (campus.physicalSupport) {
+          <app-card class="feature-card" [style.--campus-accent]="campus.accent">
+            <span class="feature-icon"><app-ui-icon name="home" /></span>
+            <div><h3>Physical support</h3><p>Visit the {{ campus.shortName }} support point for in-person peer and professional wellbeing services.</p></div>
+            <a class="feature-link" [routerLink]="['/campuses', campus.id, 'events']">View campus events <app-ui-icon name="arrow" /></a>
+          </app-card>
+        }
+        @if (campus.virtualSupport) {
+          <app-card class="feature-card" [style.--campus-accent]="campus.accent">
+            <span class="feature-icon"><app-ui-icon name="video" /></span>
+            <div><h3>Virtual support</h3><p>Join secure online counselling, group activities and wellbeing sessions from anywhere.</p></div>
+            <a class="feature-link" routerLink="/virtual-support">Access virtual support <app-ui-icon name="arrow" /></a>
+          </app-card>
+        }
+      </div>
+    </section>
+
+    <div class="campus-grid">
+      <section>
+        <div class="mini-heading"><div><span class="eyebrow">PEER COUNSELORS</span><h2>Trained student listeners</h2></div><a routerLink="/student/peer-counselors">View all <app-ui-icon name="arrow" /></a></div>
+        <app-card [compact]="true"><p>Trained peer counselors at {{ campus.shortName }} offer listening, encouragement, and referrals. They do not diagnose or replace professional care.</p><button type="button" class="button button-primary button-block" routerLink="/student/peer-counselors">Find a peer counselor <app-ui-icon name="arrow" /></button></app-card>
+      </section>
+      <section>
+        <div class="mini-heading"><div><span class="eyebrow">PROFESSIONAL SUPPORT</span><h2>Guidance &amp; Counselling</h2></div><a routerLink="/guidance">View staff <app-ui-icon name="arrow" /></a></div>
+        <app-card [compact]="true"><p>Professional counselling, supervision, and care coordination at {{ campus.shortName }}. Confidential support from trained staff.</p><button type="button" class="button button-secondary button-block" routerLink="/guidance">View professional staff <app-ui-icon name="arrow" /></button></app-card>
+      </section>
+    </div>
+
+    <section class="campus-events">
+      <div class="mini-heading"><div><span class="eyebrow">UPCOMING EVENTS</span><h2>Wellness activities</h2></div><a [routerLink]="['/student/challenges']">Join campus challenges <app-ui-icon name="arrow" /></a></div>
+      @for (event of events; track event.id) {
+        <app-card [compact]="true" class="event-card">
+          <span class="event-date" [class.purple]="event.tone === 'purple'" [class.orange]="event.tone === 'orange'" [class.neutral]="event.tone === 'neutral'"><strong>{{ event.day }}</strong><small>{{ event.month }}</small></span>
+          <div><h3>{{ event.title }}</h3><p>{{ campus.shortName }} · {{ event.time }}</p><small><app-badge [tone]="event.mode === 'virtual' ? 'peer' : 'neutral'">{{ event.mode }}</app-badge> {{ event.type === 'Upcoming' ? 'Open to all students' : 'Past event' }}</small></div>
+          @if (event.mode === 'virtual' && event.externalUrl) { <a class="event-card-link" [href]="event.externalUrl" target="_blank" rel="noopener noreferrer">Join online <app-ui-icon name="external" /></a> }
+        </app-card>
+      } @empty {
+        <app-card [compact]="true"><p>No upcoming events at this campus. Check back soon or explore events across all campuses.</p></app-card>
+      }
+    </section>
+
+    <section class="campus-resources">
+      <div class="mini-heading"><div><span class="eyebrow">WELLNESS RESOURCES</span><h2>Learn at your own pace</h2></div><a routerLink="/student/resources">All resources <app-ui-icon name="arrow" /></a></div>
+      <div class="resource-grid">
+        @for (resource of resources; track resource.title) {
+          <app-card [compact]="true" class="resource-card">
+            <app-badge tone="calm">{{ resource.category }}</app-badge>
+            <h3>{{ resource.title }}</h3>
+            <p>{{ resource.summary }}</p>
+            <small><app-ui-icon name="clock" /> {{ resource.duration }}</small>
+          </app-card>
+        }
+      </div>
+    </section>
+  </div>
+</section>

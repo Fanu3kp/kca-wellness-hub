@@ -1,0 +1,31 @@
+<section class="favorites-page">
+  <div class="favorites-hero"><div><span class="eyebrow light">MY READING LIST</span><h1>Saved for a quieter moment.</h1><p>Keep useful wellness resources close by and mark each one as read when it feels helpful.</p></div><app-badge tone="calm">{{ favorites.length }} saved</app-badge></div>
+
+  @if (error) { <p class="favorites-error"><app-ui-icon name="alert" /> {{ error }}</p> }
+  @if (loading) { <p class="favorites-loading"><span class="spinner"></span> Loading your reading list...</p> }
+
+  @if (!loading && !error) {
+    <div class="favorites-summary">
+      <div><span class="summary-icon teal"><app-ui-icon name="bookmark" /></span><div><strong>{{ favorites.length }}</strong><small>saved resources</small></div></div>
+      <div><span class="summary-icon purple"><app-ui-icon name="check" /></span><div><strong>{{ readCount }}</strong><small>marked as read</small></div></div>
+      <a class="summary-link" routerLink="/student/resources">Browse the library <app-ui-icon name="arrow" /></a>
+    </div>
+
+    @if (favorites.length) {
+      <div class="favorites-grid">
+        @for (resource of favorites; track resource.id) {
+          <app-card class="favorite-card" [style.--favorite-accent]="resource.format === 'video' ? '#c9822b' : resource.format === 'audio' ? '#6748a8' : '#147d64'">
+            <div class="favorite-card-top"><span class="favorite-format"><app-ui-icon [name]="formatIcon(resource)" /></span><button type="button" class="favorite-remove" [attr.aria-label]="'Remove ' + resource.title" (click)="toggleFavorite(resource)"><app-ui-icon name="close" /></button></div>
+            <app-badge tone="calm">{{ resource.category }}</app-badge>
+            <h2>{{ resource.title }}</h2>
+            <p>{{ resource.summary }}</p>
+            <div class="favorite-meta"><span><app-ui-icon name="clock" /> {{ resource.duration }}</span><app-badge [tone]="resourceState.isRead(resource.id) ? 'calm' : 'neutral'">{{ resourceState.isRead(resource.id) ? 'Read' : 'Unread' }}</app-badge></div>
+            <div class="favorite-actions"><a class="button button-primary" [routerLink]="['/student/resources', resource.id]">Open resource <app-ui-icon name="arrow" /></a><button type="button" class="button button-secondary" [disabled]="resourceState.isRead(resource.id)" (click)="markRead(resource)"><app-ui-icon name="check" /> Mark read</button></div>
+          </app-card>
+        }
+      </div>
+    } @else {
+      <app-empty-state icon="bookmark" title="Your reading list is empty" message="Save a resource from the wellness library and it will appear here."></app-empty-state>
+    }
+  }
+</section>

@@ -1,0 +1,5 @@
+.bottom-nav { background: rgba(255,255,255,.97); border-top: 1px solid #e0ddd0; bottom: 0; display: none; left: 0; padding: .3rem .4rem calc(.3rem + env(safe-area-inset-bottom)); position: fixed; right: 0; z-index: 25; backdrop-filter: blur(14px); }
+.bottom-nav a { align-items: center; border-radius: 10px; color: #6b7b8d; display: flex; flex-direction: column; font-size: .67rem; font-weight: 800; gap: .2rem; justify-content: center; min-height: 48px; text-decoration: none; }
+.bottom-nav a.active, .bottom-nav a:hover { color: #0A1F44; }
+.bottom-nav svg { height: 1.25rem; width: 1.25rem; }
+@media (max-width: 640px) { .bottom-nav { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); } }

@@ -1,0 +1,25 @@
+.admin-page { margin: 0 auto; max-width: 1240px; padding: 3rem 1.25rem 5rem; }
+.admin-page-heading { margin-bottom: 2rem; }
+.admin-page-heading h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.05; margin: 0; }
+.admin-page-heading p { color: var(--muted); line-height: 1.6; margin: .5rem 0 0; max-width: 680px; }
+.eyebrow { color: var(--brand); display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; }
+.user-controls { display: grid; gap: .7rem; grid-template-columns: 1fr 260px; margin-bottom: 1.5rem; }
+.user-controls .search-box, .user-controls .filter-box { align-items: center; background: white; border: 1px solid #c9c9c0; border-radius: 12px; display: flex; gap: .55rem; padding: 0 .8rem; }
+.user-controls svg { color: var(--brand); height: 1rem; width: 1rem; }
+.user-controls input, .user-controls select { background: transparent; border: 0; color: var(--ink); min-height: 46px; outline: none; width: 100%; }
+.user-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
+.user-card { display: flex; flex-direction: column; min-height: 200px; }
+.user-card-top { align-items: center; display: flex; gap: .8rem; }
+.user-avatar { align-items: center; background: #f5f2e8; border-radius: 50%; color: var(--brand); display: flex; font-size: .9rem; font-weight: 900; height: 48px; justify-content: center; width: 48px; }
+.user-card-top h2 { font-size: 1rem; margin: 0; }
+.user-card-top p { color: var(--muted); font-size: .74rem; margin: .15rem 0 0; }
+.user-roles { display: flex; flex-wrap: wrap; gap: .35rem; margin: .8rem 0; }
+.user-card-actions { display: flex; gap: .5rem; margin-top: auto; padding-top: .5rem; }
+.no-users { align-items: center; background: white; border: 1px dashed #c9c9c0; border-radius: 16px; color: var(--muted); display: flex; flex-direction: column; justify-content: center; grid-column: 1 / -1; min-height: 200px; text-align: center; }
+.no-users svg { color: var(--brand); height: 2rem; width: 2rem; }
+.no-users h2 { color: var(--ink); font-size: 1.1rem; margin: .7rem 0 .2rem; }
+.no-users p { font-size: .8rem; margin: 0; }
+.loading { align-items: center; color: #52635f; display: flex; gap: .6rem; justify-content: center; padding: 2rem; }
+.spinner { animation: spin .8s linear infinite; border: 3px solid #d7e9e4; border-radius: 50%; border-top-color: #147d64; height: 1.1rem; width: 1.1rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 800px) { .user-grid { grid-template-columns: 1fr; } .user-controls { grid-template-columns: 1fr; } }

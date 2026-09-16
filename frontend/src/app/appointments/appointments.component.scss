@@ -1,0 +1,22 @@
+.appointments-page { margin: 0 auto; max-width: 1240px; padding: 4rem 1.25rem 5rem; }
+.appointments-heading { align-items: end; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.5rem; }
+.appointments-heading h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.05; margin: 0; }
+.appointments-heading p { color: var(--muted); line-height: 1.6; margin: 0; max-width: 680px; }
+.eyebrow { color: var(--brand); display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; }
+.counsellor-grid { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
+.counsellor-card { align-items: stretch; display: flex; flex-direction: column; gap: 1rem; }
+.counsellor-avatar { align-items: center; background: linear-gradient(135deg, #e8edf5, #e8e4f0); border-radius: 14px; color: var(--brand-dark); display: flex; font-size: 1.5rem; font-weight: 900; height: 62px; justify-content: center; overflow: hidden; width: 62px; }
+.counsellor-avatar img { display: block; height: 100%; object-fit: cover; width: 100%; }
+.counsellor-copy { flex: 1; }
+.counsellor-copy > div { align-items: center; display: flex; gap: .5rem; justify-content: space-between; }
+.counsellor-copy h2 { font-size: 1.2rem; margin: 0; }
+.counsellor-copy p { align-items: center; color: var(--muted); display: flex; font-size: .78rem; gap: .4rem; margin: .8rem 0 0; }
+.counsellor-copy p svg { color: var(--brand); height: .9rem; width: .9rem; }
+.button { align-items: center; background: var(--brand); border: 0; border-radius: 11px; color: white; cursor: pointer; display: inline-flex; font-weight: 850; gap: .45rem; justify-content: center; min-height: 44px; padding: .65rem .9rem; }
+.button svg { height: 1rem; width: 1rem; }
+.staff-note { align-items: flex-start; background: #e8e4f0; border-radius: 15px; display: grid; gap: .7rem; grid-template-columns: auto 1fr; margin-top: 1rem; padding: 1rem; }
+.staff-note > svg { color: #0A1F44; height: 1.2rem; width: 1.2rem; }
+.staff-note strong { font-size: .85rem; }
+.staff-note p { color: var(--muted); font-size: .76rem; line-height: 1.5; margin: .25rem 0 0; }
+@media (max-width: 800px) { .counsellor-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .appointments-page { padding: 2.5rem .85rem 4rem; } .appointments-heading { align-items: flex-start; flex-direction: column; } .counsellor-grid { grid-template-columns: 1fr; } }

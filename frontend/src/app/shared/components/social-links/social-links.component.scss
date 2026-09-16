@@ -1,0 +1,18 @@
+.social-links-shell { min-height: 1rem; }
+.social-links-shell.loading { opacity: .72; }
+.social-links { display: grid; gap: .35rem; }
+.social-links a { align-items: center; color: #8a9baa; display: flex; font-size: .74rem; gap: .4rem; margin: .35rem 0; text-decoration: none; }
+.social-links a:hover { color: white; }
+.social-links app-ui-icon { height: .9rem; width: 1rem; }
+.social-links span { max-width: 12rem; }
+.social-links svg { height: .9rem; width: .9rem; }
+.social-platforms { display: grid; gap: .75rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.social-platform-card { align-items: center; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; color: #e8edf5; display: grid; gap: .65rem; grid-template-columns: auto 1fr auto; padding: .8rem; text-decoration: none; transition: background .18s ease, border-color .18s ease, transform .18s ease; }
+.social-platform-card:hover { background: rgba(255,255,255,.14); border-color: #C9A227; transform: translateY(-2px); }
+.social-platform-icon { align-items: center; background: #C9A227; border-radius: 10px; color: #0A1F44; display: flex; height: 38px; justify-content: center; width: 38px; }
+.social-platform-icon svg { height: 1.1rem; width: 1.1rem; }
+.social-platform-copy strong, .social-platform-copy small { display: block; }
+.social-platform-copy strong { font-size: .8rem; }
+.social-platform-copy small { color: #a0aab5; font-size: .62rem; margin-top: .15rem; }
+.social-platform-arrow { height: .9rem; width: .9rem; }
+@media (max-width: 520px) { .social-platforms { grid-template-columns: 1fr; } }

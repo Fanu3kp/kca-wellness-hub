@@ -1,0 +1,71 @@
+<section class="requests-page">
+  <div class="requests-heading">
+    <div><span class="eyebrow">MY SUPPORT REQUESTS</span><h1>Track my support</h1><p>View your support requests, their status, and create new ones when needed.</p></div>
+    <button type="button" class="button button-primary" (click)="showCreateForm = !showCreateForm"><app-ui-icon name="plus" /> {{ showCreateForm ? 'Cancel' : 'New request' }}</button>
+  </div>
+
+  @if (error) { <app-alert tone="urgent" icon="alert" title="Error" message="{{ error }}" /> }
+
+  @if (showCreateForm) {
+    <app-card class="create-form">
+      <h3>Create support request</h3>
+      <p class="form-description">Describe your concern. This will be visible to peer counselors and guidance staff who are supporting you.</p>
+      <div class="form-grid">
+        <div class="field">
+          <label>Category</label>
+          <select [(ngModel)]="newRequestCategory">
+            @for (cat of categories; track cat.value) { <option [value]="cat.value">{{ cat.label }}</option> }
+          </select>
+        </div>
+        <div class="field">
+          <label>Priority</label>
+          <select [(ngModel)]="selectedPriority">
+            @for (p of priorities; track p) { <option [value]="p">{{ p }}</option> }
+          </select>
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <label>Subject</label>
+          <input type="text" [(ngModel)]="newRequestSubject" placeholder="Brief title for your request" />
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <label>Details</label>
+          <textarea rows="4" [(ngModel)]="newRequestDetails" placeholder="Describe your concern in your own words..."></textarea>
+        </div>
+      </div>
+      <button type="button" class="button button-primary" [disabled]="submitting || !newRequestSubject.trim() || !newRequestDetails.trim()" (click)="createRequest()">
+        <app-ui-icon name="send" /> {{ submitting ? 'Submitting...' : 'Submit request' }}
+      </button>
+    </app-card>
+  }
+
+  @if (loading) { <app-loading label="Loading requests..." /> }
+
+  <div class="request-list">
+    @for (req of requests; track req.id) {
+      <app-card class="request-card">
+        <div class="request-top">
+          <div>
+            <h2>{{ req.subject }}</h2>
+            <div class="request-meta">
+              <app-badge [tone]="statusBadgeTone(req.status)">{{ req.status.replace('_', ' ') }}</app-badge>
+              <span class="priority-badge" [style.color]="priorityColor(req.priority)">{{ req.priority }} priority</span>
+              <span class="request-category">{{ req.category.replace('-', ' ') }}</span>
+            </div>
+          </div>
+          <span class="request-date">{{ req.created_at }}</span>
+        </div>
+        <p class="request-details">{{ req.details }}</p>
+        <div class="request-actions">
+          <a class="text-link" routerLink="/student/chat"><app-ui-icon name="chat" /> Open conversation</a>
+        </div>
+      </app-card>
+    } @empty {
+      <div class="no-requests">
+        <app-ui-icon name="sparkles" />
+        <h2>No requests yet</h2>
+        <p>Create your first support request to get started.</p>
+        <button type="button" class="button button-primary" (click)="showCreateForm = true">Create request</button>
+      </div>
+    }
+  </div>
+</section>

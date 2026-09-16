@@ -1,0 +1,21 @@
+<div class="social-links-shell" [class.loading]="loading">
+  @if (variant === 'cards') {
+    <div class="social-platforms" aria-label="Follow KCA Wellness Hub">
+      @for (link of links; track link.id) {
+        <a class="social-platform-card" [href]="link.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Follow KCA Wellness Hub on ' + platformLabel(link.platform)">
+          <span class="social-platform-icon"><app-ui-icon [name]="link.platform" /></span>
+          <span class="social-platform-copy"><strong>{{ platformLabel(link.platform) }}</strong><small>Follow our community</small></span>
+          <app-ui-icon class="social-platform-arrow" name="arrow" />
+        </a>
+      }
+    </div>
+  } @else {
+    <div class="social-links" aria-label="KCA Wellness Hub social links">
+      @for (link of links; track link.id) {
+        <a [href]="link.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Follow KCA Wellness Hub on ' + platformLabel(link.platform)">
+          <app-ui-icon [name]="link.platform" /><span>{{ platformLabel(link.platform) }}</span>
+        </a>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,25 @@
+<section class="notifications-page">
+  <div class="notifications-heading">
+    <div>
+      <span class="eyebrow">NOTIFICATIONS</span>
+      <h1>Updates for your wellbeing journey.</h1>
+      <p>Appointment reminders, campus announcements, resources and support updates in one place.</p>
+    </div>
+    <button type="button" class="button button-secondary" (click)="markRead()"><app-ui-icon name="check" /> Mark all read</button>
+  </div>
+
+  <div class="notification-list">
+    @for (notification of notifications$ | async; track notification.id) {
+      <app-card [compact]="true" class="notification-row" [class.unread]="!notification.read">
+        <span class="notification-icon" [class.appointment]="notification.type === 'appointment'" [class.resource]="notification.type === 'resource'" [class.escalation]="notification.type === 'escalation'">
+          <app-ui-icon [name]="notification.type === 'appointment' ? 'calendar' : notification.type === 'resource' ? 'book' : notification.type === 'escalation' ? 'alert' : 'bell'" />
+        </span>
+        <div>
+          <div class="notification-title"><strong>{{ notification.title }}</strong><small>{{ notification.createdAt }}</small></div>
+          <p>{{ notification.message }}</p>
+        </div>
+        @if (!notification.read) { <span class="unread-dot"></span> }
+      </app-card>
+    }
+  </div>
+</section>

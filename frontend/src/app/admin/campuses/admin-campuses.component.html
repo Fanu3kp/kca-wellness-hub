@@ -1,0 +1,36 @@
+<section class="admin-page">
+  <div class="admin-page-heading">
+    <div><span class="eyebrow">CAMPUS MANAGEMENT</span><h1>KCA campuses</h1><p>Manage campus profiles, locations and support availability across all KCA University sites.</p></div>
+    <button type="button" class="button button-primary" (click)="showAddForm = !showAddForm"><app-ui-icon name="plus" /> {{ showAddForm ? 'Cancel' : 'Add campus' }}</button>
+  </div>
+
+  @if (showAddForm) {
+    <app-card class="add-campus-form">
+      <h3>New campus</h3>
+      <div class="form-grid">
+        <div class="field"><label>Campus name</label><input type="text" [(ngModel)]="newCampusName" placeholder="e.g. West Campus" /></div>
+        <div class="field"><label>Campus code</label><input type="text" [(ngModel)]="newCampusCode" placeholder="e.g. WEST" /></div>
+      </div>
+      <button type="button" class="button button-primary" (click)="addCampus()" [disabled]="!newCampusName.trim() || !newCampusCode.trim()">Create campus</button>
+    </app-card>
+  }
+
+  @if (loading) { <app-loading label="Loading campuses..." /> }
+
+  <div class="campus-list-admin">
+    @for (campus of campuses; track campus.id) {
+      <app-card class="campus-admin-card">
+        <div class="campus-admin-top">
+          <span class="campus-admin-icon" [style.background]="campus.accent + '20'"><app-ui-icon name="home" /></span>
+          <div><h2>{{ campus.name }}</h2><p>{{ campus.location }}</p></div>
+          <app-badge tone="calm">{{ campus.physicalSupport && campus.virtualSupport ? 'Physical + Virtual' : 'Campus Support' }}</app-badge>
+        </div>
+        <div class="campus-admin-meta">
+          <span><app-ui-icon name="mail" /> {{ campus.email }}</span>
+          <span><app-ui-icon name="phone" /> {{ campus.phone }}</span>
+          <span><app-ui-icon name="clock" /> Mon–Fri, 9–4 EAT</span>
+        </div>
+      </app-card>
+    }
+  </div>
+</section>

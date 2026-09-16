@@ -1,0 +1,17 @@
+@if (open) {
+  <div class="campus-backdrop" (click)="closed.emit()">
+    <section class="campus-dialog" role="dialog" aria-modal="true" aria-labelledby="campus-dialog-title">
+      <header><div><span class="eyebrow">COMMUNITY SUPPORT</span><h2 id="campus-dialog-title">Choose your support community</h2></div><button type="button" aria-label="Close campus selector" (click)="closed.emit()"><app-ui-icon name="close" /></button></header>
+      <div class="campus-grid">
+        @for (campus of (campuses$ | async) ?? []; track campus.id) {
+          <button type="button" [class.selected]="(selectedCampus$ | async)?.id === campus.id" (click)="select(campus.id)">
+            <span class="campus-icon" [style.background]="campus.accent"><app-ui-icon name="home" /></span>
+            <span class="campus-copy"><strong>{{ campus.name }}</strong><small>{{ campus.location }}</small></span>
+            <app-ui-icon class="check-icon" name="check" />
+          </button>
+        }
+      </div>
+      <p class="support-note"><app-ui-icon name="shield" /> Support is available across all KCA campuses, with physical and virtual options.</p>
+    </section>
+  </div>
+}

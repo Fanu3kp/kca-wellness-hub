@@ -1,0 +1,13 @@
+<section class="campus-page">
+  <div class="page-hero"><div><span class="eyebrow">YOUR SUPPORT COMMUNITY</span><h1>Choose your campus</h1><p>Select the campus that feels most like yours. You can still access virtual support from anywhere.</p></div><a class="button button-secondary" routerLink="/landing"><app-ui-icon name="arrow" /> Back to home</a></div>
+  <div class="campus-list">
+    @for (campus of campuses; track campus.id) {
+      <article class="campus-row" [class.selected]="(selectedCampus$ | async)?.id === campus.id" [style.--campus-accent]="campus.accent">
+        <div class="campus-row-icon"><app-ui-icon name="home" /></div>
+        <div class="campus-row-copy"><div class="campus-row-title"><h2>{{ campus.name }}</h2><app-badge tone="calm">{{ campus.physicalSupport && campus.virtualSupport ? 'Physical + virtual' : 'Campus support' }}</app-badge></div><p>{{ campus.description }}</p><div class="campus-details"><span><app-ui-icon name="compass" /> {{ campus.location }}</span><span><app-ui-icon name="clock" /> Mon–Fri, 9:00–16:00 EAT</span><span><app-ui-icon name="mail" /> {{ campus.email }}</span></div></div>
+        <button type="button" [class.selected]="(selectedCampus$ | async)?.id === campus.id" (click)="select(campus.id)">{{ (selectedCampus$ | async)?.id === campus.id ? 'Selected' : 'Choose campus' }} <app-ui-icon name="arrow" /></button>
+      </article>
+    }
+  </div>
+  <div class="campus-note"><app-ui-icon name="shield" /><div><strong>Support follows you across campuses.</strong><span>Peer and professional services can be accessed physically or virtually, depending on availability.</span></div></div>
+</section>

@@ -1,0 +1,85 @@
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> A calmer way to ask for support</div>
+      <h1>Your wellbeing belongs here.</h1>
+      <p class="hero-lede">KCA University Peer Counselling &amp; Wellness Hub connects students with trained peer counselors, professional guidance, and practical wellness resources across every campus.</p>
+      <div class="hero-actions">
+        <a class="button button-primary" routerLink="/campus-selection"><app-ui-icon name="compass" /> Find your campus</a>
+        <a class="button button-secondary" routerLink="/student/quick-help"><app-ui-icon name="heart" /> I need support</a>
+      </div>
+      <div class="hero-trust"><app-ui-icon name="shield" /><span>Private, respectful and student-focused support</span></div>
+    </div>
+    <div class="hero-visual" aria-label="Wellness support illustration">
+      <div class="visual-glow"></div>
+      <div class="visual-card visual-card-top"><span class="visual-icon"><app-ui-icon name="heart" /></span><div><strong>You are not alone</strong><small>Support is available today</small></div></div>
+      <div class="visual-card visual-card-bottom"><span class="visual-icon purple"><app-ui-icon name="users" /></span><div><strong>Trained peer listeners</strong><small>Here to listen and refer</small></div></div>
+      <div class="breathing-orb"><span></span><span></span><span></span></div>
+      <div class="visual-caption"><app-ui-icon name="sparkles" /> Small steps count</div>
+    </div>
+  </div>
+</section>
+
+<section class="support-strip">
+  <div class="support-strip-inner">
+    <div class="strip-label"><app-ui-icon name="compass" /> Start with what feels true today</div>
+    <div class="category-list">
+      @for (category of supportCategories; track category.label) {
+        <a routerLink="/student/quick-help"><app-ui-icon [name]="category.icon" /> {{ category.label }}</a>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section campuses-section">
+  <div class="section-inner">
+    <div class="section-heading"><div><span class="eyebrow">ONE HUB, THREE CAMPUSES</span><h2>Support that meets you where you are</h2><p>Choose your campus to see local contacts, events and support options.</p></div><a class="text-link" routerLink="/campus-selection">View all campuses <app-ui-icon name="arrow" /></a></div>
+    <div class="campus-grid">
+      @for (campus of campuses; track campus.id) {
+        <a class="campus-card" [routerLink]="['/campus-selection']" [style.--campus-accent]="campus.accent">
+          <div class="campus-card-top"><span class="campus-mark"><app-ui-icon name="home" /></span><app-badge tone="calm">{{ campus.physicalSupport && campus.virtualSupport ? 'Physical + virtual' : 'Campus support' }}</app-badge></div>
+          <h3>{{ campus.name }}</h3>
+          <p>{{ campus.description }}</p>
+          <div class="campus-meta"><span><app-ui-icon name="clock" /> Mon–Fri, 9–4</span><span><app-ui-icon name="chevron" /> Explore</span></div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section pathways-section">
+  <div class="section-inner">
+    <div class="section-heading centered"><span class="eyebrow">A PATH FOR EVERY MOMENT</span><h2>What would feel helpful right now?</h2><p>Peer support is a listening and referral space. Professional staff provide confidential counselling and care coordination.</p></div>
+    <div class="pathway-grid">
+      @for (pathway of pathways; track pathway.id) {
+        <a class="pathway-card" [routerLink]="pathway.route" [class.urgent]="pathway.tone === 'urgent'">
+          <span class="pathway-icon"><app-ui-icon [name]="pathway.icon" /></span>
+          <h3>{{ pathway.label }}</h3>
+          <p>{{ pathway.description }}</p>
+          <span class="pathway-action">Explore this path <app-ui-icon name="arrow" /></span>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="professional-callout">
+  <div class="professional-inner">
+    <div><span class="eyebrow light">PROFESSIONAL SUPPORT</span><h2>Guidance &amp; Counselling is here for you.</h2><p>Book a confidential session with an approved counsellor for professional support, referrals and care coordination.</p><ul><li><app-ui-icon name="check" /> Main Campus and virtual options</li><li><app-ui-icon name="check" /> Town Campus and virtual options</li><li><app-ui-icon name="check" /> Monday–Friday, 9:00–16:00 EAT</li></ul><a class="button button-light" routerLink="/student/appointments">View approved booking options <app-ui-icon name="arrow" /></a></div>
+    <div class="professional-visual"><div class="quote-card"><app-ui-icon name="quote" /><p>“Asking for support is a sign of strength, not a burden.”</p><small>— KCA Wellness Community</small></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div></div>
+  </div>
+</section>
+
+<section class="section closing-section">
+  <div class="section-inner closing-inner">
+    <div><span class="eyebrow">YOUR WELLNESS JOURNEY</span><h2>Progress can be quiet, personal and entirely yours.</h2><p>Track non-clinical activities, return to calming exercises, and keep useful resources close—without turning wellbeing into a score.</p></div>
+    <a class="button button-primary button-large" routerLink="/student/wellness">Open my wellness journey <app-ui-icon name="arrow" /></a>
+  </div>
+</section>
+
+<section class="section follow-section">
+  <div class="section-inner follow-inner">
+    <div class="follow-copy"><span class="eyebrow light">STAY CONNECTED</span><h2>Follow the wellness community</h2><p>Get gentle reminders, campus updates and student wellbeing stories from KCA Wellness Hub.</p></div>
+    <app-social-links variant="cards" />
+  </div>
+</section>

@@ -1,0 +1,37 @@
+<section class="resources-page">
+  <div class="resources-heading">
+    <div>
+      <span class="eyebrow">WELLNESS LIBRARY</span>
+      <h1>Learn at your own pace.</h1>
+      <p>Search practical, approved resources for student wellbeing. These materials support reflection and self-care; they are not a substitute for professional care.</p>
+    </div>
+    <app-badge tone="calm">Student-approved library</app-badge>
+  </div>
+
+  <div class="resource-controls">
+    <label class="search-box"><app-ui-icon name="search" /><input type="search" placeholder="Search resources..." [(ngModel)]="search" /></label>
+    <label class="filter-box"><app-ui-icon name="filter" /><select [(ngModel)]="category">@for (item of categories; track item) { <option [value]="item">{{ item }}</option> }</select></label>
+  </div>
+
+  <div class="resource-count"><strong>{{ filteredResources.length }}</strong> resources <span>·</span> showing <span>{{ category }}</span></div>
+
+  <div class="resource-grid">
+    @for (resource of filteredResources; track resource.id) {
+      <app-card [hoverable]="true" class="resource-card">
+        <div class="resource-card-top">
+          <span class="resource-format" [class.audio]="resource.format === 'audio'" [class.video]="resource.format === 'video'"><app-ui-icon [name]="iconFor(resource)" /></span>
+          <button type="button" class="favorite-button" [class.active]="isFavorite(resource)" [attr.aria-label]="(isFavorite(resource) ? 'Remove ' : 'Save ') + resource.title" (click)="toggleFavorite(resource)"><app-ui-icon name="heart" /></button>
+          <app-badge tone="calm">{{ resource.category }}</app-badge>
+        </div>
+        <h2>{{ resource.title }}</h2>
+        <p>{{ resource.summary }}</p>
+          <div class="resource-meta">
+            <span><app-ui-icon name="clock" /> {{ resource.duration }}</span>
+            <span class="resource-state"><app-badge [tone]="isRead(resource) ? 'calm' : 'neutral'">{{ isRead(resource) ? 'Read' : 'New' }}</app-badge><a [routerLink]="['/student/resources', resource.id]">Open resource <app-ui-icon name="arrow" /></a></span>
+          </div>
+      </app-card>
+    } @empty {
+      <div class="no-results"><app-ui-icon name="search" /><h2>No resources found</h2><p>Try a different search term or category.</p></div>
+    }
+  </div>
+</section>

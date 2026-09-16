@@ -1,0 +1,41 @@
+<section class="connections-page">
+  <div class="connections-heading">
+    <div>
+      <span class="eyebrow">YOUR COMMUNITY</span>
+      <h1>Connections</h1>
+      <p>Review incoming support requests and build a trusted wellness community at your campus.</p>
+    </div>
+    <app-badge tone="peer">Peer community</app-badge>
+  </div>
+
+  @if (error) {
+    <app-alert tone="urgent" icon="alert" title="Connections" message="{{ error }}" />
+  }
+
+  @if (loading) {
+    <app-loading label="Loading connection requests..." />
+  } @else {
+    <div class="connections-list">
+      @for (request of incoming; track request.id) {
+        <app-card class="connection-card">
+          <span class="connection-avatar">{{ initials(request.follower?.name ?? 'KCA user') }}</span>
+          <div class="connection-copy">
+            <h2>{{ request.follower?.name ?? 'KCA user' }}</h2>
+            <p>{{ request.follower?.email ?? 'Connection request' }}</p>
+            <app-badge tone="peer">Pending request</app-badge>
+          </div>
+          <div class="connection-actions">
+            <button type="button" class="button button-primary" (click)="accept(request.id)"><app-ui-icon name="check" /> Accept</button>
+            <button type="button" class="button button-secondary" (click)="reject(request.id)"><app-ui-icon name="close" /> Decline</button>
+          </div>
+        </app-card>
+      } @empty {
+        <app-card class="empty-connections">
+          <app-ui-icon name="users" />
+          <h2>No pending requests</h2>
+          <p>New connection requests will appear here.</p>
+        </app-card>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,23 @@
+.admin-page { margin: 0 auto; max-width: 1240px; padding: 3rem 1.25rem 5rem; }
+.admin-page-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+.admin-page-heading h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.05; margin: 0; }
+.admin-page-heading p { color: var(--muted); line-height: 1.6; margin: .5rem 0 0; max-width: 680px; }
+.eyebrow { color: var(--brand); display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; }
+.add-campus-form { margin-bottom: 2rem; padding: 1.5rem; }
+.add-campus-form h3 { margin: 0 0 1rem; font-size: 1.15rem; }
+.form-grid { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; margin-bottom: 1rem; }
+.field label { display: block; font-size: .78rem; font-weight: 700; margin-bottom: .35rem; color: var(--ink); }
+.field input { background: #f8f6f0; border: 1px solid #e0ddd0; border-radius: 10px; color: var(--ink); display: block; font: inherit; min-height: 44px; padding: .55rem .7rem; width: 100%; }
+.campus-list-admin { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
+.campus-admin-card { display: flex; flex-direction: column; }
+.campus-admin-top { align-items: center; display: flex; gap: .8rem; }
+.campus-admin-icon { align-items: center; border-radius: 11px; color: var(--brand); display: flex; height: 42px; justify-content: center; width: 42px; }
+.campus-admin-top h2 { font-size: 1.05rem; margin: 0; }
+.campus-admin-top p { color: var(--muted); font-size: .74rem; margin: .15rem 0 0; }
+.campus-admin-meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .8rem; padding-top: .8rem; border-top: 1px solid #e8e4da; }
+.campus-admin-meta span { align-items: center; color: var(--muted); display: inline-flex; font-size: .72rem; gap: .3rem; }
+.campus-admin-meta svg { height: .85rem; width: .85rem; }
+.loading { align-items: center; color: #52635f; display: flex; gap: .6rem; justify-content: center; padding: 2rem; }
+.spinner { animation: spin .8s linear infinite; border: 3px solid #d7e9e4; border-radius: 50%; border-top-color: #147d64; height: 1.1rem; width: 1.1rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 800px) { .campus-list-admin { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } }

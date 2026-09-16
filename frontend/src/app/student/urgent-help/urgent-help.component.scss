@@ -1,0 +1,21 @@
+.urgent-page { margin: 0 auto; max-width: 1240px; padding: 4rem 1.25rem 5rem; }
+.urgent-hero { align-items: end; background: linear-gradient(125deg, #C9A227, #C9A227); border-radius: 22px; color: white; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.25rem; padding: 2.5rem; }
+.urgent-hero h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.05; margin: 0; max-width: 650px; }
+.urgent-hero p { color: #f5ede5; line-height: 1.6; margin: 1rem 0 0; max-width: 650px; }
+.eyebrow { color: #f5ede5; display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; }
+.urgent-grid { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); margin-bottom: 1rem; }
+.urgent-card { align-items: flex-start; display: grid; gap: .8rem; grid-template-columns: auto 1fr; }
+.urgent-icon { align-items: center; background: #f5ede5; border-radius: 12px; color: var(--danger); display: flex; height: 44px; justify-content: center; width: 44px; }
+.urgent-icon.purple { background: #ede8f0; color: var(--purple); }
+.urgent-icon.orange { background: #f5f2e8; color: var(--orange); }
+.urgent-icon svg { height: 1.2rem; width: 1.2rem; }
+.urgent-card h2 { font-size: 1rem; margin: 0; }
+.urgent-card p { color: var(--muted); font-size: .76rem; line-height: 1.5; margin: 0; }
+.urgent-link { align-items: center; color: var(--brand); display: inline-flex; font-size: .75rem; font-weight: 850; gap: .3rem; margin-top: .7rem; text-decoration: none; }
+.urgent-link svg { height: .85rem; width: .85rem; }
+.urgent-note { align-items: flex-start; background: #faf5ed; border: 1px solid #e8c8c0; border-radius: 15px; display: grid; gap: .7rem; grid-template-columns: auto 1fr; margin-top: 1rem; padding: 1rem; }
+.urgent-note > svg { color: var(--danger); height: 1.2rem; width: 1.2rem; }
+.urgent-note strong { font-size: .85rem; }
+.urgent-note p { color: var(--muted); font-size: .76rem; line-height: 1.5; margin: .25rem 0 0; }
+@media (max-width: 800px) { .urgent-grid { grid-template-columns: 1fr; } }
+@media (max-width: 540px) { .urgent-page { padding: 2.5rem .85rem 4rem; } .urgent-hero { align-items: flex-start; flex-direction: column; padding: 1.5rem; } }

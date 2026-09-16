@@ -1,0 +1,12 @@
+<section class="videos-page">
+  <div class="videos-heading">
+    <div><span class="eyebrow">WELLNESS VIDEOS</span><h1>Watch. Learn. Breathe.</h1><p>Short, student-friendly wellness education content. KCA wellness campaigns and approved educational content.</p></div><app-badge tone="calm">Student-friendly</app-badge></div>
+  <div class="video-controls">
+    <label class="filter-box"><app-ui-icon name="filter" /><select [(ngModel)]="selectedCategory">@for (cat of categories; track cat) { <option [value]="cat">{{ cat }}</option> }</select></label>
+  </div>
+  <div class="video-grid">@for (video of videos; track video.id) { <app-card [hoverable]="true" class="video-card" [class.hidden]="selectedCategory !== 'All' && video.category !== selectedCategory">
+    <div class="video-thumb [class.tone-{{video.tone}}]"><span class="play-button"><app-ui-icon name="external" /></span><span class="video-duration">{{ video.duration }}</span></div>
+    <div class="video-copy"><strong>{{ video.title }}</strong><small>{{ video.description }}</small><span class="video-category">{{ video.category }}</span></div>
+  </app-card> } </div>
+  <p class="disclaimer"><app-ui-icon name="shield" /> Demo content for development. All video content uses placeholder materials. No copyrighted content is used without permission.</p>
+</section>

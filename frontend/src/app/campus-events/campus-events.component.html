@@ -1,0 +1,39 @@
+<section class="campus-events-page" *ngIf="campus as campus">
+  <div class="events-heading">
+    <div><span class="eyebrow">CAMPUS EVENTS</span><h1>{{ campus.name }} events</h1><p>Wellness activities, workshops and community events at {{ campus.shortName }}.</p></div>
+    <app-badge tone="calm">{{ campus.physicalSupport && campus.virtualSupport ? 'Physical + Virtual' : 'Campus Support' }}</app-badge>
+  </div>
+
+  @if (error) { <app-alert tone="urgent" icon="alert" title="Error" message="{{ error }}" /> }
+
+  @if (loading) { <app-loading label="Loading events..." /> }
+
+  <div class="events-layout">
+    <aside class="events-filter">
+      <div class="filter-title"><app-ui-icon name="filter" /><strong>Filter events</strong></div>
+      <button type="button" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">All events</button>
+      <button type="button" [class.active]="activeFilter === 'upcoming'" (click)="setFilter('upcoming')">Upcoming</button>
+      <button type="button" [class.active]="activeFilter === 'past'" (click)="setFilter('past')">Past</button>
+      <div class="filter-note"><app-ui-icon name="bell" /><span>Event announcements appear in your notifications.</span></div>
+    </aside>
+    <div class="event-list">
+      @for (event of filteredEvents; track event.id) {
+        <app-card [hoverable]="true" class="event-row">
+          <span class="event-date" [class.purple]="event.tone === 'purple'" [class.orange]="event.tone === 'orange'" [class.neutral]="event.tone === 'neutral'"><strong>{{ event.day }}</strong><small>{{ event.month }}</small></span>
+          <div class="event-copy">
+            <div class="event-title-row"><h2>{{ event.title }}</h2><app-badge [tone]="event.type === 'Past' ? 'neutral' : 'calm'">{{ event.type }}</app-badge><app-badge [tone]="event.mode === 'virtual' ? 'peer' : 'neutral'">{{ event.mode }}</app-badge></div>
+            <p><app-ui-icon name="home" /> {{ campus.name }} · {{ event.time }}</p>
+            <small>Open to students · Supportive community space</small>
+          </div>
+          @if (event.mode === 'virtual' && event.externalUrl) {
+            <a class="event-action event-external" [href]="event.externalUrl" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Join ' + event.title + ' online'"><app-ui-icon name="external" /></a>
+          } @else {
+            <a class="event-action" [routerLink]="['/campuses', campus.id]" [attr.aria-label]="'Open ' + campus.name + ' campus'"><app-ui-icon name="arrow" /></a>
+          }
+        </app-card>
+      } @empty {
+        <div class="no-events"><app-ui-icon name="calendar" /><h2>No events found</h2><p>Check back soon for new events at this campus.</p></div>
+      }
+    </div>
+  </div>
+</section>

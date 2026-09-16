@@ -1,0 +1,20 @@
+<section class="gallery-page" *ngIf="campus as campus">
+  <div class="gallery-heading">
+    <div><span class="eyebrow">CAMPUS GALLERY</span><h1>{{ campus.name }}</h1><p>Moments from the KCA wellness community at {{ campus.shortName }}.</p></div>
+  </div>
+
+  <div class="gallery-grid">
+    @for (item of galleryItems; track item.title) {
+      <app-card class="gallery-card">
+        <span class="gallery-icon"><app-ui-icon [name]="item.icon" /></span>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+      </app-card>
+    }
+  </div>
+
+  <div class="gallery-placeholder">
+    <div><span class="eyebrow">PHOTO GALLERY</span><h2>Approved photos from {{ campus.shortName }}</h2><p>Approved campus photos and videos will be added here as they become available.</p></div>
+    <div class="gallery-tiles"><span><app-ui-icon name="video" /></span><span><app-ui-icon name="heart" /></span><span><app-ui-icon name="users" /></span></div>
+  </div>
+</section>

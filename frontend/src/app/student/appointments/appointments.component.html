@@ -1,0 +1,83 @@
+<section class="appointments-page">
+  <div class="appointments-heading">
+    <div>
+      <span class="eyebrow">PROFESSIONAL COUNSELLING</span>
+      <h1>Support from trained professionals.</h1>
+      <p>Choose an approved counsellor and continue through KCA University's official external booking workflow. The Hub does not own or view private counsellor calendars.</p>
+    </div>
+    <app-badge tone="professional">Confidential</app-badge>
+  </div>
+  <app-alert tone="professional" icon="shield" title="Official booking workflow" message="Booking links open the configured external KCA workflow. Operating hours are Monday–Friday, 9:00 AM–4:00 PM Nairobi time (GMT+3)." />
+  <div class="mode-tabs">
+    <button type="button" [class.active]="mode === 'Physical'" (click)="mode = 'Physical'"><app-ui-icon name="home" /> Physical session</button>
+    <button type="button" [class.active]="mode === 'Virtual'" (click)="mode = 'Virtual'"><app-ui-icon name="video" /> Virtual session</button>
+  </div>
+  <div class="counsellor-grid">
+    @for (option of options; track option.id) {
+      <app-card class="counsellor-card" [class.selected]="selectedOption?.id === option.id">
+        <div class="counsellor-avatar">
+          @if (option.photoUrl) {
+            <img [src]="option.photoUrl" [alt]="option.counsellor" />
+          } @else {
+            <span>{{ option.counsellor[0] }}</span>
+          }
+        </div>
+        <div class="counsellor-copy">
+          <div>
+            <h2>{{ option.counsellor }}</h2>
+            <app-badge tone="professional">Approved counsellor</app-badge>
+          </div>
+          <p><app-ui-icon name="compass" /> {{ option.campus }}</p>
+          <p><app-ui-icon name="clock" /> {{ option.availability }}</p>
+          <div class="mode-pills">
+            @for (item of option.modes; track item) {
+              <span [class.selected]="mode === item">{{ item }}</span>
+            }
+          </div>
+        </div>
+        <button type="button" class="button button-primary" [class.selected]="selectedOption?.id === option.id" (click)="selectOption(option)">{{ selectedOption?.id === option.id ? 'Selected' : 'Open official booking' }}<app-ui-icon name="external" /></button>
+      </app-card>
+    }
+  </div>
+  @if (selectedOption && !booked) {
+    <section class="booking-form">
+      <div class="booking-heading">
+        <span class="eyebrow">BOOK APPOINTMENT</span>
+        <h2>{{ selectedOption.counsellor }} · {{ mode }}</h2>
+        <button type="button" class="reset-link" (click)="selectedOption = null">Change counsellor</button>
+      </div>
+      @if (error) {
+        <app-alert tone="urgent" icon="alert" title="Unable to book" [message]="error" />
+      }
+      <div class="form-grid">
+        <div class="field">
+          <label for="scheduled-at">Date and time</label>
+          <input id="scheduled-at" type="datetime-local" [(ngModel)]="scheduledAt" [min]="minDateTime" />
+        </div>
+        <div class="field">
+          <label for="booking-notes">Notes (optional)</label>
+          <textarea id="booking-notes" rows="3" placeholder="Anything the counsellor should know?" [(ngModel)]="notes" maxlength="10000"></textarea>
+        </div>
+      </div>
+      <button type="button" class="button button-primary" [disabled]="loading || !scheduledAt" (click)="submitBooking()">
+        <app-ui-icon name="check" /> {{ loading ? 'Sending request…' : 'Create appointment' }}
+      </button>
+    </section>
+  }
+  @if (booked) {
+    <section class="booking-confirm">
+      <app-alert tone="calm" icon="check" title="Request sent" [message]="successMessage" />
+      <button type="button" class="button button-secondary" (click)="openExternal()">
+        <app-ui-icon name="external" /> Open provider's external booking
+      </button>
+    </section>
+  }
+  <section class="appointment-note">
+    <app-ui-icon name="heart" />
+    <div>
+      <strong>Not sure which option is right?</strong>
+      <p>Start with Quick Help or talk with a trained peer counselor. Peer counselors can listen, encourage and refer you to professional support.</p>
+      <a routerLink="/student/quick-help">Use Quick Help <app-ui-icon name="arrow" /></a>
+    </div>
+  </section>
+</section>

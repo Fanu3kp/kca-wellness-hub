@@ -1,0 +1,20 @@
+<section class="announcements-page" *ngIf="campus as campus">
+  <div class="announcements-heading">
+    <div><span class="eyebrow">CAMPUS ANNOUNCEMENTS</span><h1>{{ campus.name }} announcements</h1><p>Latest updates and news from {{ campus.shortName }} campus.</p></div>
+  </div>
+
+  @if (error) { <app-alert tone="urgent" icon="alert" title="Error" message="{{ error }}" /> }
+
+  <div class="announcement-list">
+    @for (item of announcements; track item.title) {
+      <app-card [compact]="true" class="announcement-card">
+        <div class="announcement-top">
+          <span class="announcement-date"><strong>{{ item.date }}</strong></span>
+          <app-badge tone="calm">{{ campus.shortName }}</app-badge>
+        </div>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.message }}</p>
+      </app-card>
+    }
+  </div>
+</section>

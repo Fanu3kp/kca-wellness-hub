@@ -1,0 +1,34 @@
+<section class="admin-page">
+  <div class="admin-page-heading">
+    <div><span class="eyebrow">REPORTS &amp; ANALYTICS</span><h1>System overview</h1><p>Aggregated statistics and system activity across all KCA campuses.</p></div>
+  </div>
+
+  <div class="report-stats">
+    @for (stat of stats; track stat.label) {
+      <app-card [compact]="true" class="stat-card">
+        <div><strong>{{ stat.value }}</strong><small>{{ stat.label }}</small></div>
+        <span class="trend">{{ stat.trend }}</span>
+      </app-card>
+    }
+  </div>
+
+  <div class="report-grid">
+    <section>
+      <div class="mini-heading"><div><span class="eyebrow">RECENT ACTIVITY</span><h2>System activity</h2></div></div>
+      @for (item of recentActivity; track item.action) {
+        <app-card [compact]="true" class="activity-row">
+          <div><strong>{{ item.action }}</strong><small>{{ item.campus }}</small></div>
+          <span class="activity-time">{{ item.time }}</span>
+        </app-card>
+      }
+    </section>
+    <section>
+      <div class="mini-heading"><div><span class="eyebrow">CAMPUS BREAKDOWN</span><h2>Activity by campus</h2></div></div>
+      <app-card [compact]="true" class="campus-breakdown">
+        <div class="breakdown-row"><span>Ruaraka Main</span><div class="bar"><span style="width: 65%"></span></div><strong>640</strong></div>
+        <div class="breakdown-row"><span>Town</span><div class="bar"><span style="width: 35%"></span></div><strong>350</strong></div>
+        <div class="breakdown-row"><span>Kitengela</span><div class="bar"><span style="width: 25%"></span></div><strong>250</strong></div>
+      </app-card>
+    </section>
+  </div>
+</section>

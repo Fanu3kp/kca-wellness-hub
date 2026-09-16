@@ -1,0 +1,73 @@
+<section class="chat-page">
+  <div class="chat-heading">
+    <div>
+      <span class="eyebrow">SECURE CONVERSATIONS</span>
+      <h1>Support conversations</h1>
+      <p>Chat is designed for respectful peer support. Confidential professional records remain separate and are only available to authorized staff.</p>
+    </div>
+    <app-badge tone="peer">Private support space</app-badge>
+  </div>
+
+  @if (error) { <app-alert tone="urgent" icon="alert" title="Chat unavailable" message="{{ error }}" /> }
+
+  <div class="chat-layout">
+    <aside class="conversation-list">
+      <div class="conversation-heading">
+        <div><h2>Conversations</h2><small>Student Peer Counselling</small></div>
+        <button type="button" aria-label="New conversation" (click)="createConversation()" [disabled]="sending"><app-ui-icon name="plus" /></button>
+      </div>
+      <div class="conversation-search"><app-ui-icon name="search" /><input placeholder="Search conversations" /></div>
+      @if (loading) { <p class="loading-state">Loading conversations...</p> }
+      @for (conversation of conversations; track conversation.id) {
+        <button type="button" class="conversation-row" [class.active]="activeConversation?.id === conversation.id" (click)="selectConversation(conversation)">
+          <span class="conversation-avatar">{{ initials(displayName(conversation)) }}</span>
+          <span class="conversation-copy">
+            <strong>{{ displayName(conversation) }}</strong>
+            <small>{{ conversation.subject || 'Wellness support conversation' }}</small>
+          </span>
+          <span class="conversation-meta"><small>{{ conversation.last_message_at ? formatTime(conversation.last_message_at) : '' }}</small><i [class.online]="conversation.status === 'open'"></i></span>
+        </button>
+      } @empty {
+        <p class="empty-state">No conversations yet. Start one when you need support.</p>
+      }
+    </aside>
+
+    <section class="conversation-window">
+      @if (activeConversation) {
+        <header class="window-header">
+          <span class="conversation-avatar large">{{ initials(displayName(activeConversation)) }}</span>
+          <div>
+            <strong>{{ displayName(activeConversation) }}</strong>
+            <small><i class="online"></i> {{ activeConversation.status === 'open' ? 'Conversation open' : 'Conversation closed' }} · {{ displayRole(activeConversation) }}</small>
+          </div>
+          <div class="window-actions">
+            <button type="button" aria-label="Request supervisor support"><app-ui-icon name="users" /> Supervisor</button>
+            <button type="button" aria-label="Report conversation"><app-ui-icon name="alert" /></button>
+          </div>
+        </header>
+
+        <div class="messages">
+          @if (showTyping) { <div class="typing"><span></span><span></span><span></span><small>{{ typingUser }} is typing…</small></div> }
+          @for (message of messages; track message.id) {
+            <div class="message" [class.mine]="isMine(message)">
+              <p>{{ message.body }}</p>
+              <small>{{ formatTime(message.sent_at) }} @if (isMine(message)) { · Sent } @if (message.read) { · Read }</small>
+            </div>
+          } @empty {
+            <div class="empty-messages"><app-ui-icon name="chat" /><h2>Start the conversation</h2><p>Messages in this space are encrypted and visible only to authorized participants.</p></div>
+          }
+        </div>
+
+        <form class="message-form" (ngSubmit)="send()">
+          <button type="button" aria-label="Add attachment" (click)="attachFile()"><app-ui-icon name="plus" /></button>
+          <input [(ngModel)]="message" name="message" placeholder="Write a message..." [disabled]="sending" />
+          @for (attachment of attachments; track attachment.name) { <span class="attachment-chip"><span>{{ attachment.name }}</span><small>{{ attachment.size }}</small><button type="button" (click)="removeAttachment(attachment)"><app-ui-icon name="close" /></button></span> }
+          <button type="submit" aria-label="Send message" [disabled]="sending"><app-ui-icon name="send" /></button>
+        </form>
+        <p class="privacy-note"><app-ui-icon name="shield" /> Messages are encrypted in transit and at rest. Do not share passwords or financial details.</p>
+      } @else {
+        <div class="empty-window"><app-ui-icon name="chat" /><h2>Select a conversation</h2><p>Choose an existing conversation or create a new wellness check-in.</p></div>
+      }
+    </section>
+  </div>
+</section>

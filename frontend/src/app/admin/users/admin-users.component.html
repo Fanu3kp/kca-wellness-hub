@@ -1,0 +1,42 @@
+<section class="admin-page">
+  <div class="admin-page-heading">
+    <div><span class="eyebrow">USER MANAGEMENT</span><h1>All KCA users</h1><p>View and manage student, peer counselor, guidance staff and administrator accounts.</p></div>
+  </div>
+
+  @if (error) { <app-alert tone="urgent" icon="alert" title="Error" message="{{ error }}" /> }
+
+  <div class="user-controls">
+    <label class="search-box"><app-ui-icon name="search" /><input type="search" placeholder="Search users..." [(ngModel)]="search" /></label>
+    <label class="filter-box"><app-ui-icon name="filter" /><select [(ngModel)]="roleFilter">
+      <option value="">All roles</option>
+      <option value="student">Student</option>
+      <option value="peer_counselor">Peer Counselor</option>
+      <option value="guidance_staff">Guidance Staff</option>
+      <option value="admin">Admin</option>
+    </select></label>
+  </div>
+
+  @if (loading) { <app-loading label="Loading users..." /> }
+
+  <div class="user-grid">
+    @for (user of filteredUsers; track user.id) {
+      <app-card class="user-card">
+        <div class="user-card-top">
+          <span class="user-avatar">{{ getInitials(user.name) }}</span>
+          <div><h2>{{ user.name }}</h2><p>{{ user.email }}</p></div>
+          <app-badge [tone]="user.is_active ? 'calm' : 'neutral'">{{ user.is_active ? 'Active' : 'Inactive' }}</app-badge>
+        </div>
+        <div class="user-roles">
+          @for (role of user.roles; track role) {
+            <app-badge tone="peer">{{ role.replace('_', ' ') }}</app-badge>
+          }
+        </div>
+        <div class="user-card-actions">
+          <button type="button" class="button button-secondary" [disabled]="submitting" (click)="toggleStatus(user)">{{ user.is_active ? 'Deactivate' : 'Activate' }}</button>
+        </div>
+      </app-card>
+    } @empty {
+      <div class="no-users"><app-ui-icon name="users" /><h2>No users found</h2><p>Try adjusting your search or filters.</p></div>
+    }
+  </div>
+</section>

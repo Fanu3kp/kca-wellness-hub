@@ -1,0 +1,53 @@
+<section class="dashboard-hero">
+  <div class="dashboard-hero-inner">
+    <div><span class="eyebrow light">WELCOME BACK</span><h1>@if (user$ | async; as user) { {{ user.name.split(' ')[0] }},<br /> let’s make space for you. } </h1><p>Your campus support network is close by. Start with a check-in, a conversation, or a quiet moment.</p></div>
+    <div class="hero-date"><span>Today</span><strong>{{ today }}</strong><small>Support hours: 9:00–16:00 EAT</small></div>
+  </div>
+</section>
+
+<div class="dashboard-grid">
+  <section class="dashboard-main">
+    <app-card class="mood-card">
+      <div class="section-kicker"><div><span class="eyebrow">MOOD CHECK-IN</span><h2>How are you feeling today?</h2></div><app-badge tone="calm">Non-clinical</app-badge></div>
+      <div class="mood-options">
+        @for (mood of moods; track mood) {
+          <button type="button" [class.selected]="selectedMood === mood" [class.low]="mood === 'Low' || mood === 'Stressed' || mood === 'Very low'" (click)="checkMood(mood)">{{ mood }}</button>
+        }
+      </div>
+      @if (moodMessage) { <app-alert tone="calm" icon="heart" [title]="selectedMood" [message]="moodMessage" /> }
+    </app-card>
+
+    <div class="quick-links">
+      <div class="mini-heading"><div><span class="eyebrow">QUICK HELP</span><h2>What feels most useful now?</h2></div><a routerLink="/student/quick-help">Open navigator <app-ui-icon name="arrow" /></a></div>
+      <div class="quick-grid">
+        <a class="quick-card" routerLink="/student/quick-help"><span class="quick-icon teal"><app-ui-icon name="users" /></span><strong>Talk to a peer</strong><small>Listening, encouragement and referral</small></a>
+        <a class="quick-card" routerLink="/student/appointments"><span class="quick-icon purple"><app-ui-icon name="heart" /></span><strong>Professional support</strong><small>Confidential guidance and counselling</small></a>
+        <a class="quick-card" routerLink="/student/wellness"><span class="quick-icon orange"><app-ui-icon name="moon" /></span><strong>Quiet Space</strong><small>Breathing and grounding exercises</small></a>
+        <a class="quick-card" routerLink="/student/urgent-help"><span class="quick-icon red"><app-ui-icon name="alert" /></span><strong>Urgent help</strong><small>Find immediate support contacts</small></a>
+      </div>
+    </div>
+
+    <div class="growth-links">
+      <div class="mini-heading"><div><span class="eyebrow">GROWTH TOOLS</span><h2>Build a rhythm that works for you</h2></div><a routerLink="/student/goals">Open growth tools <app-ui-icon name="arrow" /></a></div>
+      <div class="growth-grid">
+        <a class="quick-card growth-card" routerLink="/student/goals"><span class="quick-icon teal"><app-ui-icon name="target" /></span><strong>Vision, mission &amp; goals</strong><small>Peer counselling, guidance and counselling</small></a>
+        <a class="quick-card growth-card" routerLink="/student/challenges"><span class="quick-icon purple"><app-ui-icon name="trophy" /></span><strong>Campus challenges</strong><small>{{ joinedChallenges }} joined · near you</small></a>
+        <a class="quick-card growth-card" routerLink="/student/favorites"><span class="quick-icon orange"><app-ui-icon name="bookmark" /></span><strong>Saved resources</strong><small>{{ favoriteCount }} saved for later</small></a>
+      </div>
+    </div>
+
+    <div class="dashboard-split">
+      <section><div class="mini-heading"><div><span class="eyebrow">WELLNESS JOURNEY</span><h2>Your personal tracker</h2></div><a routerLink="/student/wellness">View journey <app-ui-icon name="arrow" /></a></div><app-card [compact]="true"><div class="journey-summary"><span class="journey-number">04</span><div><strong>activities this month</strong><p>Small moments of care add up over time.</p></div></div><div class="journey-bars"><span style="height: 45%"></span><span style="height: 70%"></span><span style="height: 55%"></span><span style="height: 90%"></span><span style="height: 65%"></span><span style="height: 80%"></span><span style="height: 50%"></span></div><p class="journey-caption">A personal wellness activity tracker, not a medical score.</p></app-card></section>
+      <section><div class="mini-heading"><div><span class="eyebrow">CAMPUS LIFE</span><h2>Close to you</h2></div><a routerLink="/events">See events <app-ui-icon name="arrow" /></a></div><app-card [compact]="true" class="event-card"><span class="event-date"><strong>24</strong><small>SEP</small></span><div><h3>Wellness Walk &amp; Check-in</h3><p>Ruaraka Main Campus · 10:00–11:30</p><small>Open to all students · Physical + virtual check-in</small></div></app-card><app-card [compact]="true" class="event-card"><span class="event-date purple"><strong>02</strong><small>OCT</small></span><div><h3>Academic Pressure Reset</h3><p>Town Campus · 13:00–14:00</p><small>Peer-led conversation · Virtual option available</small></div></app-card></section>
+    </div>
+  </section>
+
+  <aside class="dashboard-aside">
+    <app-card class="support-card"><div class="support-card-head"><span class="support-avatar"><app-ui-icon name="users" /></span><div><strong>Find a peer counselor</strong><small>Trained student listeners on your campus</small></div></div><p>Peer counselors offer listening, encouragement, and referrals. They do not diagnose or replace professional care.</p><a class="button button-primary button-block" routerLink="/student/peer-counselors">Discover peers <app-ui-icon name="arrow" /></a></app-card>
+    <app-card class="support-card"><div class="support-card-head"><span class="support-avatar purple"><app-ui-icon name="heart" /></span><div><strong>Professional counselling</strong><small>Approved external booking options</small></div></div><p>Choose a counsellor and continue through the official KCA booking workflow.</p><a class="button button-secondary button-block" routerLink="/student/appointments">View options <app-ui-icon name="arrow" /></a></app-card>
+    <app-card class="support-card resource-card"><div class="support-card-head"><span class="support-avatar orange"><app-ui-icon name="book" /></span><div><strong>Recommended for you</strong><small>Practical, student-friendly resources</small></div></div>@for (resource of resources; track resource.id) { <a class="resource-link" routerLink="/student/resources"><span>{{ resource.title }}</span><app-ui-icon name="arrow" /></a> }<a class="text-link" routerLink="/student/resources">Browse resource library <app-ui-icon name="arrow" /></a></app-card>
+    <app-card class="support-card"><div class="support-card-head"><span class="support-avatar teal"><app-ui-icon name="video" /></span><div><strong>Wellness videos</strong><small>Short guided practices</small></div></div><p>Breathe, stretch and reset with student-friendly video content.</p><a class="button button-secondary button-block" routerLink="/student/wellness">Watch videos <app-ui-icon name="arrow" /></a></app-card>
+    <app-card class="support-card gallery-card"><div class="support-card-head"><span class="support-avatar purple"><app-ui-icon name="book" /></span><div><strong>Campus gallery</strong><small>Moments from {{ (campus$ | async)?.shortName }}</small></div></div><p>See photos and videos from campus wellness activities.</p><a class="button button-primary button-block" [routerLink]="['/campuses', (campus$ | async)?.id]">View gallery <app-ui-icon name="arrow" /></a></app-card>
+    <app-card class="support-card"><div class="support-card-head"><span class="support-avatar calm"><app-ui-icon name="users" /></span><div><strong>Community</strong><small>Student groups near you</small></div></div>@for (group of community; track group.name) { <div class="community-row"><span class="community-icon"><app-ui-icon name="users" /></span><div><strong>{{ group.name }}</strong><small>{{ group.members }} members · {{ group.type }}</small></div><app-ui-icon name="arrow" /></div> }</app-card>
+  </aside>
+</div>

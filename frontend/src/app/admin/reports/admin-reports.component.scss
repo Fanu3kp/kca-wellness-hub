@@ -1,0 +1,29 @@
+.admin-page { margin: 0 auto; max-width: 1240px; padding: 3rem 1.25rem 5rem; }
+.admin-page-heading { margin-bottom: 2rem; }
+.admin-page-heading h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.05; margin: 0; }
+.admin-page-heading p { color: var(--muted); line-height: 1.6; margin: .5rem 0 0; max-width: 680px; }
+.eyebrow { color: var(--brand); display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; }
+.report-stats { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem; }
+.stat-card { display: flex; align-items: center; justify-content: space-between; }
+.stat-card strong { display: block; font-size: 1.8rem; line-height: 1; }
+.stat-card small { color: var(--muted); font-size: .74rem; margin-top: .2rem; }
+.trend { background: #e8f5f1; border-radius: 999px; color: #146b58; font-size: .68rem; font-weight: 800; padding: .25rem .5rem; }
+.report-grid { display: grid; gap: 1.5rem; grid-template-columns: 1.5fr 1fr; }
+.mini-heading { align-items: center; margin-bottom: .9rem; }
+.mini-heading h2 { font-size: 1.15rem; margin: 0; }
+.activity-row { align-items: center; display: flex; justify-content: space-between; gap: .75rem; margin-bottom: .6rem; }
+.activity-row strong, .activity-row small { display: block; }
+.activity-row strong { font-size: .82rem; }
+.activity-row small { color: var(--muted); font-size: .66rem; }
+.activity-time { color: var(--muted); font-size: .66rem; white-space: nowrap; }
+.campus-breakdown { padding: 1rem; }
+.breakdown-row { align-items: center; display: flex; gap: .75rem; margin-bottom: .8rem; }
+.breakdown-row:last-child { margin-bottom: 0; }
+.breakdown-row > span { flex: 0 0 auto; font-size: .78rem; font-weight: 700; width: 100px; }
+.breakdown-row .bar { flex: 1; background: #e0ddd0; border-radius: 999px; height: 8px; overflow: hidden; }
+.breakdown-row .bar span { background: var(--brand); border-radius: inherit; display: block; height: 100%; }
+.breakdown-row strong { flex: 0 0 auto; font-size: .9rem; }
+.mini-heading { align-items: center; margin-bottom: .9rem; }
+.mini-heading h2 { font-size: 1.15rem; margin: 0; }
+@media (max-width: 900px) { .report-grid { grid-template-columns: 1fr; } .report-stats { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 540px) { .report-stats { grid-template-columns: 1fr; } }

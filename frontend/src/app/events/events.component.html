@@ -1,0 +1,58 @@
+<section class="events-page">
+  <div class="events-heading">
+    <div><span class="eyebrow">CAMPUS WELLNESS</span><h1>Events, connection and community.</h1><p>Join student wellbeing activities across KCA campuses. Choose a campus to explore its physical, virtual and community support options.</p></div>
+    <app-badge tone="calm">Physical + virtual</app-badge>
+  </div>
+
+  @if (error) { <p class="events-error"><app-ui-icon name="alert" /> {{ error }}</p> }
+  @if (loading) { <p class="events-loading"><span class="spinner" aria-hidden="true"></span> Loading events...</p> }
+
+  <div class="events-layout">
+    <aside class="events-filter" aria-label="Filter events">
+      <div class="filter-title"><app-ui-icon name="filter" /><strong>Filter events</strong></div>
+      <button type="button" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">All events</button>
+      <button type="button" [class.active]="activeFilter === 'ruaraka'" (click)="setFilter('ruaraka')">Ruaraka Main</button>
+      <button type="button" [class.active]="activeFilter === 'town'" (click)="setFilter('town')">Town</button>
+      <button type="button" [class.active]="activeFilter === 'kitengela'" (click)="setFilter('kitengela')">Kitengela</button>
+      <button type="button" [class.active]="activeFilter === 'virtual'" (click)="setFilter('virtual')">Virtual</button>
+      <div class="filter-note"><app-ui-icon name="bell" /><span>Event announcements will appear in your notifications.</span></div>
+    </aside>
+
+    <div class="event-list">
+      @if (!loading && !error) {
+        @for (event of filteredEvents; track event.id) {
+          <app-card [hoverable]="true" class="event-row">
+            <span class="event-date" [class.purple]="event.tone === 'purple'" [class.orange]="event.tone === 'orange'" [class.neutral]="event.tone === 'neutral'"><strong>{{ event.day }}</strong><small>{{ event.month }}</small></span>
+            <div class="event-copy">
+              <div class="event-title-row"><h2>{{ event.title }}</h2><app-badge [tone]="event.type === 'Past' ? 'neutral' : 'calm'">{{ event.type }}</app-badge><app-badge [tone]="event.mode === 'virtual' ? 'peer' : 'neutral'">{{ event.mode }}</app-badge></div>
+              <p class="event-campus"><app-ui-icon name="home" /><a [routerLink]="campusRoute(event)">{{ event.campus }}</a><span> · {{ event.time }}</span></p>
+              <small>Open to students · Supportive community space</small>
+            </div>
+            @if (event.mode === 'virtual' && event.externalUrl) {
+              <a class="event-action event-external" [href]="event.externalUrl" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Join ' + event.title + ' online'"><app-ui-icon name="external" /></a>
+            } @else {
+              <a class="event-action" [routerLink]="campusRoute(event)" [attr.aria-label]="'Open ' + event.campus + ' events'"><app-ui-icon name="arrow" /></a>
+            }
+          </app-card>
+        } @empty {
+          <app-card class="empty-events"><app-ui-icon name="calendar" /><h2>No events found</h2><p>Check back soon for new activities.</p></app-card>
+        }
+      }
+    </div>
+  </div>
+
+  <section class="campus-features">
+    <div class="campus-features-heading"><div><span class="eyebrow">CAMPUS SUPPORT</span><h2>Choose your support community</h2><p>Each campus has its own support availability and event community.</p></div></div>
+    <div class="campus-feature-grid">
+      @for (campus of campuses; track campus.id) {
+        <app-card class="campus-feature-card" [style.--campus-accent]="campus.accent">
+          <span class="campus-feature-icon"><app-ui-icon name="home" /></span>
+          <div><h3>{{ campus.name }}</h3><p>{{ campus.location }}</p><app-badge tone="calm">{{ supportLabel(campus) }}</app-badge></div>
+          <a class="campus-feature-link" [routerLink]="['/campuses', campus.id]">View campus <app-ui-icon name="arrow" /></a>
+        </app-card>
+      }
+    </div>
+  </section>
+
+  <section class="gallery-placeholder"><div><span class="eyebrow">WELLNESS GALLERY</span><h2>Moments from the KCA wellness community</h2><p>Approved photos and videos will be added here as they become available.</p></div><div class="gallery-tiles"><span><app-ui-icon name="video" /></span><span><app-ui-icon name="heart" /></span><span><app-ui-icon name="users" /></span></div></section>
+</section>

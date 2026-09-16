@@ -1,0 +1,81 @@
+<section class="admin-page">
+  <div class="admin-page-heading">
+    <div>
+      <span class="eyebrow">CONTENT MANAGEMENT</span>
+      <h1>Social links</h1>
+      <p>Manage the public social and website links shown across the KCA Wellness Hub.</p>
+    </div>
+    <button type="button" class="button button-primary" (click)="startCreate()"><app-ui-icon name="plus" /> Add social link</button>
+  </div>
+
+  @if (error) {
+    <app-alert tone="urgent" icon="alert" title="Social links" message="{{ error }}" />
+  }
+
+  @if (loading) {
+    <app-loading label="Loading social links..." />
+  } @else {
+    <div class="social-links-list">
+      @for (link of links; track link.id) {
+        <app-card class="social-link-card">
+          <div class="social-link-top">
+            <span class="social-icon"><app-ui-icon [name]="link.platform" /></span>
+            <div class="social-link-copy">
+              <div class="social-link-title">
+                <h2>{{ platformLabel(link.platform) }}</h2>
+                <app-badge [tone]="link.is_active ? 'calm' : 'neutral'">{{ link.is_active ? 'Active' : 'Inactive' }}</app-badge>
+              </div>
+              <p>{{ link.label }}</p>
+            </div>
+            <a class="external-link" [href]="link.url" target="_blank" rel="noreferrer" [attr.aria-label]="'Open ' + platformLabel(link.platform) + ' link'"><app-ui-icon name="external" /></a>
+          </div>
+          <div class="social-link-url"><app-ui-icon name="website" /><span>{{ link.url }}</span></div>
+          <div class="social-link-actions">
+            <button type="button" class="button button-secondary" [disabled]="submitting" (click)="toggleActive(link)">{{ link.is_active ? 'Deactivate' : 'Activate' }}</button>
+            <button type="button" class="button button-quiet" [disabled]="submitting" (click)="startEdit(link)">Edit</button>
+            <button type="button" class="button button-danger" [disabled]="submitting" (click)="deleteLink(link)">Delete</button>
+          </div>
+        </app-card>
+      } @empty {
+        <div class="empty-state"><app-ui-icon name="website" /><h2>No social links yet</h2><p>Add a link to make it available on the public wellness hub.</p></div>
+      }
+    </div>
+  }
+
+  <app-modal [open]="showForm" [title]="editingId ? 'Edit social link' : 'Add social link'" (closed)="cancelForm()">
+    <form class="social-form" [formGroup]="form" (ngSubmit)="saveLink()">
+      <div class="form-grid">
+        <div class="field">
+          <label for="social-platform">Platform</label>
+          <select id="social-platform" formControlName="platform">
+            @for (platform of platforms; track platform) {
+              <option [value]="platform">{{ platformLabels[platform] }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label for="social-sort-order">Sort order</label>
+          <input id="social-sort-order" type="number" min="0" formControlName="sort_order" />
+        </div>
+        <div class="field field-full">
+          <label for="social-label">Link label</label>
+          <input id="social-label" type="text" maxlength="80" formControlName="label" placeholder="e.g. KCA Wellness Hub" />
+          @if (labelControl?.invalid && labelControl?.touched) { <span class="field-error">Enter a label of 80 characters or fewer.</span> }
+        </div>
+        <div class="field field-full">
+          <label for="social-url">URL</label>
+          <input id="social-url" type="url" formControlName="url" placeholder="https://example.com" />
+          @if (urlControl?.invalid && urlControl?.touched) { <span class="field-error">Enter a valid URL beginning with http:// or https://.</span> }
+        </div>
+        <label class="checkbox-field" for="social-active">
+          <input id="social-active" type="checkbox" formControlName="is_active" />
+          <span><strong>Publish this link</strong><small>Show it on the public wellness hub.</small></span>
+        </label>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="button button-secondary" (click)="cancelForm()">Cancel</button>
+        <button type="submit" class="button button-primary" [disabled]="submitting || form.invalid">{{ editingId ? 'Save changes' : 'Add link' }}</button>
+      </div>
+    </form>
+  </app-modal>
+</section>

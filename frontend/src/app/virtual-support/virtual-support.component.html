@@ -1,0 +1,22 @@
+<section class="virtual-page">
+  <div class="virtual-heading">
+    <div><span class="eyebrow">VIRTUAL SUPPORT</span><h1>Connect from anywhere.</h1><p>Join scheduled virtual sessions via approved university platforms. Links are shared through official KCA booking workflows.</p></div><app-badge tone="calm">Secure platform</app-badge></div>
+  <app-alert tone="calm" icon="shield" title="Privacy first" message="Virtual sessions use approved university platforms. The application does not host video or audio streams. Session links are provided through official booking confirmations." />
+  <div class="virtual-section">
+    <div class="mini-heading"><div><span class="eyebrow">UPCOMING</span><h2>Scheduled sessions</h2></div></div>
+    <div class="session-list">@for (session of upcomingSessions; track session.id) { <app-card class="session-card"><img class="session-avatar" [src]="session.photoUrl" [alt]="session.counselor" /><div class="session-copy"><strong>{{ session.title }}</strong><small>{{ session.counselor }} · {{ session.date }} at {{ session.time }}</small><span class="session-mode"><app-ui-icon name="video" /> {{ session.mode }}</span></div><app-badge tone="calm">{{ session.status }}</app-badge></app-card> }</div>
+  </div>
+  <div class="virtual-section">
+    <div class="mini-heading"><div><span class="eyebrow">HISTORY</span><h2>Past sessions</h2></div></div>
+    <div class="session-list">@for (session of completedSessions; track session.id) { <app-card [compact]="true" class="session-card"><img class="session-avatar" [src]="session.photoUrl" [alt]="session.counselor" /><div class="session-copy"><strong>{{ session.title }}</strong><small>{{ session.counselor }} · {{ session.date }} at {{ session.time }}</small><span class="session-mode"><app-ui-icon name="video" /> {{ session.mode }}</span></div><app-badge tone="neutral">{{ session.status }}</app-badge></app-card> }</div>
+  </div>
+  <div class="entry-points">
+    <div class="mini-heading"><div><span class="eyebrow">ENTRY POINTS</span><h2>How to join</h2></div></div>
+    <div class="entry-grid">
+      <app-card class="entry-card"><app-ui-icon name="video" /><h3>Text chat</h3><p>For quick questions and ongoing support conversations.</p></app-card>
+      <app-card class="entry-card"><app-ui-icon name="users" /><h3>Scheduled sessions</h3><p>Join video or audio sessions via approved platform links.</p></app-card>
+      <app-card class="entry-card"><app-ui-icon name="phone" /><h3>Audio/video entry</h3><p>Use the link from your booking confirmation to enter the session.</p></app-card>
+    </div>
+  </div>
+  <p class="architecture-note"><app-ui-icon name="shield" /> This application does not host video or audio. Approved platforms (Google Meet, Microsoft Teams) are integrated via booking confirmation links. Architecture supports real-time integration via WebSocket/Socket.IO on the backend.</p>
+</section>

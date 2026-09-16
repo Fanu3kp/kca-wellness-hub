@@ -1,0 +1,60 @@
+.events-page { margin: 0 auto; max-width: 1240px; padding: 4rem 1.25rem 5rem; }
+.events-heading { align-items: end; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.5rem; }
+.events-heading h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.05; margin: 0; }
+.events-heading p { color: var(--muted); line-height: 1.6; margin: 0; max-width: 680px; }
+.eyebrow { color: var(--brand); display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; }
+.events-error, .events-loading { align-items: center; border-radius: 12px; display: flex; font-size: .8rem; gap: .5rem; margin: 0 0 1rem; padding: .8rem 1rem; }
+.events-error { background: #fff0ed; color: #a33a2d; }
+.events-loading { background: #f8f6f0; color: var(--muted); }
+.events-layout { display: grid; gap: 1rem; grid-template-columns: 220px 1fr; }
+.events-filter { align-self: start; background: white; border: 1px solid var(--line); border-radius: 16px; padding: 1rem; }
+.filter-title { align-items: center; display: flex; gap: .4rem; font-size: .85rem; margin-bottom: .8rem; }
+.filter-title svg { color: var(--brand); height: 1rem; width: 1rem; }
+.events-filter > button { background: transparent; border: 0; border-radius: 9px; color: #333333; cursor: pointer; display: block; font-size: .76rem; font-weight: 750; padding: .6rem .5rem; text-align: left; width: 100%; }
+.events-filter > button:hover, .events-filter > button.active { background: #f5f2e8; color: var(--brand-dark); }
+.filter-note { align-items: flex-start; border-top: 1px solid #e8e4da; color: var(--muted); display: flex; font-size: .68rem; gap: .4rem; line-height: 1.4; margin-top: 1rem; padding-top: .8rem; }
+.filter-note svg { color: var(--brand); flex: 0 0 auto; height: 1rem; width: 1rem; }
+.event-list { display: grid; gap: .7rem; }
+.event-row { align-items: center; display: grid; gap: .9rem; grid-template-columns: auto 1fr auto; }
+.event-date { align-items: center; background: #f5f2e8; border-radius: 13px; color: var(--brand); display: flex; flex: 0 0 auto; flex-direction: column; justify-content: center; min-width: 58px; }
+.event-date strong { font-size: 1.35rem; line-height: 1; }
+.event-date small { font-size: .6rem; font-weight: 900; margin-top: .25rem; }
+.event-date.purple { background: #ede8f0; color: var(--purple); }
+.event-date.orange { background: #f5f2e8; color: var(--orange); }
+.event-date.neutral { background: #f8f6f0; color: #6b7b8d; }
+.event-title-row { align-items: center; display: flex; flex-wrap: wrap; gap: .45rem; }
+.event-copy h2 { font-size: 1rem; margin: 0; }
+.event-campus { align-items: center; color: var(--muted); display: flex; font-size: .75rem; gap: .35rem; margin: .5rem 0 .25rem; }
+.event-campus svg { color: var(--brand); height: .85rem; width: .85rem; }
+.event-campus a { color: var(--brand-dark); font-weight: 800; text-decoration: none; }
+.event-campus a:hover { text-decoration: underline; }
+.event-copy small { color: #8a9baa; font-size: .66rem; }
+.event-action { align-items: center; background: #f5f3ef; border-radius: 50%; color: var(--brand); display: flex; height: 36px; justify-content: center; text-decoration: none; width: 36px; }
+.event-action svg { height: .9rem; width: .9rem; }
+.event-external { background: #e9f7f2; color: #146b58; }
+.empty-events { align-items: center; color: var(--muted); display: flex; flex-direction: column; justify-content: center; min-height: 180px; text-align: center; }
+.empty-events svg { color: var(--brand); height: 2rem; width: 2rem; }
+.empty-events h2 { color: var(--ink); font-size: 1.1rem; margin: .6rem 0 .2rem; }
+.empty-events p { font-size: .78rem; margin: 0; }
+.campus-features { margin-top: 2.5rem; }
+.campus-features-heading { margin-bottom: 1rem; }
+.campus-features-heading h2 { font-size: 1.35rem; margin: 0; }
+.campus-features-heading p { color: var(--muted); font-size: .78rem; margin: .35rem 0 0; }
+.campus-feature-grid { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
+.campus-feature-card { align-items: flex-start; display: grid; gap: .8rem; grid-template-columns: auto 1fr; padding: 1rem; position: relative; }
+.campus-feature-icon { align-items: center; background: color-mix(in srgb, var(--campus-accent) 12%, white); border-radius: 11px; color: var(--campus-accent); display: flex; height: 42px; justify-content: center; width: 42px; }
+.campus-feature-icon svg { height: 1.1rem; width: 1.1rem; }
+.campus-feature-card h3 { font-size: .92rem; margin: 0; }
+.campus-feature-card p { color: var(--muted); font-size: .7rem; margin: .2rem 0 .5rem; }
+.campus-feature-link { align-items: center; color: var(--brand); display: inline-flex; font-size: .72rem; font-weight: 850; gap: .3rem; text-decoration: none; }
+.campus-feature-link svg { height: .8rem; width: .8rem; }
+.gallery-placeholder { align-items: center; background: #f5f2e8; border-radius: 18px; display: grid; gap: 1.5rem; grid-template-columns: 1fr auto; margin-top: 1.5rem; padding: 1.5rem; }
+.gallery-placeholder h2 { font-size: 1.3rem; margin: 0; }
+.gallery-placeholder p { color: var(--muted); font-size: .78rem; margin: .4rem 0 0; }
+.gallery-tiles { display: flex; gap: .5rem; }
+.gallery-tiles span { align-items: center; background: white; border: 1px solid #d0d5dd; border-radius: 13px; color: var(--brand); display: flex; height: 62px; justify-content: center; width: 62px; }
+.gallery-tiles svg { height: 1.3rem; width: 1.3rem; }
+.spinner { animation: spin .8s linear infinite; border: 2px solid #d7e9e4; border-radius: 50%; border-top-color: var(--brand); display: inline-block; height: 1rem; width: 1rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 760px) { .events-layout { grid-template-columns: 1fr; } .events-filter { display: grid; grid-template-columns: repeat(2, 1fr); } .filter-title, .filter-note { grid-column: 1 / -1; } .campus-feature-grid { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .events-page { padding: 2.5rem .85rem 4rem; } .events-heading { align-items: flex-start; flex-direction: column; } .event-row { grid-template-columns: auto 1fr; } .event-action { display: none; } .gallery-placeholder { grid-template-columns: 1fr; } }

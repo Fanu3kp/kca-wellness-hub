@@ -1,0 +1,24 @@
+<section class="challenges-page">
+  <div class="challenges-hero"><div><span class="eyebrow light">CAMPUS WELLBEING</span><h1>Grow together, one small step at a time.</h1><p>Join a campus challenge, invite a classmate and celebrate progress without pressure.</p></div><app-badge tone="calm">This week</app-badge></div>
+
+  @if (campus$ | async; as campus) {
+    <div class="challenge-intro"><div><span class="eyebrow">YOUR COMMUNITY</span><h2>{{ campus.name }} challenges</h2><p>Activities are shaped around the support options available at {{ campus.shortName }}.</p></div><div class="challenge-filters"><button type="button" [class.active]="activeFilter === 'all'" (click)="activeFilter = 'all'">All challenges</button><button type="button" [class.active]="activeFilter === 'joined'" (click)="activeFilter = 'joined'">My challenges</button></div></div>
+  }
+
+  @if (challenges$ | async; as challenges) {
+    <div class="challenge-grid">
+      @for (challenge of filterChallenges(challenges); track challenge.id) {
+        <app-card class="challenge-card" [style.--challenge-accent]="challenge.tone === 'calm' ? '#147d64' : challenge.tone === 'peer' ? '#6748a8' : '#315c9d'">
+          <div class="challenge-card-top"><span class="challenge-icon"><app-ui-icon name="target" /></span><app-badge [tone]="challenge.tone">{{ challenge.category }}</app-badge></div>
+          <div class="challenge-days"><app-ui-icon name="calendar" /> {{ challenge.daysLeft }} days left</div>
+          <h2>{{ challenge.title }}</h2>
+          <p>{{ challenge.description }}</p>
+          <div class="challenge-progress"><span [style.width.%]="progress(challenge)"></span></div>
+          <div class="challenge-meta"><span><app-ui-icon name="users" /> {{ challengeService.participantCount(challenge) }} students</span><button type="button" class="join-button" [class.joined]="challengeService.isJoined(challenge.id)" (click)="joinOrLeave(challenge)"><app-ui-icon [name]="challengeService.isJoined(challenge.id) ? 'check' : 'plus'" /> {{ challengeService.isJoined(challenge.id) ? 'Joined' : 'Join challenge' }}</button></div>
+        </app-card>
+      } @empty {
+        <div class="challenge-empty"><app-ui-icon name="sparkles" /><h2>No challenges in this view</h2><p>Join a challenge to see it here and track your campus community.</p></div>
+      }
+    </div>
+  }
+</section>
