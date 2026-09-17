@@ -17,6 +17,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SocialLinkController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\SupportRequestController;
 use App\Http\Controllers\TrainingModuleController;
 use App\Http\Controllers\UserController;
@@ -41,6 +42,7 @@ Route::get('/training-modules', [TrainingModuleController::class, 'index']);
 Route::get('/training-modules/{trainingModule}', [TrainingModuleController::class, 'show']);
 Route::get('/social-links', [SocialLinkController::class, 'index']);
 Route::get('/booking-providers', [BookingProviderController::class, 'index']);
+Route::post('/contact', [ContactMessageController::class, 'store'])->middleware('throttle:contact');
 
 Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::post('/logout', [AuthController::class, 'logout']);
