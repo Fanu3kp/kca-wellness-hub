@@ -47,6 +47,14 @@ interface ApiBookingProvider {
   campus?: { id: number | string; name: string; code: string } | null;
 }
 
+interface ApiPeerCounselor {
+  id: number | string;
+  name: string;
+  email: string;
+  campus?: { id: number | string; name: string; code: string } | null;
+  profile?: { campus_id?: number | string } | null;
+}
+
 interface ApiSocialLink {
   id: number | string;
   platform: string;
@@ -60,8 +68,16 @@ export class WellnessService {
     { id: 'peer', label: 'Talk to a peer counselor', description: 'Student-to-student listening, encouragement and referral.', icon: 'users', route: '/student/peer-counselors', tone: 'peer' },
     { id: 'professional', label: 'Professional counselling', description: 'Private support from trained Guidance & Counselling staff.', icon: 'heart', route: '/student/appointments', tone: 'professional' },
     { id: 'resource', label: 'Explore a wellness resource', description: 'Short, practical guides you can use at your own pace.', icon: 'book', route: '/student/resources', tone: 'calm' },
-    { id: 'quiet', label: 'Take a quiet space break', description: 'A guided breathing or grounding activity.', icon: 'sparkles', route: '/student/wellness', tone: 'calm' },
+    { id: 'quiet', label: 'Take a quiet space break', description: 'A guided breathing or grounding activity.', icon: 'sparkles', route: '/wellness-videos', tone: 'calm' },
     { id: 'urgent', label: 'Urgent help', description: 'Find immediate support contacts and next steps.', icon: 'alert', route: '/student/urgent-help', tone: 'urgent' }
+  ];
+
+  readonly talkToSomeonePathways: SupportPathway[] = [
+    { id: 'available-peer', label: 'Available Peer Counselor', description: 'Start with a trained student listener who is available now.', icon: 'users', route: '/student/peer-counselors', queryParams: { available: true }, tone: 'peer' },
+    { id: 'professional-counselling', label: 'Professional Counselling', description: 'Continue to confidential support from Guidance & Counselling staff.', icon: 'heart', route: '/student/appointments', tone: 'professional' },
+    { id: 'wellness-resources', label: 'Wellness Resources', description: 'Use practical guides and activities at your own pace.', icon: 'book', route: '/student/resources', tone: 'calm' },
+    { id: 'virtual-support', label: 'Virtual Support', description: 'Connect to approved online support from anywhere.', icon: 'video', route: '/virtual-support', tone: 'calm' },
+    { id: 'urgent-help', label: 'Urgent Help', description: 'If safety or immediate support is needed, use urgent help now.', icon: 'alert', route: '/student/urgent-help', tone: 'urgent' }
   ];
 
   readonly resources: WellnessResource[] = [
@@ -132,20 +148,38 @@ export class WellnessService {
     );
   }
 
+  loadPeerCounselors(campusId?: string): Observable<AppointmentOption[]> {
+    return this.api.get<ApiCollection<ApiPeerCounselor>>('/peer-counselors', { campus_id: campusId }).pipe(
+      map((response) => this.itemsFrom(response).map((item) => this.fromPeerCounselor(item))),
+      catchError(() => of([]))
+    );
+  }
+
   bookAppointment(payload: {
-    bookingProviderId: string;
+    bookingProviderId?: string;
+    peerCounselorId?: string;
     campusId?: string;
+    mode?: 'physical' | 'virtual';
     startsAt: string;
     endsAt: string;
     notes?: string;
   }): Observable<Appointment> {
-    return this.api.post<Appointment>('/appointments', {
-      booking_provider_id: payload.bookingProviderId,
-      campus_id: payload.campusId ?? null,
+    const body: Record<string, unknown> = {
       starts_at: payload.startsAt,
       ends_at: payload.endsAt,
-      notes: payload.notes ?? null
-    });
+      mode: payload.mode ?? 'physical',
+      notes: payload.notes ?? null,
+    };
+    if (payload.bookingProviderId) {
+      body['booking_provider_id'] = payload.bookingProviderId;
+    }
+    if (payload.peerCounselorId) {
+      body['peer_counselor_id'] = payload.peerCounselorId;
+    }
+    if (payload.campusId) {
+      body['campus_id'] = payload.campusId;
+    }
+    return this.api.post<Appointment>('/appointments', body);
   }
 
   loadTrainingModules(): Observable<TrainingModule[]> {
@@ -175,6 +209,10 @@ export class WellnessService {
 
   recommend(concern: string): SupportPathway[] {
     const value = concern.toLowerCase();
+    const normalized = value.replace(/[.!?]+$/, '').trim();
+    if (normalized === 'i need someone to talk to') {
+      return this.talkToSomeonePathways;
+    }
     if (value.includes('urgent') || value.includes('crisis') || value.includes('unsafe')) {
       return [this.pathways[4], this.pathways[1], this.pathways[0]];
     }
@@ -235,6 +273,21 @@ export class WellnessService {
       availability: 'Mon–Fri, 09:00–16:00 EAT',
       bookingUrl: item.external_booking_url,
       photoUrl: item.photo_url ?? this.photoFor(item.name)
+    };
+  }
+
+  private fromPeerCounselor(item: ApiPeerCounselor): AppointmentOption {
+    const campusName = item.campus?.name ?? item.profile?.campus_id ? 'Campus peer counselor' : 'KCA University';
+    return {
+      id: String(item.id),
+      counsellor: `Peer ${item.name}`,
+      campus: campusName,
+      modes: ['Physical', 'Virtual'],
+      availability: 'Mon–Fri, 09:00–16:00 EAT',
+      bookingUrl: '',
+      photoUrl: undefined,
+      isPeerCounselor: true,
+      peerCounselorId: String(item.id)
     };
   }
 

@@ -10,7 +10,7 @@
 .notification-row { align-items: flex-start; display: grid; gap: .8rem; grid-template-columns: auto 1fr auto; }
 .notification-row.unread { background: #f8f6f0; border-color: #e8edf5; }
 .notification-icon { align-items: center; background: #f5f2e8; border-radius: 11px; color: var(--brand); display: flex; height: 40px; justify-content: center; width: 40px; }
-.notification-icon.appointment { background: #e8e4f0; color: #0A1F44; }
+.notification-icon.appointment { background: #e8e4f0; color: var(--brand); }
 .notification-icon.resource { background: #ede8f0; color: var(--purple); }
 .notification-icon.escalation { background: #f5ede5; color: var(--danger); }
 .notification-icon svg { height: 1.1rem; width: 1.1rem; }

@@ -14,6 +14,7 @@ class RoleCampusSeeder extends Seeder
             ['name' => 'student', 'description' => 'Student user'],
             ['name' => 'peer_counselor', 'description' => 'Trained peer counsellor'],
             ['name' => 'guidance_staff', 'description' => 'Guidance and counselling staff'],
+            ['name' => 'hod', 'description' => 'Head of Department for a campus'],
             ['name' => 'admin', 'description' => 'Platform administrator'],
         ] as $role) {
             Role::updateOrCreate(['name' => $role['name']], ['description' => $role['description']]);

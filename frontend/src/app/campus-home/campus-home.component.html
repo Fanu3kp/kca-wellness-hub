@@ -1,0 +1,71 @@
+<section class="campus-home" *ngIf="campus as campus">
+  <div class="campus-hero" [style.--campus-accent]="campus.accent">
+    <div class="campus-hero-inner">
+      <div>
+        <span class="eyebrow">YOUR CAMPUS</span>
+        <h1>{{ campus.name }}</h1>
+        <p class="hero-ledge">{{ campus.description }}</p>
+        <app-badge tone="calm">{{ supportLabel }}</app-badge>
+      </div>
+      <div class="campus-hero-meta">
+        <div><app-ui-icon name="home" /><span>{{ campus.location }}</span></div>
+        <div><app-ui-icon name="phone" /><span>{{ campus.phone }}</span></div>
+        <div><app-ui-icon name="mail" /><span>{{ campus.email }}</span></div>
+        <div><app-ui-icon name="clock" /><span>Mon–Fri, 9:00–16:00 EAT</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="campus-stats" *ngIf="!loading && stats.length">
+    <div class="campus-stat" *ngFor="let stat of stats">
+      <strong>{{ stat.value }}</strong>
+      <small>{{ stat.label }}</small>
+    </div>
+  </div>
+
+  <div class="campus-actions">
+    <a class="button button-primary button-block" [routerLink]="['/' + campus.slug + '/login']">
+      <app-ui-icon name="arrow" /> Sign in to your campus
+    </a>
+    <a class="button button-secondary button-block" [routerLink]="['/' + campus.slug + '/register']">
+      <app-ui-icon name="heart" /> Create an account
+    </a>
+  </div>
+
+  <div class="campus-sections">
+    <section class="campus-features">
+      <div class="mini-heading">
+        <div><span class="eyebrow">SUPPORT OPTIONS</span><h2>Support at {{ campus.shortName }}</h2></div>
+        <a class="mini-heading-link" [routerLink]="['/' + campus.slug + '/dashboard']">Campus dashboard</a>
+      </div>
+      <div class="feature-grid">
+        <app-card class="feature-card" [style.--campus-accent]="campus.accent">
+          <span class="feature-icon"><app-ui-icon name="heart" /></span>
+          <div><h3>Support</h3><p>In-person peer and professional wellbeing services at {{ campus.shortName }}, plus secure online counselling, group activities and wellbeing sessions from anywhere.</p></div>
+          <a class="feature-link" routerLink="/student/peer-counselors">Contact peer counselor <app-ui-icon name="arrow" /></a>
+        </app-card>
+      </div>
+    </section>
+
+    <section class="campus-events">
+      <div class="mini-heading"><div><span class="eyebrow">UPCOMING EVENTS</span><h2>Wellness activities at {{ campus.shortName }}</h2></div></div>
+      @for (event of events; track event.id) {
+        <app-card [compact]="true" class="event-card">
+          <span class="event-date"><strong>{{ event.day }}</strong><small>{{ event.month }}</small></span>
+          <div><h3>{{ event.title }}</h3><p>{{ event.time }}</p><small><app-badge [tone]="event.mode === 'virtual' ? 'peer' : 'neutral'">{{ event.mode }}</app-badge></small></div>
+          @if (event.externalUrl) { <a class="event-card-link" [href]="event.externalUrl" target="_blank" rel="noopener noreferrer">Join online <app-ui-icon name="external" /></a> }
+        </app-card>
+      } @empty {
+        <app-card [compact]="true"><p>No upcoming events at this campus. Check back soon.</p></app-card>
+      }
+    </section>
+
+    <section class="campus-links">
+      <div class="mini-heading"><div><span class="eyebrow">QUICK LINKS</span><h2>More ways to get support</h2></div></div>
+      <div class="link-grid">
+        <a class="quick-link" [routerLink]="['/' + campus.slug + '/contact']"><app-ui-icon name="mail" /><span>Contact us</span></a>
+        <a class="quick-link" routerLink="/wellness-videos"><app-ui-icon name="video" /><span>Wellness videos</span></a>
+      </div>
+    </section>
+  </div>
+</section>

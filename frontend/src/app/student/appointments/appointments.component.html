@@ -1,44 +1,64 @@
 <section class="appointments-page">
   <div class="appointments-heading">
     <div>
-      <span class="eyebrow">PROFESSIONAL COUNSELLING</span>
-      <h1>Support from trained professionals.</h1>
-      <p>Choose an approved counsellor and continue through KCA University's official external booking workflow. The Hub does not own or view private counsellor calendars.</p>
+      <span class="eyebrow">APPOINTMENT BOOKING</span>
+      <h1>Book support, physical or virtual.</h1>
+      <p>Choose between professional counsellors via the official external workflow or book a direct peer counselling session on your campus.</p>
     </div>
-    <app-badge tone="professional">Confidential</app-badge>
+    <app-badge tone="calm">Campus: {{ (campusService.selectedCampus$ | async)?.shortName ?? 'KCA' }}</app-badge>
   </div>
-  <app-alert tone="professional" icon="shield" title="Official booking workflow" message="Booking links open the configured external KCA workflow. Operating hours are Monday–Friday, 9:00 AM–4:00 PM Nairobi time (GMT+3)." />
+  <app-alert tone="professional" icon="shield" title="Confidential booking" message="All appointments are private and handled respectfully. Operating hours are Monday–Friday, 9:00 AM–4:00 PM Nairobi time (GMT+3)." />
   <div class="mode-tabs">
     <button type="button" [class.active]="mode === 'Physical'" (click)="mode = 'Physical'"><app-ui-icon name="home" /> Physical session</button>
     <button type="button" [class.active]="mode === 'Virtual'" (click)="mode = 'Virtual'"><app-ui-icon name="video" /> Virtual session</button>
   </div>
-  <div class="counsellor-grid">
-    @for (option of options; track option.id) {
-      <app-card class="counsellor-card" [class.selected]="selectedOption?.id === option.id">
-        <div class="counsellor-avatar">
-          @if (option.photoUrl) {
-            <img [src]="option.photoUrl" [alt]="option.counsellor" />
-          } @else {
-            <span>{{ option.counsellor[0] }}</span>
-          }
-        </div>
-        <div class="counsellor-copy">
-          <div>
-            <h2>{{ option.counsellor }}</h2>
-            <app-badge tone="professional">Approved counsellor</app-badge>
-          </div>
-          <p><app-ui-icon name="compass" /> {{ option.campus }}</p>
-          <p><app-ui-icon name="clock" /> {{ option.availability }}</p>
-          <div class="mode-pills">
-            @for (item of option.modes; track item) {
-              <span [class.selected]="mode === item">{{ item }}</span>
+
+  @if (loadingOptions) {
+    <p class="options-loading">Loading available counsellors…</p>
+  }
+
+  @if (!loadingOptions && options.length === 0) {
+    <p class="no-options">No counsellors are currently available. Please check back later.</p>
+  }
+
+  @if (!loadingOptions && options.length > 0) {
+    <div class="counsellor-grid">
+      @for (option of options; track option.id) {
+        <app-card class="counsellor-card" [class.selected]="selectedOption?.id === option.id">
+          <div class="counsellor-avatar">
+            @if (option.photoUrl) {
+              <img [src]="option.photoUrl" [alt]="option.counsellor" />
+            } @else {
+              <span>{{ option.counsellor.charAt(option.counsellor.length - 1) }}</span>
             }
           </div>
-        </div>
-        <button type="button" class="button button-primary" [class.selected]="selectedOption?.id === option.id" (click)="selectOption(option)">{{ selectedOption?.id === option.id ? 'Selected' : 'Open official booking' }}<app-ui-icon name="external" /></button>
-      </app-card>
-    }
-  </div>
+          <div class="counsellor-copy">
+            <div>
+              <h2>{{ option.counsellor }}</h2>
+              @if (option.isPeerCounselor) {
+                <app-badge tone="peer">Peer counselor</app-badge>
+              } @else {
+                <app-badge tone="professional">Approved counsellor</app-badge>
+              }
+            </div>
+            <p><app-ui-icon name="compass" /> {{ option.campus }}</p>
+            <p><app-ui-icon name="clock" /> {{ option.availability }}</p>
+            <div class="mode-pills">
+              @for (item of option.modes; track item) {
+                <span [class.selected]="mode === item">{{ item }}</span>
+              }
+            </div>
+          </div>
+          @if (option.isPeerCounselor) {
+            <button type="button" class="button button-primary" [class.selected]="selectedOption?.id === option.id" (click)="selectOption(option)">{{ selectedOption?.id === option.id ? 'Selected' : 'Select peer counselor' }}</button>
+          } @else {
+            <button type="button" class="button button-primary" [class.selected]="selectedOption?.id === option.id" (click)="selectOption(option)">{{ selectedOption?.id === option.id ? 'Selected' : 'Select' }}</button>
+          }
+        </app-card>
+      }
+    </div>
+  }
+
   @if (selectedOption && !booked) {
     <section class="booking-form">
       <div class="booking-heading">
@@ -46,9 +66,7 @@
         <h2>{{ selectedOption.counsellor }} · {{ mode }}</h2>
         <button type="button" class="reset-link" (click)="selectedOption = null">Change counsellor</button>
       </div>
-      @if (error) {
-        <app-alert tone="urgent" icon="alert" title="Unable to book" [message]="error" />
-      }
+      @if (error) { <app-alert tone="urgent" icon="alert" title="Unable to book" message="{{ error }}" /> }
       <div class="form-grid">
         <div class="field">
           <label for="scheduled-at">Date and time</label>
@@ -64,20 +82,37 @@
       </button>
     </section>
   }
+
   @if (booked) {
-    <section class="booking-confirm">
-      <app-alert tone="calm" icon="check" title="Request sent" [message]="successMessage" />
-      <button type="button" class="button button-secondary" (click)="openExternal()">
-        <app-ui-icon name="external" /> Open provider's external booking
-      </button>
+    <section class="booking-confirm" #bookingConfirm>
+      <div class="confirm-header">
+        <app-alert tone="calm" icon="check" title="Request sent" message="{{ successMessage }}" />
+        <button type="button" class="print-button" (click)="printReport()"><app-ui-icon name="print" /> Print</button>
+      </div>
+      @if (!selectedOption?.isPeerCounselor) {
+        <button type="button" class="button button-secondary" (click)="openExternal()">
+          <app-ui-icon name="external" /> Open provider's external booking
+        </button>
+      } @else {
+        <p class="peer-note"><app-ui-icon name="heart" /> Your peer counsellor will review and confirm this session. You will receive a notification with details.</p>
+      }
+      <div class="printable-summary">
+        <h3>Appointment Summary</h3>
+        <p><strong>Counsellor:</strong> {{ selectedOption?.counsellor }}</p>
+        <p><strong>Mode:</strong> {{ mode }}</p>
+        <p><strong>Date:</strong> {{ scheduledAt }}</p>
+        <p><strong>Type:</strong> {{ selectedOption?.isPeerCounselor ? 'Peer counselling session' : 'Professional counselling' }}</p>
+        <p><strong>Generated:</strong> {{ reportDate | date:'medium' }}</p>
+      </div>
     </section>
   }
+
   <section class="appointment-note">
     <app-ui-icon name="heart" />
     <div>
-      <strong>Not sure which option is right?</strong>
-      <p>Start with Quick Help or talk with a trained peer counselor. Peer counselors can listen, encourage and refer you to professional support.</p>
-      <a routerLink="/student/quick-help">Use Quick Help <app-ui-icon name="arrow" /></a>
+      <strong>Need peer support first?</strong>
+      <p>Peer counselors offer listening, encouragement, and referrals. They are trained student listeners on your campus.</p>
+      <a routerLink="/student/peer-counselors">Find a peer counselor <app-ui-icon name="arrow" /></a>
     </div>
   </section>
 </section>

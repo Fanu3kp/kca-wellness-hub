@@ -41,4 +41,9 @@ class CampusPolicy
     {
         return false;
     }
+
+    public function viewReports(User $user): bool
+    {
+        return $user->hasAnyRole(['guidance_staff', 'hod', 'admin']);
+    }
 }

@@ -15,10 +15,21 @@ class ConversationController extends Controller
         $this->authorize('viewAny', Conversation::class);
         $query = Conversation::query()->with(['supportRequest', 'creator:id,name,email', 'participants:id,name,email']);
 
-        if (! $request->user()->hasAnyRole(['peer_counselor', 'guidance_staff', 'admin'])) {
+        $user = $request->user();
+        $isStaff = $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'hod', 'admin']);
+
+        if (! $isStaff) {
             $query->whereHas('participants', static function ($query) use ($request): void {
                 $query->where('user_id', $request->user()->id)->whereNull('left_at');
             });
+        } elseif (! $user->hasRole('admin')) {
+            $campusId = $user->profile?->campus_id;
+            if ($campusId) {
+                $query->where(function ($q) use ($campusId): void {
+                    $q->whereHas('supportRequest', fn ($sq) => $sq->where('campus_id', $campusId))
+                        ->orWhereHas('participants', fn ($pq) => $pq->whereHas('profile', fn ($ppq) => $ppq->where('campus_id', $campusId)));
+                });
+            }
         }
 
         return response()->json(['data' => $query->latest('last_message_at')->paginate(15)]);

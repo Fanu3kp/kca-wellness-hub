@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\EnsureRole::class,
             'active' => \App\Http\Middleware\EnsureUserIsActive::class,
         ]);
+        $middleware->redirectGuestsTo(fn () => null);
         $middleware->statefulApi();
         $middleware->throttleApi('api');
         $middleware->trustProxies(at: [

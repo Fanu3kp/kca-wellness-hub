@@ -1,0 +1,140 @@
+<section class="campus-contact-page" *ngIf="campus as campus">
+  <div class="contact-hero" [style.--campus-accent]="campus.accent">
+    <div class="hero-content">
+      <span class="eyebrow light">CONTACT {{ campus.shortName | uppercase }}</span>
+      <h1>Contact your campus</h1>
+      <p>Reach out to the Wellness Hub at {{ campus.name }} for questions about support, events and wellbeing services. We're here to listen and help.</p>
+    </div>
+    <div class="hero-actions">
+      <app-badge tone="calm">{{ campus.location }}</app-badge>
+      @if (firstOtherCampus) {
+        <button type="button" class="switch-campus-btn" (click)="switchCampus(firstOtherCampus.slug)">
+          <app-ui-icon name="chevron" /> View {{ firstOtherCampus.shortName }} campus
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="contact-grid">
+    <app-card class="contact-form-card">
+      <div class="form-heading">
+        <div>
+          <span class="eyebrow">SEND A MESSAGE</span>
+          <h2>How can we help?</h2>
+        </div>
+        <span class="form-icon"><app-ui-icon name="mail" /></span>
+      </div>
+
+      @if (success) {
+        <app-alert tone="calm" icon="check" title="Message received" [message]="success" />
+      }
+      @if (error) {
+        <app-alert tone="urgent" icon="alert" title="Message not sent" [message]="error" />
+      }
+
+      <form (ngSubmit)="submitContact()">
+        <div class="form-grid">
+          <label class="field">
+            <span>Your Full Name</span>
+            <input type="text" [(ngModel)]="fullName" name="fullName" placeholder="e.g. Jane Wanjiku" required />
+          </label>
+          <label class="field">
+            <span>Your Contact Email</span>
+            <input type="email" [(ngModel)]="contactEmail" name="contactEmail" placeholder="you@students.kca.ac.ke" required />
+          </label>
+        </div>
+        <label class="field">
+          <span>Subject</span>
+          <input type="text" [(ngModel)]="subject" name="subject" placeholder="What is your message about?" required />
+        </label>
+        <label class="field">
+          <span>Your message <small>optional</small></span>
+          <textarea rows="6" [(ngModel)]="message" name="message" placeholder="Share a little more detail..."></textarea>
+        </label>
+        <button type="submit" class="button button-primary submit-button" [disabled]="submitting">
+          <app-ui-icon name="send" /> {{ submitting ? 'Sending...' : 'Submit message' }}
+        </button>
+        <p class="form-note">
+          <app-ui-icon name="shield" /> Your message is handled respectfully and shared only with the Wellness Hub team at {{ campus?.shortName }}.
+        </p>
+      </form>
+    </app-card>
+
+    <aside class="contact-side">
+      <app-card class="contact-details-card" [style.--accent]="campus.accent">
+        <div class="contact-details-heading">
+          <span class="contact-icon"><app-ui-icon name="home" /></span>
+          <div>
+            <span class="eyebrow">{{ campus.shortName | uppercase }} WELLNESS HUB</span>
+            <h2>{{ campus.name }}</h2>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <app-ui-icon name="mail" />
+          <div>
+            <strong>Email</strong>
+            <a href="mailto:{{ campus.email }}">{{ campus.email }}</a>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <app-ui-icon name="phone" />
+          <div>
+            <strong>Phone</strong>
+            <a href="tel:{{ campus.phone }}">{{ campus.phone }}</a>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <app-ui-icon name="clock" />
+          <div>
+            <strong>Support hours</strong>
+            <span>Mon–Fri, 09:00–16:00 EAT</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <app-ui-icon name="location" />
+          <div>
+            <strong>Location</strong>
+            <span>{{ campus.location }}</span>
+          </div>
+        </div>
+        @if (campus.guidanceHod) {
+          <div class="hod-section">
+            <div class="hod-heading">
+              <app-ui-icon name="shield" />
+              <div><span class="eyebrow">GUIDANCE HOD</span><h3>{{ campus.guidanceHod.name }}</h3></div>
+            </div>
+            <div class="hod-detail"><app-ui-icon name="mail" /><a href="mailto:{{ campus.guidanceHod.email }}">{{ campus.guidanceHod.email }}</a></div>
+            @if (campus.guidanceHod.phone) {
+              <div class="hod-detail"><app-ui-icon name="phone" /><a href="tel:{{ campus.guidanceHod.phone }}">{{ campus.guidanceHod.phone }}</a></div>
+            }
+            <a class="staff-login-link" routerLink="/guidance/login">
+              Staff login <app-ui-icon name="arrow" />
+            </a>
+          </div>
+        }
+      </app-card>
+
+      <div class="other-campuses-section">
+        <div class="mini-heading">
+          <div><span class="eyebrow">OTHER CAMPUSES</span><h2>Reach us elsewhere</h2></div>
+        </div>
+        @for (other of otherCampuses; track other.slug) {
+          <app-card [compact]="true" class="other-campus-card" [style.--accent]="other.accent">
+            <div class="other-campus-header">
+              <span class="other-campus-mark"><app-ui-icon name="home" /></span>
+              <div>
+                <h3>{{ other.shortName }}</h3>
+                <app-badge tone="calm">{{ other.location }}</app-badge>
+              </div>
+            </div>
+            <div class="other-campus-detail"><app-ui-icon name="mail" /><span>{{ other.email }}</span></div>
+            <div class="other-campus-detail"><app-ui-icon name="phone" /><span>{{ other.phone }}</span></div>
+            <a class="view-campus-link" [routerLink]="'/' + other.slug + '/contact'">
+              Contact {{ other.shortName }} <app-ui-icon name="arrow" />
+            </a>
+          </app-card>
+        }
+      </div>
+    </aside>
+  </div>
+</section>

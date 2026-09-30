@@ -1,0 +1,93 @@
+<section class="campus-dashboard">
+  <div class="campus-header">
+    <div>
+      <span class="eyebrow">{{ campus?.shortName ?? campus?.name ?? 'Campus' }} Reports</span>
+      <h1>{{ campus?.name ?? 'Campus Dashboard' }}</h1>
+      <p>Campus-scoped analytics and reporting for {{ campus?.shortName ?? 'this location' }}.</p>
+    </div>
+    <div class="header-actions">
+      <select class="days-select" [(ngModel)]="days" (ngModelChange)="loadReports()">
+        <option [ngValue]="7">Last 7 days</option>
+        <option [ngValue]="30" selected>Last 30 days</option>
+        <option [ngValue]="60">Last 60 days</option>
+        <option [ngValue]="90">Last 90 days</option>
+      </select>
+    </div>
+  </div>
+
+  @if (error) {
+    <app-alert tone="urgent" icon="alert" title="Unable to load reports" message="{{ error }}" />
+  }
+
+  @if (loading) {
+    <app-loading label="Loading campus reports..." />
+  }
+
+  @if (!loading) {
+    <div class="report-print-header" aria-hidden="true">
+      <div class="print-header-inner">
+        <div>
+          <span class="eyebrow">REPORT</span>
+          <h2>{{ campus?.name ?? 'Campus' }} Analytics Report</h2>
+          <small>Campus: {{ campus?.shortName ?? 'N/A' }} · Period: Last {{ days }} days</small>
+        </div>
+        <div class="print-meta">
+          <span>Generated: {{ reportDate | date:'medium' }}</span>
+          <button type="button" class="print-button" (click)="printReport()"><app-ui-icon name="print" /> Print</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      @for (stat of statCards(); track stat.label) {
+        <app-card [compact]="true" class="stat-card">
+          <span class="stat-icon" [ngClass]="stat.tone"><app-ui-icon [name]="stat.icon" /></span>
+          <div><strong>{{ stat.value }}</strong><small>{{ stat.label }}</small></div>
+        </app-card>
+      }
+    </div>
+
+    <div class="chart-grid">
+      <section class="chart-section">
+        <div class="mini-heading"><div><span class="eyebrow">SUPPORT REQUEST STATUS</span><h2>Requests by status</h2></div></div>
+        <app-card [compact]="true" class="chart-card">
+          <app-pie-chart *ngIf="statusSegments().segments.length" [segments]="statusSegments().segments" [size]="180" />
+          <p *ngIf="!statusSegments().segments.length" class="chart-placeholder">No support request data available.</p>
+        </app-card>
+      </section>
+
+      <section class="chart-section">
+        <div class="mini-heading"><div><span class="eyebrow">REQUEST CATEGORIES</span><h2>Requests by category</h2></div></div>
+        <app-card [compact]="true" class="chart-card">
+          <app-pie-chart *ngIf="categorySegments().segments.length" [segments]="categorySegments().segments" [size]="180" />
+          <p *ngIf="!categorySegments().segments.length" class="chart-placeholder">No category data available.</p>
+        </app-card>
+      </section>
+
+      <section class="chart-section">
+        <div class="mini-heading"><div><span class="eyebrow">APPOINTMENT TRENDS</span><h2>Appointments over time</h2></div></div>
+        <app-card [compact]="true" class="chart-card">
+          <app-line-chart *ngIf="trendSeries().length" [series]="trendSeries()" [height]="180" />
+          <p *ngIf="!trendSeries().length" class="chart-placeholder">No appointment data available.</p>
+        </app-card>
+      </section>
+
+      <section class="chart-section">
+        <div class="mini-heading"><div><span class="eyebrow">APPOINTMENT BY MODE</span><h2>Physical vs virtual</h2></div></div>
+        <app-card [compact]="true" class="chart-card">
+          <app-pie-chart *ngIf="modeSegments().segments.length" [segments]="modeSegments().segments" [size]="160" />
+          <p *ngIf="!modeSegments().segments.length" class="chart-placeholder">No mode data available.</p>
+        </app-card>
+      </section>
+    </div>
+
+    @if (authService.hasRole('admin') && campusBreakdown.length) {
+      <section class="chart-section">
+        <div class="mini-heading"><div><span class="eyebrow">ALL CAMPUSES</span><h2>Campus comparison</h2></div></div>
+        <app-card [compact]="true" class="chart-card">
+          <app-bar-chart [series]="reportService.campusStatsBars(campusBreakdown)" [height]="20" [legend]="true" />
+        </app-card>
+      </section>
+    }
+  }
+</section>

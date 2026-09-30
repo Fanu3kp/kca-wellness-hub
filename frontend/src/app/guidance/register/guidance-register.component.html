@@ -1,0 +1,60 @@
+<section class="auth-page guidance-auth">
+  <div class="auth-card">
+    <div class="auth-heading">
+      <span class="eyebrow">STAFF REGISTRATION</span>
+      <h1>Create your staff account.</h1>
+      <p>Set up your guidance and counselling profile for your campus.</p>
+    </div>
+    <app-alert tone="professional" icon="info" title="Approval required" message="Guidance and counselling roles are restricted. Enter the staff number issued to you by human resources to continue." />
+    <form (ngSubmit)="submit()">
+      <label for="staffNumber">Staff number</label>
+      <input id="staffNumber" name="staffNumber" type="text" placeholder="e.g. GS-2001" required autocomplete="off" [(ngModel)]="staffNumber" />
+      <p class="field-hint">Issued by human resources. Head of department accounts use an HOD number.</p>
+
+      <label for="name">Full name</label>
+      <input id="name" name="name" type="text" placeholder="e.g. Belinda Wanjiru" required [(ngModel)]="name" />
+
+      <label for="email">Staff email</label>
+      <input id="email" name="email" type="email" placeholder="you@kcau.ac.ke" required [(ngModel)]="email" />
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" placeholder="At least 8 characters" minlength="8" required [(ngModel)]="password" />
+
+      <label for="passwordConfirmation">Confirm password</label>
+      <input id="passwordConfirmation" name="passwordConfirmation" type="password" placeholder="Repeat your password" minlength="8" required [(ngModel)]="passwordConfirmation" />
+
+      <label for="campus">Campus</label>
+      <select id="campus" name="campus" [(ngModel)]="campusId" (ngModelChange)="onCampusChange($event)">
+        @for (campus of campuses; track campus.id) {
+          <option [value]="campus.id">{{ campus.name }}</option>
+        }
+      </select>
+
+      <label class="checkbox-row" for="isAdmin">
+        <input type="checkbox" id="isAdmin" name="isAdmin" [(ngModel)]="isAdmin" />
+        <span>Register as campus administrator (Head of Department)</span>
+      </label>
+
+      <button class="auth-submit guidance-submit" type="submit" [disabled]="submitting">{{ submitting ? 'Creating account...' : 'Create staff account' }}<app-ui-icon name="shield" /></button>
+      @if (error) { <app-alert tone="urgent" icon="alert" title="Registration failed" message="{{ error }}" /> }
+    </form>
+    <div class="auth-alternate">
+      <p class="auth-alternate-title">Already registered?</p>
+      <div class="auth-alternate-list">
+        <a routerLink="/guidance/login">Sign in to your staff account</a>
+      </div>
+    </div>
+  </div>
+  <aside class="auth-aside guidance-aside">
+    <div class="aside-inner">
+      <span class="aside-mark"><app-ui-icon name="users" /></span>
+      <h2>Guidance and counselling leads.</h2>
+      <p>This portal is for HODs and guidance staff across KCA campuses.</p>
+      <div class="aside-staff">
+        <div class="staff-item"><strong>Belinda</strong><small>Ruaraka Main</small></div>
+        <div class="staff-item"><strong>Tasha</strong><small>Town</small></div>
+        <div class="staff-item"><strong>Emily</strong><small>Kitengela</small></div>
+      </div>
+    </div>
+  </aside>
+</section>

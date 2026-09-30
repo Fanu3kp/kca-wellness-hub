@@ -22,7 +22,6 @@ export class CampusDetailComponent implements OnInit {
   campus: Campus | null = null;
   campusId: string | null = null;
   events: EventItem[] = [];
-  resources: Array<{ title: string; category: string; summary: string; duration: string; format: 'article' | 'audio' | 'video' }> = [];
   loading = false;
   error = '';
 
@@ -49,10 +48,6 @@ export class CampusDetailComponent implements OnInit {
         this.events = events;
         this.loading = false;
       },
-      error: () => { this.loading = false; }
-    });
-    this.wellnessService.getResources('All', this.campusId ?? undefined).subscribe({
-      next: (resources) => { this.resources = resources.slice(0, 6); this.loading = false; },
       error: () => { this.loading = false; }
     });
   }

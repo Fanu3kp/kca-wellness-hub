@@ -14,9 +14,20 @@ class SupportRequestPolicy
 
     public function view(User $user, SupportRequest $supportRequest): bool
     {
-        return $supportRequest->requester_id === $user->id
-            || $supportRequest->assigned_to === $user->id
-            || $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'admin']);
+        if ($supportRequest->requester_id === $user->id
+            || $supportRequest->assigned_to === $user->id) {
+            return true;
+        }
+
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
+        if ($user->hasAnyRole(['peer_counselor', 'guidance_staff', 'hod'])) {
+            return (int) ($supportRequest->campus_id) === (int) ($user->profile?->campus_id);
+        }
+
+        return false;
     }
 
     public function create(User $user): bool
@@ -26,14 +37,21 @@ class SupportRequestPolicy
 
     public function update(User $user, SupportRequest $supportRequest): bool
     {
-        return $supportRequest->assigned_to === $user->id
-            || $user->hasAnyRole(['guidance_staff', 'admin'])
-            || ($supportRequest->requester_id === $user->id && $supportRequest->status === 'pending');
+        if ($supportRequest->assigned_to === $user->id
+            || $user->hasAnyRole(['guidance_staff', 'hod', 'admin'])) {
+            return true;
+        }
+
+        if ($supportRequest->requester_id === $user->id && $supportRequest->status === 'pending') {
+            return true;
+        }
+
+        return false;
     }
 
     public function delete(User $user, SupportRequest $supportRequest): bool
     {
-        return $user->hasAnyRole(['guidance_staff', 'admin']);
+        return $user->hasAnyRole(['guidance_staff', 'hod', 'admin']);
     }
 
     public function restore(User $user, SupportRequest $supportRequest): bool

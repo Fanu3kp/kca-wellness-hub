@@ -1,6 +1,6 @@
 .role-dashboard { margin: 0 auto; max-width: 1240px; padding: 3rem 1.25rem 5rem; }
 .role-hero { align-items: end; border-radius: 22px; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.25rem; padding: 2.4rem; }
-.admin-hero { background: linear-gradient(125deg, #0A1F44, #0A1F44); color: white; }
+.admin-hero { background: linear-gradient(125deg, var(--brand), var(--brand)); color: white; }
 .role-hero h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.05; margin: 0; }
 .role-hero p { color: rgba(255,255,255,.82); line-height: 1.6; margin: 1rem 0 0; max-width: 650px; }
 .eyebrow { color: currentColor; display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; opacity: .8; }
@@ -12,7 +12,7 @@
 .stat-icon.teal { background: #f5f2e8; color: var(--brand); }
 .stat-icon.purple { background: #ede8f0; color: var(--purple); }
 .stat-icon.orange { background: #f5f2e8; color: var(--orange); }
-.stat-icon.blue { background: #e8e4f0; color: #0A1F44; }
+.stat-icon.blue { background: #e8e4f0; color: var(--brand); }
 .stat-icon svg { height: 1rem; width: 1rem; }
 .stat-grid strong, .stat-grid small { display: block; }
 .stat-grid strong { font-size: 1rem; }
@@ -22,7 +22,7 @@
 .mini-heading h2 { font-size: 1.15rem; margin: 0; }
 .admin-links { display: grid; gap: .55rem; }
 .admin-links a { align-items: center; background: white; border: 1px solid var(--line); border-radius: 13px; display: grid; gap: .65rem; grid-template-columns: auto 1fr auto; padding: .8rem; text-decoration: none; }
-.admin-links a:hover { border-color: #e8edf5; box-shadow: 0 8px 20px rgba(10,31,68,.07); }
+.admin-links a:hover { border-color: #e8edf5; box-shadow: 0 8px 20px rgba(27,44,87,.07); }
 .admin-links > app-ui-icon, .admin-links a > app-ui-icon { color: var(--brand); height: 1.1rem; width: 1.1rem; }
 .admin-links a > app-ui-icon:last-child { color: #8a9baa; height: .85rem; width: .85rem; }
 .admin-links strong, .admin-links small { display: block; }
@@ -42,5 +42,6 @@
 .button-block { width: 100%; }
 .button-primary { background: var(--brand); color: white; }
 .button-secondary { background: #f5f2e8; color: var(--brand-dark); }
+.chart-placeholder { color: var(--muted); font-size: .8rem; padding: 1rem; text-align: center; }
 @media (max-width: 900px) { .role-grid { grid-template-columns: 1fr; } .role-aside { grid-template-columns: 1fr 1fr; } .stat-grid { grid-template-columns: 1fr 1fr; } .admin-grid { grid-template-columns: 1fr; } }
 @media (max-width: 620px) { .role-dashboard { padding: 1.5rem .85rem 4rem; } .role-hero { align-items: flex-start; flex-direction: column; padding: 1.5rem; } .role-aside { grid-template-columns: 1fr; } .stat-grid { grid-template-columns: 1fr 1fr; } }

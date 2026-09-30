@@ -15,7 +15,7 @@ import { AlertComponent } from '../../shared/components/alert/alert.component';
   styleUrl: './quick-help.component.scss'
 })
 export class QuickHelpComponent {
-  concerns = ['Stress', 'Anxiety/worry', 'Academic pressure', 'Relationships', 'Family issues', 'Financial challenges', 'Career guidance', 'Friendship/social issues', 'Sleep/wellbeing', 'General support', "I don't know what I need", 'Urgent help'];
+  concerns = ['Stress', 'Anxiety/worry', 'Academic pressure', 'Relationships', 'Family issues', 'Financial challenges', 'Career guidance', 'Friendship/social issues', 'Sleep/wellbeing', 'General support', 'I need someone to talk to.', "I don't know what I need", 'Urgent help'];
   selectedConcern = '';
   unsureStep = 0;
   unsureAnswers: Record<number, string> = {};
@@ -41,6 +41,10 @@ export class QuickHelpComponent {
     return this.wellnessService.recommend(this.selectedConcern);
   }
 
+  get isTalkToSomeone(): boolean {
+    return this.selectedConcern.trim().toLowerCase().replace(/[.!?]+$/, '') === 'i need someone to talk to';
+  }
+
   answer(value: string): void {
     this.unsureAnswers[this.unsureStep] = value;
     if (this.unsureStep < this.unsureQuestions.length - 1) {
@@ -58,7 +62,7 @@ export class QuickHelpComponent {
     if (answers.includes('immediate') || answers.includes('urgent') || answers.includes('danger')) { route = '/student/urgent-help'; }
     else if (answers.includes('professional')) { route = '/student/appointments'; }
     else if (answers.includes('listen') || answers.includes('talk')) { route = '/student/peer-counselors'; }
-    else if (answers.includes('quiet') || answers.includes('calming')) { route = '/student/wellness'; }
+    else if (answers.includes('quiet') || answers.includes('calming')) { route = '/wellness-videos'; }
     this.router.navigate([route]);
   }
 }

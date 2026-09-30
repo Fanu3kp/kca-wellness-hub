@@ -30,7 +30,8 @@ const fallbackCampuses: Campus[] = [
     timezone: 'Africa/Nairobi',
     physicalSupport: true,
     virtualSupport: true,
-    accent: 'teal'
+    accent: 'teal',
+    guidanceHod: { name: 'Belinda Wanjiru', email: 'belinda@welness.kca.ac.ke', phone: '+254 711 814 101' }
   },
   {
     id: '2',
@@ -44,7 +45,8 @@ const fallbackCampuses: Campus[] = [
     timezone: 'Africa/Nairobi',
     physicalSupport: true,
     virtualSupport: true,
-    accent: 'purple'
+    accent: 'purple',
+    guidanceHod: { name: 'Tasha Njoroge', email: 'tasha@welness.kca.ac.ke', phone: '+254 711 814 102' }
   },
   {
     id: '3',
@@ -58,14 +60,18 @@ const fallbackCampuses: Campus[] = [
     timezone: 'Africa/Nairobi',
     physicalSupport: true,
     virtualSupport: true,
-    accent: 'orange'
+    accent: 'orange',
+    guidanceHod: { name: 'Emily Ochieng', email: 'emily@welness.kca.ac.ke', phone: '+254 711 814 103' }
   }
 ];
 
 @Injectable({ providedIn: 'root' })
 export class CampusService {
   private campuses = [...fallbackCampuses];
+  private campusesLoaded = false;
+  private readonly campusesSource = new BehaviorSubject<Campus[]>([...fallbackCampuses]);
   private readonly selectedCampusSource = new BehaviorSubject<Campus>(this.getSelectedCampus());
+  readonly campuses$ = this.campusesSource.asObservable();
   readonly selectedCampus$ = this.selectedCampusSource.asObservable();
 
   constructor(private readonly api: ApiService) {
@@ -73,9 +79,14 @@ export class CampusService {
   }
 
   loadCampuses() {
+    let loadedFromApi = false;
     return this.api.get<ApiCampusCollection>('/campuses').pipe(
-      catchError(() => of({ data: [] })),
+      catchError(() => {
+        this.campusesLoaded = false;
+        return of({ data: [] });
+      }),
       map((response) => {
+        loadedFromApi = response.data.length > 0;
         const apiCampuses = response.data.map((item) => this.fromApi(item));
         if (!apiCampuses.length) return this.campuses;
         return [
@@ -84,8 +95,10 @@ export class CampusService {
         ];
       }),
       tap((items) => {
+        this.campusesLoaded = loadedFromApi;
         this.campuses = items;
-        const selected = this.getCampus(this.selectedCampus.id) ?? items[0];
+        this.campusesSource.next(items);
+        const selected = this.getCampusBySlug(this.selectedCampus.slug) ?? items[0];
         if (selected) {
           this.selectCampus(selected);
         }
@@ -101,9 +114,25 @@ export class CampusService {
     return this.campuses.find((campus) => campus.id === id);
   }
 
+  getCampusBySlug(slug: string): Campus | undefined {
+    return this.campuses.find((campus) => campus.slug === slug);
+  }
+
+  getPersistableCampusId(campus: Campus): string | null {
+    return this.campuses.find((item) => item.slug === campus.slug)?.id ?? campus.id ?? null;
+  }
+
   selectCampus(campus: Campus): void {
-    sessionStorage.setItem('kca_campus_id', campus.id);
-    this.selectedCampusSource.next(campus);
+    const selected = this.campuses.find((item) => item.slug === campus.slug) ?? campus;
+    sessionStorage.setItem('kca_campus_id', selected.id);
+    this.selectedCampusSource.next(selected);
+  }
+
+  selectCampusBySlug(slug: string): Campus | null {
+    const campus = this.getCampusBySlug(slug);
+    if (!campus) return null;
+    this.selectCampus(campus);
+    return campus;
   }
 
   get selectedCampus(): Campus {

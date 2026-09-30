@@ -1,5 +1,5 @@
 .academy-page { margin: 0 auto; max-width: 1240px; padding: 4rem 1.25rem 5rem; }
-.academy-hero { align-items: end; background: linear-gradient(125deg, #0A1F44, #C9A227); border-radius: 22px; color: white; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1rem; padding: 2.5rem; }
+.academy-hero { align-items: end; background: linear-gradient(125deg, var(--brand), var(--brand-dark)); border-radius: 22px; color: white; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1rem; padding: 2.5rem; }
 .academy-hero h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.05; margin: 0; max-width: 680px; }
 .academy-hero p { color: #e8e4f0; line-height: 1.6; margin: 1rem 0 0; max-width: 680px; }
 .eyebrow { color: #e8e4f0; display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; }

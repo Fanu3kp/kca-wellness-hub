@@ -30,6 +30,35 @@ class UserController extends Controller
         return response()->json(['data' => $query->orderBy('name')->paginate(20)]);
     }
 
+    public function peerCounselors(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $query = User::query()
+            ->where('is_active', true)
+            ->whereHas('roles', static function ($query): void {
+                $query->where('name', 'peer_counselor');
+            })
+            ->with(['profile:id,user_id,campus_id', 'roles:id,name']);
+
+        if (! $user->hasRole('admin')) {
+            $campusId = $user->profile?->campus_id ?? $user->profile?->campus_id;
+            if ($campusId) {
+                $query->whereHas('profile', static function ($query) use ($campusId): void {
+                    $query->where('campus_id', $campusId);
+                });
+            }
+        }
+
+        if ($request->filled('campus_id')) {
+            $query->whereHas('profile', static function ($query) use ($request): void {
+                $query->where('campus_id', $request->integer('campus_id'));
+            });
+        }
+
+        return response()->json(['data' => $query->orderBy('name')->get()]);
+    }
+
     public function show(User $user): JsonResponse
     {
         $this->authorize('view', $user);

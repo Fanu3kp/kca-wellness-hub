@@ -1,6 +1,6 @@
 <nav class="bottom-nav" aria-label="Mobile shortcuts">
   @for (link of links; track link.path) {
-    <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: link.path === '/student' || link.path === '/peer-counselor' || link.path === '/landing' }">
+      <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: link.path === '/student' || link.path === '/peer-counselor' || link.path === '/guidance' || link.path === '/admin' || link.path === '/landing' }">
       <app-ui-icon [name]="link.icon" /><span>{{ link.label }}</span>
     </a>
   }

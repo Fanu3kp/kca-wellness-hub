@@ -1,0 +1,51 @@
+<section class="reports-page">
+  <div class="page-header">
+    <div class="header-content">
+      <div class="eyebrow"><app-ui-icon name="chart" /> Public Reports</div>
+      <h1>Wellness Hub Reports</h1>
+      <p class="lead">View aggregated wellness data across KCA University campuses. Detailed reports are available to authorized staff.</p>
+    </div>
+  </div>
+
+  <div class="reports-grid">
+    <app-card class="report-card">
+      <div class="report-icon"><app-ui-icon name="users" /></div>
+      <h3>Student Wellbeing</h3>
+      <p>Overview of student engagement, support requests, and wellness trends across all campuses.</p>
+      <a class="button button-secondary" routerLink="/login" [queryParams]="{ redirect: '/admin/reports' }"><app-ui-icon name="lock" /> Login to view</a>
+    </app-card>
+
+    <app-card class="report-card">
+      <div class="report-icon"><app-ui-icon name="calendar" /></div>
+      <h3>Appointments & Sessions</h3>
+      <p>Booking statistics, counselor availability, and session completion rates.</p>
+      <a class="button button-secondary" routerLink="/login" [queryParams]="{ redirect: '/admin/reports' }"><app-ui-icon name="lock" /> Login to view</a>
+    </app-card>
+
+    <app-card class="report-card">
+      <div class="report-icon"><app-ui-icon name="alert" /></div>
+      <h3>Escalations & Referrals</h3>
+      <p>Tracking of escalated cases, referral patterns, and response times.</p>
+      <a class="button button-secondary" routerLink="/login" [queryParams]="{ redirect: '/guidance/reports' }"><app-ui-icon name="lock" /> Login to view</a>
+    </app-card>
+
+    <app-card class="report-card">
+      <div class="report-icon"><app-ui-icon name="target" /></div>
+      <h3>Peer Counselor Activity</h3>
+      <p>Training completion, conversation volumes, and peer support effectiveness.</p>
+      <a class="button button-secondary" routerLink="/login" [queryParams]="{ redirect: '/peer-counselor/reports' }"><app-ui-icon name="lock" /> Login to view</a>
+    </app-card>
+  </div>
+
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>Need detailed reports?</h2>
+      <p>Sign in with your staff account to access comprehensive analytics, export data, and generate custom reports for your campus.</p>
+      <div class="cta-actions">
+        <a class="button button-primary" routerLink="/guidance/login"><app-ui-icon name="briefcase" /> Guidance Staff Login</a>
+        <a class="button button-secondary" routerLink="/peer-counselor/login"><app-ui-icon name="users" /> Peer Counselor Login</a>
+        <a class="button button-secondary" routerLink="/admin/login"><app-ui-icon name="shield" /> Admin Login</a>
+      </div>
+    </div>
+  </section>
+</section>

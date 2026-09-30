@@ -1,0 +1,51 @@
+<section class="auth-page peer-auth">
+  <div class="auth-card">
+    <div class="auth-heading">
+      <span class="eyebrow">PEER COUNSELOR REGISTRATION</span>
+      <h1>Create your counselor account.</h1>
+      <p>Set up your peer counselor profile for your campus.</p>
+    </div>
+    <app-alert tone="calm" icon="shield" title="Approval required" message="Peer counsellor places are limited. Enter the counsellor number issued to you by the wellbeing office to continue." />
+    <form (ngSubmit)="submit()">
+      <label for="counselorNumber">Peer counselor number</label>
+      <input id="counselorNumber" name="counselorNumber" type="text" placeholder="e.g. PC-1001" required autocomplete="off" [(ngModel)]="counselorNumber" />
+      <p class="field-hint">Issued by the counselling office after your training.</p>
+
+      <label for="name">Full name</label>
+      <input id="name" name="name" type="text" placeholder="e.g. Wanjiru Mwangi" required [(ngModel)]="name" />
+
+      <label for="email">Counselor email</label>
+      <input id="email" name="email" type="email" placeholder="you@students.kcau.ac.ke" required [(ngModel)]="email" />
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" placeholder="At least 8 characters" minlength="8" required [(ngModel)]="password" />
+
+      <label for="passwordConfirmation">Confirm password</label>
+      <input id="passwordConfirmation" name="passwordConfirmation" type="password" placeholder="Repeat your password" minlength="8" required [(ngModel)]="passwordConfirmation" />
+
+      <label for="campus">Campus</label>
+      <select id="campus" name="campus" [(ngModel)]="campusId" (ngModelChange)="onCampusChange($event)">
+        @for (campus of campuses; track campus.id) {
+          <option [value]="campus.id">{{ campus.name }}</option>
+        }
+      </select>
+
+      <button class="auth-submit peer-submit" type="submit" [disabled]="submitting">{{ submitting ? 'Creating account...' : 'Create counselor account' }}<app-ui-icon name="users" /></button>
+      @if (error) { <app-alert tone="urgent" icon="alert" title="Registration failed" message="{{ error }}" /> }
+    </form>
+    <div class="auth-alternate">
+      <p class="auth-alternate-title">Already registered?</p>
+      <div class="auth-alternate-list">
+        <a routerLink="/peer-counselor/login">Sign in to your counselor account</a>
+      </div>
+    </div>
+  </div>
+  <aside class="auth-aside peer-aside">
+    <div class="aside-inner">
+      <span class="aside-mark"><app-ui-icon name="heart" /></span>
+      <h2>Become a peer counselor.</h2>
+      <p>This portal is for trained student peer counselors across KCA campuses.</p>
+      <div class="aside-quote">“Your story matters. Your wellbeing matters too.”</div>
+    </div>
+  </aside>
+</section>

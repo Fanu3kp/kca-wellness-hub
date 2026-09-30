@@ -8,7 +8,7 @@
 .panel-heading h2, .recommendation-heading h2 { font-size: 1.25rem; margin: 0; }
 .panel-heading p { color: var(--muted); font-size: .8rem; margin: .35rem 0 1rem; }
 .concern-grid { display: grid; gap: .5rem; }
-.concern-grid button { align-items: center; background: #f8f6f0; border: 1px solid #e0ddd0; border-radius: 10px; color: #0A1F44; cursor: pointer; display: flex; font-size: .8rem; font-weight: 750; justify-content: space-between; min-height: 44px; padding: .6rem .75rem; text-align: left; }
+.concern-grid button { align-items: center; background: #f8f6f0; border: 1px solid #e0ddd0; border-radius: 10px; color: var(--brand); cursor: pointer; display: flex; font-size: .8rem; font-weight: 750; justify-content: space-between; min-height: 44px; padding: .6rem .75rem; text-align: left; }
 .concern-grid button:hover, .concern-grid button.selected { background: #f5f2e8; border-color: #a0aab5; color: var(--brand-dark); }
 .concern-grid svg { height: .85rem; width: .85rem; opacity: .6; }
 .recommendation-heading { align-items: flex-start; display: flex; justify-content: space-between; }
@@ -23,6 +23,8 @@
 .recommendation-card strong { display: block; font-size: .83rem; }
 .recommendation-card p { color: var(--muted); font-size: .72rem; line-height: 1.4; margin: .25rem 0 0; }
 .recommendation-card > svg { color: var(--brand); height: .9rem; width: .9rem; }
+.pathway-arrow { align-items: center; color: var(--brand); display: flex; justify-content: center; margin: -.1rem 0; }
+.pathway-arrow svg { height: .9rem; width: .9rem; }
 .empty-prompt { align-items: center; color: var(--muted); display: flex; flex-direction: column; justify-content: center; min-height: 300px; text-align: center; }
 .empty-prompt svg { color: var(--brand); height: 2rem; margin-bottom: .8rem; width: 2rem; }
 .empty-prompt h2 { color: var(--ink); font-size: 1.2rem; margin: 0; }
@@ -39,7 +41,7 @@
 .question-count { color: var(--brand); font-size: .68rem; font-weight: 900; margin: 1rem 0 .4rem; text-transform: uppercase; }
 .unsure-card h3 { font-size: 1.15rem; margin-bottom: 1rem; }
 .unsure-options { display: grid; gap: .5rem; }
-.unsure-options button { background: #f8f6f0; border: 1px solid #e0ddd0; border-radius: 10px; color: #0A1F44; cursor: pointer; font-size: .8rem; font-weight: 750; min-height: 42px; padding: .55rem .75rem; text-align: left; }
+.unsure-options button { background: #f8f6f0; border: 1px solid #e0ddd0; border-radius: 10px; color: var(--brand); cursor: pointer; font-size: .8rem; font-weight: 750; min-height: 42px; padding: .55rem .75rem; text-align: left; }
 .unsure-options button:hover { background: #f5f2e8; border-color: #a0aab5; }
 .unsure-actions { display: flex; justify-content: flex-end; margin-top: 1rem; }
 @media (max-width: 850px) { .quick-help-layout, .unsure-section { grid-template-columns: 1fr; } }

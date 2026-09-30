@@ -27,6 +27,15 @@ interface AuthResponse {
   };
 }
 
+interface RegisterResponse {
+  data: {
+    user: AuthResponse['data']['user'];
+    profile?: AuthResponse['data']['profile'];
+    token?: string;
+    verification_needed?: boolean;
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly currentUserSource = new BehaviorSubject<User | null>(null);
@@ -38,22 +47,70 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): Observable<User> {
-    return this.api.post<AuthResponse>('/login', { email, password }).pipe(
+  login(email: string, password: string, campusId: string | null = null): Observable<User> {
+    return this.api.post<AuthResponse>('/login', { email, password, campus_id: campusId ?? null }).pipe(
       tap((response) => this.applySession(response)),
       map((response) => this.toUser(response.data.user, response.data.profile))
     );
   }
 
-  register(name: string, email: string, password: string, passwordConfirmation: string, campusId: string): Observable<User> {
-    return this.api.post<AuthResponse>('/register', {
+  register(name: string, email: string, password: string, passwordConfirmation: string, campusId: string | null): Observable<{ user: User; verificationNeeded: boolean }> {
+    return this.api.post<RegisterResponse>('/register', {
       name,
       email,
       password,
       password_confirmation: passwordConfirmation,
       campus_id: campusId
     }).pipe(
+      tap((response) => {
+        if (response.data.token) {
+          setStoredAccessToken(response.data.token);
+          this.currentUserSource.next(this.toUser(response.data.user, response.data.profile));
+        }
+      }),
+      map((response) => ({
+        user: this.toUser(response.data.user, response.data.profile),
+        verificationNeeded: response.data.verification_needed ?? false
+      }))
+    );
+  }
+
+  verifyCode(email: string, code: string): Observable<User> {
+    return this.api.post<AuthResponse>('/verify-code', { email, code }).pipe(
       tap((response) => this.applySession(response)),
+      map((response) => this.toUser(response.data.user, response.data.profile))
+    );
+  }
+
+  resendVerificationCode(email: string): Observable<void> {
+    return this.api.post<{ message: string }>('/resend-verification-code', { email }).pipe(
+      map(() => undefined)
+    );
+  }
+
+  registerStaff(name: string, email: string, password: string, passwordConfirmation: string, campusId: string | null, isAdmin: boolean, staffNumber: string): Observable<User> {
+    return this.api.post<AuthResponse>('/guidance/register', {
+      name,
+      email,
+      password,
+      password_confirmation: passwordConfirmation,
+      campus_id: campusId,
+      is_admin: isAdmin,
+      staff_number: staffNumber
+    }).pipe(
+      map((response) => this.toUser(response.data.user, response.data.profile))
+    );
+  }
+
+  registerPeerCounselor(name: string, email: string, password: string, passwordConfirmation: string, campusId: string | null, counselorNumber: string): Observable<User> {
+    return this.api.post<AuthResponse>('/peer-counselor/register', {
+      name,
+      email,
+      password,
+      password_confirmation: passwordConfirmation,
+      campus_id: campusId,
+      counselor_number: counselorNumber
+    }).pipe(
       map((response) => this.toUser(response.data.user, response.data.profile))
     );
   }
@@ -96,10 +153,21 @@ export class AuthService {
     return roles.some((role) => this.hasRole(role));
   }
 
+  /**
+   * Returns the dashboard path the given user should land on after login.
+   */
+  homePathFor(user: User): string {
+    if (user.roles.includes('admin')) return '/admin';
+    if (user.roles.includes('guidance_staff') || user.roles.includes('hod')) return '/guidance';
+    if (user.roles.includes('peer_counselor')) return '/peer-counselor';
+    return '/student';
+  }
+
   get primaryRole(): UserRole {
     const roles = this.currentUser?.roles ?? [];
     if (roles.includes('admin')) return 'admin';
     if (roles.includes('guidance_staff')) return 'guidance_staff';
+    if (roles.includes('hod')) return 'hod';
     if (roles.includes('peer_counselor')) return 'peer_counselor';
     return 'student';
   }
@@ -109,11 +177,11 @@ export class AuthService {
   }
 
   canAccessConfidential(): boolean {
-    return this.hasAnyRole(['guidance_staff', 'admin']);
+    return this.hasAnyRole(['guidance_staff', 'hod', 'admin']);
   }
 
   canEscalate(): boolean {
-    return this.hasAnyRole(['peer_counselor', 'guidance_staff', 'admin']);
+    return this.hasAnyRole(['peer_counselor', 'guidance_staff', 'hod', 'admin']);
   }
 
   private applySession(response: AuthResponse): void {
@@ -126,6 +194,7 @@ export class AuthService {
       student: undefined,
       peer_counselor: 'Student Peer Counselor',
       guidance_staff: 'Guidance & Counselling Staff',
+      hod: 'Head of Department',
       admin: 'System Administrator'
     };
     const campus = this.campusService.getCampus(String(profile?.campus_id ?? this.campusService.selectedCampus.id))

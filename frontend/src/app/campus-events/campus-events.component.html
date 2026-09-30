@@ -28,7 +28,7 @@
           @if (event.mode === 'virtual' && event.externalUrl) {
             <a class="event-action event-external" [href]="event.externalUrl" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Join ' + event.title + ' online'"><app-ui-icon name="external" /></a>
           } @else {
-            <a class="event-action" [routerLink]="['/campuses', campus.id]" [attr.aria-label]="'Open ' + campus.name + ' campus'"><app-ui-icon name="arrow" /></a>
+            <a class="event-action" [routerLink]="['/' + (campus?.slug ?? '')]" [attr.aria-label]="'Open ' + campus?.name + ' campus'"><app-ui-icon name="arrow" /></a>
           }
         </app-card>
       } @empty {

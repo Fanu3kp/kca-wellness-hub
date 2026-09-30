@@ -1,4 +1,4 @@
-export type UserRole = 'student' | 'peer_counselor' | 'guidance_staff' | 'admin';
+export type UserRole = 'student' | 'peer_counselor' | 'guidance_staff' | 'hod' | 'admin';
 
 export interface Campus {
   id: string;
@@ -13,6 +13,7 @@ export interface Campus {
   physicalSupport: boolean;
   virtualSupport: boolean;
   accent: string;
+  guidanceHod?: { name: string; email: string; phone?: string };
 }
 
 export interface EventItem {
@@ -121,6 +122,7 @@ export interface SupportPathway {
   icon: string;
   route: string;
   tone: 'calm' | 'peer' | 'professional' | 'urgent';
+  queryParams?: Record<string, string | boolean>;
 }
 
 export interface WellnessResource {
@@ -163,6 +165,8 @@ export interface AppointmentOption {
   availability: string;
   bookingUrl: string;
   photoUrl?: string;
+  isPeerCounselor?: boolean;
+  peerCounselorId?: string;
 }
 
 export interface NotificationItem {
@@ -190,10 +194,12 @@ export interface Appointment {
   support_request_id?: string;
   starts_at: string;
   ends_at: string;
+  mode: 'physical' | 'virtual';
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   booking_reference?: string;
   notes?: string;
   cancelled_at?: string;
-  bookingProvider?: { id: string; name: string; mode: string; external_booking_url: string };
+  bookingProvider?: { id: string; name: string; mode: string; external_booking_url: string; photo_url?: string };
   campus?: { id: string; name: string; code: string };
+  assignee?: { id: string; name: string; email: string };
 }

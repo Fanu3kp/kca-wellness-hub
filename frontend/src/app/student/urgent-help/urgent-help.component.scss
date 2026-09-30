@@ -1,5 +1,5 @@
 .urgent-page { margin: 0 auto; max-width: 1240px; padding: 4rem 1.25rem 5rem; }
-.urgent-hero { align-items: end; background: linear-gradient(125deg, #C9A227, #C9A227); border-radius: 22px; color: white; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.25rem; padding: 2.5rem; }
+.urgent-hero { align-items: end; background: linear-gradient(125deg, var(--brand-dark), var(--brand-dark)); border-radius: 22px; color: white; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.25rem; padding: 2.5rem; }
 .urgent-hero h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.05; margin: 0; max-width: 650px; }
 .urgent-hero p { color: #f5ede5; line-height: 1.6; margin: 1rem 0 0; max-width: 650px; }
 .eyebrow { color: #f5ede5; display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; }

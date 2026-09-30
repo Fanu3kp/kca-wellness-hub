@@ -14,8 +14,19 @@ class AppointmentPolicy
 
     public function view(User $user, Appointment $appointment): bool
     {
-        return $appointment->user_id === $user->id
-            || $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'admin']);
+        if ($appointment->user_id === $user->id) {
+            return true;
+        }
+
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
+        if ($user->hasAnyRole(['peer_counselor', 'guidance_staff', 'hod'])) {
+            return (int) ($appointment->campus_id) === (int) ($user->profile?->campus_id);
+        }
+
+        return false;
     }
 
     public function create(User $user): bool
@@ -25,13 +36,12 @@ class AppointmentPolicy
 
     public function update(User $user, Appointment $appointment): bool
     {
-        return $appointment->user_id === $user->id
-            || $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'admin']);
+        return $this->view($user, $appointment);
     }
 
     public function delete(User $user, Appointment $appointment): bool
     {
-        return $user->hasAnyRole(['guidance_staff', 'admin']);
+        return $user->hasAnyRole(['guidance_staff', 'hod', 'admin']);
     }
 
     public function restore(User $user, Appointment $appointment): bool

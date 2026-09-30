@@ -34,8 +34,20 @@ export class CampusEventsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.campusId = this.route.snapshot.params['campusId'] ?? this.campusService.selectedCampus.id;
-    this.campus = this.campusService.getCampus(this.campusId ?? '') ?? this.campusService.selectedCampus;
+    const campusSlug = this.route.snapshot.parent?.data?.['campusSlug'];
+    if (campusSlug) {
+      const campus = this.campusService.getCampusBySlug(campusSlug as string);
+      if (campus) {
+        this.campusId = campus.id;
+        this.campus = campus;
+      }
+    } else {
+      this.campusId = this.route.snapshot.params['campusId'] ?? this.campusService.selectedCampus.id;
+      this.campus = this.campusService.getCampus(this.campusId ?? '') ?? this.campusService.selectedCampus;
+    }
+    if (!this.campus) {
+      this.campus = this.campusService.selectedCampus;
+    }
     this.loadEvents();
   }
 

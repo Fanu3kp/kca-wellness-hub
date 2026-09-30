@@ -9,7 +9,7 @@ class ReferralPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'admin']);
+        return $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'hod', 'admin']);
     }
 
     public function view(User $user, Referral $referral): bool
@@ -21,12 +21,12 @@ class ReferralPolicy
 
     public function create(User $user): bool
     {
-        return $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'admin']);
+        return $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'hod', 'admin']);
     }
 
     public function update(User $user, Referral $referral): bool
     {
-        return $user->hasAnyRole(['guidance_staff', 'admin'])
+        return $user->hasAnyRole(['guidance_staff', 'hod', 'admin'])
             || ($referral->to_user_id === $user->id && $referral->status === 'pending');
     }
 

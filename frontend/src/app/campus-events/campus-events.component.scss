@@ -13,7 +13,7 @@
 .filter-note svg { color: var(--brand); flex: 0 0 auto; height: .9rem; margin-top: .1rem; width: .9rem; }
 .event-list { display: grid; gap: .75rem; }
 .event-row { align-items: center; display: grid; gap: .75rem; grid-template-columns: auto 1fr; }
-.event-row:hover { border-color: var(--brand); box-shadow: 0 8px 20px rgba(10,31,68,.07); }
+.event-row:hover { border-color: var(--brand); box-shadow: 0 8px 20px rgba(27,44,87,.07); }
 .event-date { align-items: center; background: #f5f2e8; border-radius: 10px; color: var(--brand); display: flex; flex-direction: column; justify-content: center; min-width: 50px; }
 .event-date strong { font-size: 1.15rem; line-height: 1; }
 .event-date small { font-size: .58rem; font-weight: 900; margin-top: .15rem; }

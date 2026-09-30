@@ -1,7 +1,13 @@
 <section class="requests-page">
   <div class="requests-heading">
-    <div><span class="eyebrow">MY SUPPORT REQUESTS</span><h1>Track my support</h1><p>View your support requests, their status, and create new ones when needed.</p></div>
-    <button type="button" class="button button-primary" (click)="showCreateForm = !showCreateForm"><app-ui-icon name="plus" /> {{ showCreateForm ? 'Cancel' : 'New request' }}</button>
+    <div>
+      <span class="eyebrow">MY SUPPORT REQUESTS</span>
+      <h1>Track my support</h1>
+      <p>View your support requests, their status, and create new ones when needed. A peer counselor from your campus is automatically assigned to listen and help.</p>
+    </div>
+    <button type="button" class="button button-primary" (click)="showCreateForm = !showCreateForm">
+      <app-ui-icon name="plus" /> {{ showCreateForm ? 'Cancel' : 'New request' }}
+    </button>
   </div>
 
   @if (error) { <app-alert tone="urgent" icon="alert" title="Error" message="{{ error }}" /> }
@@ -9,7 +15,13 @@
   @if (showCreateForm) {
     <app-card class="create-form">
       <h3>Create support request</h3>
-      <p class="form-description">Describe your concern. This will be visible to peer counselors and guidance staff who are supporting you.</p>
+      <p class="form-description">Describe your concern. This will be visible to your assigned peer counselor and guidance staff on your campus. After submitting, a peer counselor will be automatically matched to you — you do not select a counselor yourself.</p>
+
+      <div class="campus-info">
+        <app-badge tone="calm">Campus: {{ campusService.selectedCampus.shortName }}</app-badge>
+        <small>You are creating this request for your registered campus.</small>
+      </div>
+
       <div class="form-grid">
         <div class="field">
           <label>Category</label>
@@ -55,15 +67,37 @@
           <span class="request-date">{{ req.created_at }}</span>
         </div>
         <p class="request-details">{{ req.details }}</p>
+
+        <div class="assignment-info" *ngIf="req.assignee">
+          <app-ui-icon name="users" />
+          <div>
+            <strong>Assigned peer counselor</strong>
+            <small>{{ req.assignee.name }} has been automatically assigned to your request. They will reach out via the conversation tab.</small>
+          </div>
+          <app-badge tone="peer">Auto-assigned</app-badge>
+        </div>
+        <div class="assignment-info" *ngIf="!req.assignee && req.status === 'pending'">
+          <app-ui-icon name="clock" />
+          <div>
+            <strong>Awaiting assignment</strong>
+            <small>A peer counselor on your campus will be assigned shortly.</small>
+          </div>
+        </div>
+
         <div class="request-actions">
           <a class="text-link" routerLink="/student/chat"><app-ui-icon name="chat" /> Open conversation</a>
+          @if (canRefer(req)) {
+            <button type="button" class="text-link refer-link" [disabled]="submitting" (click)="referToGuidance(req.id)">
+              <app-ui-icon name="arrow" /> Refer to Guidance &amp; Counselling
+            </button>
+          }
         </div>
       </app-card>
     } @empty {
       <div class="no-requests">
         <app-ui-icon name="sparkles" />
         <h2>No requests yet</h2>
-        <p>Create your first support request to get started.</p>
+        <p>Create your first support request to get started. A peer counselor will be automatically assigned to you.</p>
         <button type="button" class="button button-primary" (click)="showCreateForm = true">Create request</button>
       </div>
     }

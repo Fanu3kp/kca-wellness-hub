@@ -9,24 +9,24 @@ class EscalationPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'admin']);
+        return $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'hod', 'admin']);
     }
 
     public function view(User $user, Escalation $escalation): bool
     {
-        return $user->hasAnyRole(['guidance_staff', 'admin'])
+        return $user->hasAnyRole(['guidance_staff', 'hod', 'admin'])
             || $escalation->escalated_by === $user->id
             || $escalation->assigned_to === $user->id;
     }
 
     public function create(User $user): bool
     {
-        return $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'admin']);
+        return $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'hod', 'admin']);
     }
 
     public function update(User $user, Escalation $escalation): bool
     {
-        return $user->hasAnyRole(['guidance_staff', 'admin'])
+        return $user->hasAnyRole(['guidance_staff', 'hod', 'admin'])
             || ($escalation->assigned_to === $user->id && $escalation->status === 'open');
     }
 

@@ -42,6 +42,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'sanctum' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -113,5 +117,18 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Two-Factor Challenge Lifetime
+    |--------------------------------------------------------------------------
+    |
+    | How long a user has to finish the second step of a two-factor sign-in
+    | after their password has been accepted. The challenge only unlocks the
+    | code check, it never grants a session on its own.
+    |
+    */
+
+    'two_factor_challenge_minutes' => (int) env('TWO_FACTOR_CHALLENGE_MINUTES', 5),
 
 ];

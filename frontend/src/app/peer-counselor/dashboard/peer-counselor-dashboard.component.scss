@@ -1,6 +1,6 @@
 .role-dashboard { margin: 0 auto; max-width: 1240px; padding: 3rem 1.25rem 5rem; }
 .role-hero { align-items: end; border-radius: 22px; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.25rem; padding: 2.4rem; }
-.peer-hero { background: linear-gradient(125deg, #0A1F44, #C9A227); color: white; }
+.peer-hero { background: linear-gradient(125deg, var(--brand), var(--brand-dark)); color: white; }
 .role-hero h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.05; margin: 0; }
 .role-hero p { color: rgba(255,255,255,.82); line-height: 1.6; margin: 1rem 0 0; max-width: 650px; }
 .eyebrow { color: currentColor; display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; opacity: .8; }
@@ -16,7 +16,7 @@
 .mini-heading a, .text-link { align-items: center; color: var(--brand); display: inline-flex; font-size: .74rem; font-weight: 850; gap: .3rem; text-decoration: none; white-space: nowrap; }
 .mini-heading svg, .text-link svg { height: .85rem; width: .85rem; }
 .request-card { display: grid; gap: .35rem; margin-top: .6rem; position: relative; }
-.request-status { align-self: start; background: #f5ede5; border-radius: 999px; color: #C9A227; font-size: .62rem; font-weight: 900; padding: .25rem .45rem; text-transform: uppercase; }
+.request-status { align-self: start; background: #f5ede5; border-radius: 999px; color: var(--brand-dark); font-size: .62rem; font-weight: 900; padding: .25rem .45rem; text-transform: uppercase; }
 .request-card strong { font-size: .82rem; }
 .request-card small { color: var(--muted); font-size: .68rem; }
 .request-card > div { margin-top: .35rem; }
@@ -39,7 +39,7 @@
 .button-block { width: 100%; }
 .button-primary { background: var(--brand); color: white; }
 .button-secondary { background: #f5f2e8; color: var(--brand-dark); }
-.button-danger { background: #f5ede5; color: #C9A227; }
+.button-danger { background: #f5ede5; color: var(--brand-dark); }
 .schedule-list { display: grid; gap: .5rem; margin-top: .7rem; }
 .schedule-row { align-items: center; background: #f8f6f0; border-radius: 10px; display: grid; gap: .6rem; grid-template-columns: 50px 1fr auto; padding: .65rem .8rem; }
 .schedule-row strong { font-size: .78rem; }
@@ -54,5 +54,30 @@
 .resource-row span { display: block; font-size: .78rem; }
 .resource-row small { color: var(--muted); font-size: .64rem; }
 .spacing-top { margin-top: 1rem; }
+.campus-stats-card { padding: .9rem; }
+.mini-stat { align-items: center; display: flex; gap: .6rem; padding: .6rem 0; border-bottom: 1px solid #e8e4da; }
+.mini-stat:last-child { border-bottom: 0; }
+.mini-stat-icon { align-items: center; background: #f5f2e8; border-radius: 8px; color: var(--brand); display: flex; height: 28px; justify-content: center; width: 28px; }
+.mini-stat-icon.purple { background: #ede8f0; color: #6748a8; }
+.mini-stat-icon.orange { background: #f5f2e8; color: var(--brand-dark); }
+.mini-stat-icon.urgent { background: #fff0ed; color: #a33a2d; }
+.mini-stat-icon.professional { background: #e8f1ff; color: #315c9d; }
+.mini-stat-icon svg { height: .8rem; width: .8rem; }
+.mini-stat strong { display: block; font-size: 1.1rem; }
+.mini-stat small { color: var(--muted); font-size: .62rem; }
+.pie-card { padding: 1rem; text-align: center; }
+.pie-card app-pie-chart { display: flex; justify-content: center; }
+.notification-row { align-items: flex-start; display: flex; gap: .6rem; padding: .6rem 0; border-bottom: 1px solid #e8e4da; }
+.notification-row:last-child { border-bottom: 0; }
+.notification-type { align-items: center; background: #f5f2e8; border-radius: 8px; color: var(--brand); display: flex; flex: 0 0 auto; height: 28px; justify-content: center; width: 28px; }
+.notification-type.message { background: #e8f1ff; color: #315c9d; }
+.notification-type.appointment { background: #e9f7f2; color: #146b58; }
+.notification-type.resource { background: #f5f2e8; color: var(--brand-dark); }
+.notification-type.training { background: #ede8f0; color: #6748a8; }
+.notification-type.announcement { background: #e8e4da; color: var(--brand); }
+.notification-type.escalation { background: #fff0ed; color: #a33a2d; }
+.notification-type svg { height: .8rem; width: .8rem; }
+.notification-time { color: var(--muted); font-size: .62rem; margin-left: auto; white-space: nowrap; }
+.no-notifications { color: var(--muted); font-size: .8rem; padding: .8rem 0; }
 @media (max-width: 900px) { .role-grid { grid-template-columns: 1fr; } .role-aside { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 620px) { .role-dashboard { padding: 1.5rem .85rem 4rem; } .role-hero { align-items: flex-start; flex-direction: column; padding: 1.5rem; } .dashboard-split { grid-template-columns: 1fr; } .role-aside { grid-template-columns: 1fr; } .availability-options { grid-template-columns: 1fr; } }

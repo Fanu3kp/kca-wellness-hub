@@ -97,7 +97,7 @@ export class ProfileComponent implements OnInit {
     const user = this.authService.currentUser;
     if (!user) return 'neutral';
     if (user.roles.includes('peer_counselor')) return 'peer';
-    if (user.roles.includes('guidance_staff') || user.roles.includes('admin')) return 'professional';
+    if (user.roles.includes('guidance_staff') || user.roles.includes('hod') || user.roles.includes('admin')) return 'professional';
     return 'calm';
   }
 

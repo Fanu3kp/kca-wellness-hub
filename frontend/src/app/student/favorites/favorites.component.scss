@@ -1,9 +1,9 @@
 .favorites-page { margin: 0 auto; max-width: 1240px; padding: 4rem 1.25rem 5rem; }
-.favorites-hero { align-items: end; background: linear-gradient(125deg, #0A1F44, #0A1F44); border-radius: 22px; color: white; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.25rem; padding: 2.5rem; }
+.favorites-hero { align-items: end; background: linear-gradient(125deg, var(--brand), var(--brand)); border-radius: 22px; color: white; display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.25rem; padding: 2.5rem; }
 .favorites-hero h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.05; margin: 0; }
 .favorites-hero p { color: #a0aab5; line-height: 1.6; margin: 1rem 0 0; max-width: 680px; }
 .eyebrow { color: var(--brand); display: block; font-size: .68rem; font-weight: 900; letter-spacing: .1em; margin-bottom: .55rem; }
-.eyebrow.light { color: #C9A227; }
+.eyebrow.light { color: var(--brand-dark); }
 .favorites-error, .favorites-loading { align-items: center; border-radius: 12px; display: flex; font-size: .78rem; gap: .5rem; margin-bottom: 1rem; padding: .8rem 1rem; }
 .favorites-error { background: #fff0ed; color: #a33a2d; }
 .favorites-loading { background: #f8f6f0; color: var(--muted); }

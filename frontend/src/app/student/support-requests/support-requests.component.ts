@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
@@ -22,6 +23,8 @@ interface SupportRequest {
   status: 'pending' | 'assigned' | 'in_progress' | 'resolved' | 'closed';
   priority: 'low' | 'medium' | 'high';
   assigned_to?: string;
+  assignee?: { id: string; name: string; email: string } | null;
+  campus?: { id: string; name: string; code: string } | null;
   created_at: string;
 }
 
@@ -35,6 +38,8 @@ interface ApiSupportRequest {
   status: string;
   priority: string;
   assigned_to?: number | string | null;
+  assignee?: { id: number | string; name: string; email: string } | null;
+  campus?: { id: number | string; name: string; code: string } | null;
   created_at: string;
 }
 
@@ -45,7 +50,7 @@ interface ApiSupportRequestCollection {
 @Component({
   selector: 'app-support-requests',
   standalone: true,
-  imports: [FormsModule, RouterLink, AsyncPipe, UiIconComponent, CardComponent, BadgeComponent, AlertComponent, ButtonComponent, LoadingComponent],
+  imports: [CommonModule, FormsModule, RouterLink, AsyncPipe, UiIconComponent, CardComponent, BadgeComponent, AlertComponent, ButtonComponent, LoadingComponent],
   templateUrl: './support-requests.component.html',
   styleUrl: './support-requests.component.scss'
 })
@@ -99,6 +104,8 @@ export class SupportRequestsComponent implements OnInit {
           status: item.status as SupportRequest['status'],
           priority: item.priority as SupportRequest['priority'],
           assigned_to: item.assigned_to ? String(item.assigned_to) : undefined,
+          assignee: item.assignee ? { id: String(item.assignee.id), name: item.assignee.name, email: item.assignee.email } : null,
+          campus: item.campus ? { id: String(item.campus.id), name: item.campus.name, code: item.campus.code } : null,
           created_at: item.created_at
         }));
         this.loading = false;
@@ -111,8 +118,9 @@ export class SupportRequestsComponent implements OnInit {
     if (!this.newRequestSubject.trim() || !this.newRequestDetails.trim()) return;
     this.submitting = true;
     this.error = '';
+    const campusId = this.campusService.getPersistableCampusId(this.campusService.selectedCampus);
     this.api.post<ApiSupportRequest>('/support-requests', {
-      campus_id: this.newRequestCampusId || this.campusService.selectedCampus.id,
+      campus_id: this.newRequestCampusId || campusId || this.campusService.selectedCampus.id,
       category: this.newRequestCategory,
       subject: this.newRequestSubject.trim(),
       details: this.newRequestDetails.trim(),
@@ -128,6 +136,9 @@ export class SupportRequestsComponent implements OnInit {
           details: item.details,
           status: item.status as SupportRequest['status'],
           priority: item.priority as SupportRequest['priority'],
+          assigned_to: item.assigned_to ? String(item.assigned_to) : undefined,
+          assignee: item.assignee ? { id: String(item.assignee.id), name: item.assignee.name, email: item.assignee.email } : null,
+          campus: item.campus ? { id: String(item.campus.id), name: item.campus.name, code: item.campus.code } : null,
           created_at: item.created_at
         });
         this.newRequestSubject = '';
@@ -137,6 +148,30 @@ export class SupportRequestsComponent implements OnInit {
       },
       error: () => { this.submitting = false; this.error = 'Request could not be created.'; }
     });
+  }
+
+  referToGuidance(requestId: string): void {
+    const request = this.requests.find((r) => r.id === requestId);
+    if (!request || request.status === 'resolved' || request.status === 'closed') return;
+
+    this.submitting = true;
+    this.error = '';
+    this.api.post(`/support-requests/${requestId}/refer-to-guidance`, {
+      reason: `Referral from student for ${request.category.replace(/-/g, ' ')} support`,
+      notes: 'Student requested referral to Guidance & Counselling department.'
+    }).subscribe({
+      next: () => {
+        request.status = 'assigned';
+        request.assigned_to = request.assignee ? request.assignee.id : undefined;
+        this.error = '';
+        this.submitting = false;
+      },
+      error: () => { this.submitting = false; this.error = 'Referral could not be created.'; }
+    });
+  }
+
+  canRefer(request: SupportRequest): boolean {
+    return !['resolved', 'closed'].includes(request.status);
   }
 
   statusBadgeTone(status: string): 'calm' | 'professional' | 'urgent' | 'neutral' {
@@ -153,7 +188,7 @@ export class SupportRequestsComponent implements OnInit {
   priorityColor(priority: string): string {
     switch (priority) {
       case 'high': return '#a33a2d';
-      case 'medium': return '#C9A227';
+      case 'medium': return '#BEA429';
       default: return '#146b58';
     }
   }

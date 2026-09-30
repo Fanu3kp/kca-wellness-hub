@@ -34,7 +34,7 @@ class MessageController extends Controller
             ->exists();
 
         abort_unless(
-            $canParticipate || $request->user()->hasAnyRole(['peer_counselor', 'guidance_staff', 'admin']),
+            $canParticipate || $request->user()->hasAnyRole(['peer_counselor', 'guidance_staff', 'hod', 'admin']),
             403
         );
 
@@ -64,7 +64,7 @@ class MessageController extends Controller
         abort_unless($message->conversation_id === $conversation->id, 404);
         abort_unless(
             $message->sender_id === $request->user()->id
-                || $request->user()->hasAnyRole(['guidance_staff', 'admin']),
+                || $request->user()->hasAnyRole(['guidance_staff', 'hod', 'admin']),
             403
         );
 
@@ -81,7 +81,7 @@ class MessageController extends Controller
         abort_unless($message->conversation_id === $conversation->id, 404);
         abort_unless(
             $message->sender_id === $request->user()->id
-                || $request->user()->hasAnyRole(['guidance_staff', 'admin']),
+                || $request->user()->hasAnyRole(['guidance_staff', 'hod', 'admin']),
             403
         );
         $message->delete();

@@ -1,0 +1,58 @@
+<section class="auth-page guidance-auth">
+  <div class="auth-card">
+    <div class="auth-heading">
+      <span class="eyebrow">GUIDANCE STAFF ACCESS</span>
+      <h1>Guidance and counselling sign-in.</h1>
+      <p>Access campus reports, support requests, and staff dashboards.</p>
+    </div>
+    <form (ngSubmit)="submit()">
+      <label for="email">Staff email</label>
+      <input id="email" name="email" type="email" placeholder="staff@campus.kca.ac.ke" required [(ngModel)]="email" />
+
+      <label for="campus">Your campus</label>
+      <div class="campus-select-wrapper" (click)="campusSelectOpen = !campusSelectOpen">
+        <span>{{ campusService.getCampus(campusId)?.shortName ?? campusService.selectedCampus.shortName }} Campus</span>
+        <app-ui-icon name="chevron" />
+      </div>
+      @if (campusSelectOpen) {
+        <div class="campus-dropdown">
+          @for (campus of campusService.getCampuses(); track campus.id) {
+            <button
+              type="button"
+              class="campus-option"
+              [class.active]="campusId === campus.id"
+              (click)="selectCampus(campus.id)"
+            >
+              <span class="campus-name">{{ campus.name }}</span>
+              <small>{{ campus.location }}</small>
+            </button>
+          }
+        </div>
+      }
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" placeholder="Enter your password" required [(ngModel)]="password" />
+      <button class="auth-submit guidance-submit" type="submit" [disabled]="submitting">{{ submitting ? 'Signing in...' : 'Sign in to guidance hub' }}<app-ui-icon name="shield" /></button>
+      @if (error) { <app-alert tone="urgent" icon="alert" title="Access denied" message="{{ error }}" /> }
+    </form>
+    <app-alert tone="professional" icon="info" title="Guidance staff only" message="This login is for guidance and counselling staff and campus administrators." />
+    <div class="auth-alternate">
+      <p class="auth-alternate-title">New to the hub?</p>
+      <div class="auth-alternate-list">
+        <a routerLink="/guidance/register">Create a staff account</a>
+      </div>
+    </div>
+  </div>
+  <aside class="auth-aside guidance-aside">
+    <div class="aside-inner">
+      <span class="aside-mark"><app-ui-icon name="shield" /></span>
+      <h2>Staff wellbeing supports everyone.</h2>
+      <p>Guidance and counselling leads for Ruaraka Main, Town, and Kitengela campuses.</p>
+      <div class="aside-staff">
+        <div class="staff-item"><strong>Belinda</strong><small>Ruaraka Main</small></div>
+        <div class="staff-item"><strong>Tasha</strong><small>Town</small></div>
+        <div class="staff-item"><strong>Emily</strong><small>Kitengela</small></div>
+      </div>
+    </div>
+  </aside>
+</section>

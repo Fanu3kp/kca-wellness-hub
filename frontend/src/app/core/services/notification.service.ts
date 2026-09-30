@@ -22,7 +22,7 @@ const fallbackNotifications: NotificationItem[] = [
   {
     id: 'n1',
     title: 'Welcome to your wellness hub',
-    message: 'Your campus support network is ready when you need it.',
+    message: 'Your campus support system is ready when you need it.',
     type: 'announcement',
     read: false,
     createdAt: 'Today, 09:00'

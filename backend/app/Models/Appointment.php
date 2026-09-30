@@ -14,10 +14,13 @@ class Appointment extends Model
     protected $fillable = [
         'user_id',
         'booking_provider_id',
+        'peer_counselor_id',
         'campus_id',
         'support_request_id',
         'starts_at',
         'ends_at',
+        'mode',
+        'attendee_mode',
         'status',
         'booking_reference',
         'notes',
@@ -42,6 +45,11 @@ class Appointment extends Model
     public function bookingProvider(): BelongsTo
     {
         return $this->belongsTo(BookingProvider::class);
+    }
+
+    public function peerCounselor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'peer_counselor_id');
     }
 
     public function campus(): BelongsTo

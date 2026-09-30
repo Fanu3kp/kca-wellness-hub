@@ -1,0 +1,54 @@
+<section class="auth-page peer-auth">
+  <div class="auth-card">
+    <div class="auth-heading">
+      <span class="eyebrow">PEER COUNSELOR ACCESS</span>
+      <h1>Sign in to your peer counselor space.</h1>
+      <p>Access your campus support queue, conversations, and training modules.</p>
+    </div>
+    <form (ngSubmit)="submit()">
+      <label for="email">Counselor email</label>
+      <input id="email" name="email" type="email" placeholder="peer@counselor.kca.ac.ke" required [(ngModel)]="email" />
+
+      <label for="campus">Your campus</label>
+      <div class="campus-select-wrapper" (click)="campusSelectOpen = !campusSelectOpen">
+        <span>{{ campusService.getCampus(campusId)?.shortName ?? campusService.selectedCampus.shortName }} Campus</span>
+        <app-ui-icon name="chevron" />
+      </div>
+      @if (campusSelectOpen) {
+        <div class="campus-dropdown">
+          @for (campus of campusService.getCampuses(); track campus.id) {
+            <button
+              type="button"
+              class="campus-option"
+              [class.active]="campusId === campus.id"
+              (click)="selectCampus(campus.id)"
+            >
+              <span class="campus-name">{{ campus.name }}</span>
+              <small>{{ campus.location }}</small>
+            </button>
+          }
+        </div>
+      }
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" placeholder="Enter your password" required [(ngModel)]="password" />
+      <button class="auth-submit peer-submit" type="submit" [disabled]="submitting">{{ submitting ? 'Signing in...' : 'Access peer counselor hub' }}<app-ui-icon name="users" /></button>
+      @if (error) { <app-alert tone="urgent" icon="alert" title="Access denied" message="{{ error }}" /> }
+    </form>
+    <app-alert tone="calm" icon="info" title="Peer counselors only" message="This login is for trained student peer counselors. Students and guidance staff use separate portals." />
+    <div class="auth-alternate">
+      <p class="auth-alternate-title">New to the hub?</p>
+      <div class="auth-alternate-list">
+        <a routerLink="/peer-counselor/register">Create a peer counselor account</a>
+      </div>
+    </div>
+  </div>
+  <aside class="auth-aside peer-aside">
+    <div class="aside-inner">
+      <span class="aside-mark"><app-ui-icon name="heart" /></span>
+      <h2>Listening, encouragement, and referral.</h2>
+      <p>Peer counselors are trained student listeners who offer support and connect students to professional resources.</p>
+      <div class="aside-quote">“The most powerful tool in peer counseling is the willingness to listen.”</div>
+    </div>
+  </aside>
+</section>

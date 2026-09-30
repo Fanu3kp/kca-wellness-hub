@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { CampusService } from '../core/services/campus.service';
 import { UiIconComponent } from '../shared/components/ui-icon/ui-icon.component';
@@ -17,10 +17,16 @@ export class CampusSelectionComponent {
   readonly campuses = this.campusService.getCampuses();
   readonly selectedCampus$ = this.campusService.selectedCampus$;
 
-  constructor(readonly campusService: CampusService) {}
+  constructor(
+    readonly campusService: CampusService,
+    private readonly router: Router
+  ) {}
 
   select(id: string): void {
     const campus = this.campusService.getCampus(id);
-    if (campus) this.campusService.selectCampus(campus);
+    if (campus) {
+      this.campusService.selectCampus(campus);
+      this.router.navigate(['/' + campus.slug]);
+    }
   }
 }

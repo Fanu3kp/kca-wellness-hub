@@ -17,9 +17,7 @@ export class RoleGuard implements CanActivate {
     return this.authService.loadCurrentUser().pipe(
       map((user) => {
         if (user && this.authService.hasAnyRole(roles)) return true;
-        const destination = user
-          ? user.roles.includes('admin') ? '/admin' : user.roles.includes('guidance_staff') ? '/guidance' : user.roles.includes('peer_counselor') ? '/peer-counselor' : '/student'
-          : '/landing';
+        const destination = user ? this.authService.homePathFor(user) : '/landing';
         this.router.navigate([destination]);
         return false;
       })

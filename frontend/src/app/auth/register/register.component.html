@@ -1,6 +1,5 @@
 <section class="auth-page">
   <div class="auth-card">
-    <a class="auth-brand" routerLink="/landing"><span><app-ui-icon name="heart" /></span><strong>KCA Wellness Hub</strong></a>
     <div class="auth-heading"><span class="eyebrow">CREATE YOUR SPACE</span><h1>Start with one small step.</h1><p>Set up your private wellness hub profile. You can change your campus later.</p></div>
     <form (ngSubmit)="submit()">
       <label for="name">Your name</label>
@@ -18,7 +17,12 @@
       <button class="auth-submit" type="submit" [disabled]="submitting">{{ submitting ? 'Creating your space...' : 'Create my account' }} <app-ui-icon name="arrow" /></button>
       @if (error) { <app-alert tone="urgent" icon="alert" title="Registration failed" message="{{ error }}" /> }
     </form>
-    <p class="auth-switch">Already have an account? <a routerLink="/login">Sign in</a></p>
+    <div class="auth-options">
+      <p class="auth-options-title">Already registered?</p>
+      <div class="auth-options-list">
+        <a routerLink="/student/login">Sign in to your student account</a>
+      </div>
+    </div>
   </div>
   <aside class="auth-aside"><div class="aside-inner"><span class="aside-mark"><app-ui-icon name="heart" /></span><h2>Welcome to your corner of KCA.</h2><p>This hub is designed to make support easier to find, easier to understand, and easier to return to whenever you need it.</p><div class="aside-quote">“Your story matters. Your wellbeing matters too.”</div></div></aside>
 </section>

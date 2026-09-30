@@ -25,19 +25,19 @@
 .conversation-meta { align-items: flex-end; display: flex; flex-direction: column; gap: .4rem; }
 .conversation-meta small { color: var(--muted); font-size: .6rem; }
 .conversation-meta i { background: #8a9baa; border-radius: 50%; display: block; height: 8px; width: 8px; }
-.conversation-meta i.online { background: #0A1F44; }
+.conversation-meta i.online { background: var(--brand); }
 .window-header { align-items: center; border-bottom: 1px solid var(--line); display: grid; gap: .7rem; grid-template-columns: auto 1fr auto; padding: .9rem 1.1rem; }
 .window-header > div:nth-child(2) strong, .window-header > div:nth-child(2) small { display: block; }
 .window-header > div:nth-child(2) strong { font-size: .84rem; }
 .window-header > div:nth-child(2) small { align-items: center; color: var(--muted); display: flex; font-size: .65rem; gap: .35rem; margin-top: .2rem; }
 .window-header i { background: #8a9baa; border-radius: 50%; display: inline-block; height: 7px; width: 7px; }
-.window-header i.online { background: #0A1F44; }
+.window-header i.online { background: var(--brand); }
 .window-actions { align-items: center; display: flex; gap: .4rem; }
 .window-actions button { align-items: center; background: #f5f3ef; border: 0; border-radius: 9px; color: var(--brand-dark); cursor: pointer; display: flex; font-size: .68rem; font-weight: 800; gap: .3rem; min-height: 34px; padding: .4rem .55rem; }
 .window-actions button:last-child { height: 34px; justify-content: center; width: 34px; }
 .window-actions svg { height: .9rem; width: .9rem; }
 .messages { background: #f8f6f0; flex: 1; min-height: 430px; overflow: auto; padding: 1.2rem; }
-.message { background: white; border: 1px solid #e0ddd0; border-radius: 13px 13px 13px 4px; box-shadow: 0 3px 10px rgba(10,31,68,.04); margin-bottom: .7rem; max-width: 72%; padding: .65rem .8rem; }
+.message { background: white; border: 1px solid #e0ddd0; border-radius: 13px 13px 13px 4px; box-shadow: 0 3px 10px rgba(27,44,87,.04); margin-bottom: .7rem; max-width: 72%; padding: .65rem .8rem; }
 .message.mine { background: #e8edf5; border-color: #e8edf5; border-radius: 13px 13px 4px 13px; margin-left: auto; }
 .message p { font-size: .78rem; line-height: 1.45; margin: 0; }
 .message small { color: #8a9baa; display: block; font-size: .6rem; margin-top: .3rem; text-align: right; }

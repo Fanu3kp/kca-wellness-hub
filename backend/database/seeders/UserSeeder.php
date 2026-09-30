@@ -45,6 +45,43 @@ class UserSeeder extends Seeder
             ],
         ];
 
+        foreach ($campuses as $campus) {
+            $suffix = strtolower($campus->code);
+            $users[] = [
+                'name' => "{$campus->name} Peer Counsellor Demo",
+                'email' => "counsellor.{$suffix}@example.test",
+                'roles' => ['peer_counselor'],
+                'student_number' => null,
+                'campus' => $campus,
+            ];
+            $users[] = [
+                'name' => "{$campus->name} Guidance Staff Demo",
+                'email' => "guidance.{$suffix}@example.test",
+                'roles' => ['guidance_staff'],
+                'student_number' => null,
+                'campus' => $campus,
+            ];
+            $hodName = match ($campus->code) {
+                'RUARAKA' => 'Belinda',
+                'TOWN' => 'Emily',
+                'KITENGELA' => 'Tasha',
+                default => "{$campus->name} HOD",
+            };
+            $hodEmail = match ($campus->code) {
+                'RUARAKA' => 'belinda.ruaraka@example.test',
+                'TOWN' => 'emily.town@example.test',
+                'KITENGELA' => 'tasha.kitengela@example.test',
+                default => "hod.{$suffix}@example.test",
+            };
+            $users[] = [
+                'name' => $hodName,
+                'email' => $hodEmail,
+                'roles' => ['hod'],
+                'student_number' => null,
+                'campus' => $campus,
+            ];
+        }
+
         foreach ($users as $data) {
             $user = User::updateOrCreate(
                 ['email' => $data['email']],
@@ -65,7 +102,6 @@ class UserSeeder extends Seeder
                 'student_number' => $data['student_number'],
                 'preferences' => ['notifications' => true],
             ]);
-}
-
+        }
     }
 }

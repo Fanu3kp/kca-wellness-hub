@@ -1,15 +1,35 @@
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" routerLink="/landing" aria-label="KCA University home">
-      <span class="brand-mark">
-        <img src="assets/kca-logo.svg" alt="KCA University" height="40" width="40">
-      </span>
-      <span><strong>KCA University</strong><small>Peer Counselling &amp; Wellness</small></span>
+      <span class="brand-logo"><img src="assets/kca-logo.svg" alt="KCA University" width="56" height="56" /></span>
+      <span class="brand-text"><strong>KCA University</strong><small>Peer Counselling &amp; Wellness</small></span>
     </a>
 
-    <nav class="desktop-nav" aria-label="Primary navigation">
+    <nav class="desktop-nav" [class.has-open-menu]="openRoleMenu" aria-label="Primary navigation">
       @for (link of navLinks; track link.path) {
-        <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: link.path === '/student' || link.path === '/guidance' || link.path === '/admin' || link.path === '/peer-counselor' }">{{ link.label }}</a>
+        @if (link.groups; as groups) {
+          <div class="nav-group" [class.open]="openRoleMenu === link.path" (mouseenter)="openRoleMenu = link.path" (mouseleave)="closeRoleMenu()" (focusin)="openRoleMenu = link.path" (focusout)="closeRoleMenuOnFocus($event)">
+            <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: link.path === '/student' || link.path === '/guidance' || link.path === '/admin' || link.path === '/peer-counselor' }" (click)="closeRoleMenu()">{{ link.label }}</a>
+            <button class="nav-group-toggle" type="button" (click)="toggleRoleMenu(link.path)" [attr.aria-expanded]="openRoleMenu === link.path" [attr.aria-label]="'Open ' + link.label + ' menu'" aria-haspopup="menu">
+              <app-ui-icon name="chevron" />
+            </button>
+            <div class="nav-dropdown" role="menu">
+              @for (group of groups; track group.label) {
+                <div class="nav-dropdown-section">
+                  <p class="nav-dropdown-title">{{ group.label }}</p>
+                  @for (child of group.links; track child.path) {
+                    <a [routerLink]="child.path" role="menuitem" (click)="closeRoleMenu()">
+                      <app-ui-icon [name]="child.icon" />
+                      <span>{{ child.label }}</span>
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        } @else {
+          <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: link.path === '/student' || link.path === '/guidance' || link.path === '/admin' || link.path === '/peer-counselor' }">{{ link.label }}</a>
+        }
       }
     </nav>
 
@@ -31,8 +51,8 @@
         </a>
         <button class="logout-button" type="button" (click)="logout()" aria-label="Log out"><app-ui-icon name="logout" /><span class="logout-label">Log out</span></button>
       } @else {
-        <a class="button-link button-secondary" routerLink="/login">Log in</a>
-        <a class="button-link button-primary" routerLink="/register">Join</a>
+        <a class="button-link button-secondary" [routerLink]="(campus$ | async)?.slug ? '/' + (campus$ | async)!.slug + '/login' : '/login'">Log in</a>
+        <a class="button-link button-primary" [routerLink]="(campus$ | async)?.slug ? '/' + (campus$ | async)!.slug + '/register' : '/register'">Join</a>
       }
       <button class="menu-button" type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen" aria-label="Toggle navigation">
         <app-ui-icon [name]="menuOpen ? 'close' : 'menu'" />
@@ -42,14 +62,40 @@
 
   @if (menuOpen) {
     <nav class="mobile-nav" aria-label="Mobile navigation">
-      @for (link of navLinks; track link.path) {
-        <a [routerLink]="link.path" (click)="closeMenu()"><app-ui-icon [name]="link.icon" /><span>{{ link.label }}</span></a>
+      @for (link of mobileNavLinks; track link.path) {
+        @if (link.groups; as groups) {
+          <div class="mobile-nav-group" [class.open]="openRoleMenu === link.path">
+            <div class="mobile-nav-group-row">
+              <a [routerLink]="link.path" (click)="closeMenu()"><app-ui-icon [name]="link.icon" /><span>{{ link.label }}</span></a>
+              <button class="mobile-nav-group-toggle" type="button" (click)="toggleRoleMenu(link.path)" [attr.aria-expanded]="openRoleMenu === link.path" [attr.aria-label]="'Open ' + link.label + ' menu'" aria-haspopup="menu">
+                <app-ui-icon name="chevron" />
+              </button>
+            </div>
+            @if (openRoleMenu === link.path) {
+              <div class="mobile-nav-group-content">
+                @for (group of groups; track group.label) {
+                  <div class="mobile-nav-group-section">
+                    <p class="mobile-nav-group-title">{{ group.label }}</p>
+                    @for (child of group.links; track child.path) {
+                      <a [routerLink]="child.path" (click)="closeMenu(); closeRoleMenu()">
+                        <app-ui-icon [name]="child.icon" />
+                        <span>{{ child.label }}</span>
+                      </a>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <a [routerLink]="link.path" (click)="closeMenu()"><app-ui-icon [name]="link.icon" /><span>{{ link.label }}</span></a>
+        }
       }
       @if (user$ | async) {
         <button class="mobile-logout" type="button" (click)="logout(); closeMenu()"><app-ui-icon name="logout" /><span>Log out</span></button>
       } @else {
-        <a routerLink="/login" (click)="closeMenu()"><app-ui-icon name="logout" /><span>Log in</span></a>
-        <a routerLink="/register" (click)="closeMenu()"><app-ui-icon name="plus" /><span>Create account</span></a>
+        <a [routerLink]="(campus$ | async)?.slug ? '/' + (campus$ | async)!.slug + '/login' : '/login'" (click)="closeMenu()"><app-ui-icon name="logout" /><span>Log in</span></a>
+        <a [routerLink]="(campus$ | async)?.slug ? '/' + (campus$ | async)!.slug + '/register' : '/register'" (click)="closeMenu()"><app-ui-icon name="plus" /><span>Create account</span></a>
       }
     </nav>
   }

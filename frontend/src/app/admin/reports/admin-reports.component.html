@@ -1,10 +1,41 @@
 <section class="admin-page">
   <div class="admin-page-heading">
-    <div><span class="eyebrow">REPORTS &amp; ANALYTICS</span><h1>System overview</h1><p>Aggregated statistics and system activity across all KCA campuses.</p></div>
+    <div>
+      <span class="eyebrow">REPORTS &amp; ANALYTICS</span>
+      <h1>System analytics dashboard</h1>
+      <p>Campus-scoped analytics across all KCA campuses. Filter by campus to see local activity.</p>
+    </div>
+    <div class="report-controls">
+      <select class="campus-select" [(ngModel)]="selectedCampusId" (ngModelChange)="onCampusChange()">
+        <option [ngValue]="null">All campuses</option>
+        @for (campus of campuses; track campus.id) {
+          <option [ngValue]="campus.id">{{ campus.shortName }}</option>
+        }
+      </select>
+      <label class="days-control">
+        <small>Period (days)</small>
+        <input type="number" min="7" max="90" [(ngModel)]="days" (ngModelChange)="loadReports()" />
+      </label>
+      <button type="button" class="print-button" (click)="printReport()"><app-ui-icon name="print" /> Print</button>
+    </div>
   </div>
 
+  <div class="report-print-header" aria-hidden="true">
+    <div class="print-header-inner">
+      <div>
+        <span class="eyebrow">REPORT</span>
+        <h2>{{ selectedCampusLabel }} Analytics Report</h2>
+        <small>Period: Last {{ days }} days · Generated: {{ reportDate | date:'medium' }}</small>
+      </div>
+    </div>
+  </div>
+
+  @if (error) {
+    <app-alert tone="urgent" icon="alert" title="Unable to load reports" message="{{ error }}" />
+  }
+
   <div class="report-stats">
-    @for (stat of stats; track stat.label) {
+    @for (stat of statCards(); track stat.label) {
       <app-card [compact]="true" class="stat-card">
         <div><strong>{{ stat.value }}</strong><small>{{ stat.label }}</small></div>
         <span class="trend">{{ stat.trend }}</span>
@@ -12,23 +43,154 @@
     }
   </div>
 
-  <div class="report-grid">
-    <section>
-      <div class="mini-heading"><div><span class="eyebrow">RECENT ACTIVITY</span><h2>System activity</h2></div></div>
-      @for (item of recentActivity; track item.action) {
-        <app-card [compact]="true" class="activity-row">
-          <div><strong>{{ item.action }}</strong><small>{{ item.campus }}</small></div>
-          <span class="activity-time">{{ item.time }}</span>
-        </app-card>
-      }
+  <div class="chart-grid">
+    <section class="chart-section">
+      <div class="mini-heading">
+        <div><span class="eyebrow">SUPPORT REQUEST STATUS</span><h2>Requests by status</h2></div>
+      </div>
+      <app-card [compact]="true" class="chart-card">
+        <app-pie-chart
+          *ngIf="statusSegments().segments.length"
+          [segments]="statusSegments().segments"
+          [size]="200"
+        />
+        <p *ngIf="!statusSegments().segments.length" class="chart-placeholder">No support request data available.</p>
+      </app-card>
     </section>
-    <section>
-      <div class="mini-heading"><div><span class="eyebrow">CAMPUS BREAKDOWN</span><h2>Activity by campus</h2></div></div>
-      <app-card [compact]="true" class="campus-breakdown">
-        <div class="breakdown-row"><span>Ruaraka Main</span><div class="bar"><span style="width: 65%"></span></div><strong>640</strong></div>
-        <div class="breakdown-row"><span>Town</span><div class="bar"><span style="width: 35%"></span></div><strong>350</strong></div>
-        <div class="breakdown-row"><span>Kitengela</span><div class="bar"><span style="width: 25%"></span></div><strong>250</strong></div>
+
+    <section class="chart-section">
+      <div class="mini-heading">
+        <div><span class="eyebrow">REQUEST CATEGORIES</span><h2>Requests by category</h2></div>
+      </div>
+      <app-card [compact]="true" class="chart-card">
+        <app-pie-chart
+          *ngIf="categorySegments().segments.length"
+          [segments]="categorySegments().segments"
+          [size]="200"
+        />
+        <p *ngIf="!categorySegments().segments.length" class="chart-placeholder">No category data available.</p>
+      </app-card>
+    </section>
+
+    <section class="chart-section">
+      <div class="mini-heading">
+        <div><span class="eyebrow">REQUEST PRIORITY</span><h2>Requests by priority</h2></div>
+      </div>
+      <app-card [compact]="true" class="chart-card">
+        <app-pie-chart
+          *ngIf="prioritySegments().segments.length"
+          [segments]="prioritySegments().segments"
+          [size]="200"
+        />
+        <p *ngIf="!prioritySegments().segments.length" class="chart-placeholder">No priority data available.</p>
       </app-card>
     </section>
   </div>
+
+  <div class="chart-grid">
+    <section class="chart-section">
+      <div class="mini-heading">
+        <div><span class="eyebrow">APPOINTMENT TRENDS</span><h2>Appointments over time</h2></div>
+      </div>
+      <app-card [compact]="true" class="chart-card">
+        <app-line-chart
+          *ngIf="trendSeries().length"
+          [series]="trendSeries()"
+          [height]="200"
+        />
+        <p *ngIf="!trendSeries().length" class="chart-placeholder">No appointment data available.</p>
+      </app-card>
+    </section>
+
+    <section class="chart-section">
+      <div class="mini-heading">
+        <div><span class="eyebrow">APPOINTMENT BY MODE</span><h2>Physical vs virtual</h2></div>
+      </div>
+      <app-card [compact]="true" class="chart-card">
+        <app-pie-chart
+          *ngIf="modeSegments().segments.length"
+          [segments]="modeSegments().segments"
+          [size]="180"
+        />
+        <p *ngIf="!modeSegments().segments.length" class="chart-placeholder">No appointment mode data.</p>
+      </app-card>
+    </section>
+
+    <section class="chart-section">
+      <div class="mini-heading">
+        <div><span class="eyebrow">APPOINTMENT STATUS</span><h2>By status</h2></div>
+      </div>
+      <app-card [compact]="true" class="chart-card">
+        <app-pie-chart
+          *ngIf="appointmentStatusSegments().segments.length"
+          [segments]="appointmentStatusSegments().segments"
+          [size]="180"
+        />
+        <p *ngIf="!appointmentStatusSegments().segments.length" class="chart-placeholder">No data available.</p>
+      </app-card>
+    </section>
+  </div>
+
+  <div class="chart-grid">
+    <section class="chart-section">
+      <div class="mini-heading">
+        <div><span class="eyebrow">STUDENTS BY CAMPUS</span><h2>Breakdown across campuses</h2></div>
+      </div>
+      <app-card [compact]="true" class="chart-card">
+        <app-bar-chart
+          *ngIf="campusBars().length"
+          [series]="campusBars()"
+          [height]="24"
+          [legend]="true"
+        />
+        <p *ngIf="!campusBars().length" class="chart-placeholder">No campus data available.</p>
+      </app-card>
+    </section>
+
+    <section class="chart-section">
+      <div class="mini-heading">
+        <div><span class="eyebrow">SUPPORT REQUESTS BY CAMPUS</span><h2>Thirty-day activity</h2></div>
+      </div>
+      <app-card [compact]="true" class="chart-card">
+        <app-bar-chart
+          *ngIf="campusRequestBars().length"
+          [series]="campusRequestBars()"
+          [height]="24"
+          [legend]="true"
+        />
+        <p *ngIf="!campusRequestBars().length" class="chart-placeholder">No campus activity data available.</p>
+      </app-card>
+    </section>
+
+    @if (escalationReport) {
+      <section class="chart-section">
+        <div class="mini-heading">
+          <div><span class="eyebrow">ESCALATION SEVERITY</span><h2>Open escalations by severity</h2></div>
+        </div>
+        <app-card [compact]="true" class="chart-card">
+          <app-pie-chart
+            *ngIf="escalationSeveritySegments().segments.length"
+            [segments]="escalationSeveritySegments().segments"
+            [size]="180"
+          />
+          <p *ngIf="!escalationSeveritySegments().segments.length" class="chart-placeholder">No escalation data.</p>
+        </app-card>
+      </section>
+    }
+  </div>
+
+  @if (campusBreakdown.length) {
+    <section class="chart-section">
+      <div class="mini-heading"><div><span class="eyebrow">CAMPUS BREAKDOWN</span><h2>Activity by campus</h2></div></div>
+      <app-card [compact]="true" class="campus-breakdown">
+        @for (campus of campusBreakdown; track campus.id) {
+          <div class="breakdown-row">
+            <span>{{ campus.short_name ?? campus.name }}</span>
+            <div class="bar"><span [style.width.%]="campus.percentage"></span></div>
+            <strong>{{ campus.stats.students }} students</strong>
+          </div>
+        }
+      </app-card>
+    </section>
+  }
 </section>

@@ -14,6 +14,7 @@ class Profile extends Model
         'user_id',
         'campus_id',
         'student_number',
+        'staff_number',
         'phone',
         'date_of_birth',
         'gender',

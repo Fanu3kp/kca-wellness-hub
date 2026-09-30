@@ -1,7 +1,14 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { CampusService } from '../../../core/services/campus.service';
 import { UiIconComponent } from '../ui-icon/ui-icon.component';
+
+interface MobileNavLink {
+  path: string;
+  label: string;
+  icon: string;
+}
 
 @Component({
   selector: 'app-mobile-nav',
@@ -12,50 +19,58 @@ import { UiIconComponent } from '../ui-icon/ui-icon.component';
 })
 export class MobileNavComponent {
   readonly user$ = this.authService.currentUser$;
-  constructor(readonly authService: AuthService) {}
+  constructor(
+    readonly authService: AuthService,
+    private readonly campusService: CampusService
+  ) {}
+
+  private get townPath(): string {
+    const campusSlug = this.campusService.selectedCampus?.slug ?? '';
+    return campusSlug ? '/' + campusSlug : '/campus-selection';
+  }
+
+  private get commonLinks(): MobileNavLink[] {
+    return [
+      { path: '/events', label: 'Events', icon: 'calendar' },
+      { path: '/reports', label: 'Reports', icon: 'chart' },
+      { path: '/contact', label: 'Contact', icon: 'mail' },
+      { path: '/login', label: 'Login', icon: 'login' },
+      { path: this.townPath, label: 'Town', icon: 'compass' },
+    ];
+  }
+
+  private get roleHomePath(): string {
+    const user = this.authService.currentUser;
+    const role = user?.roles[0];
+    if (role === 'student') return '/student';
+    if (role === 'peer_counselor') return '/peer-counselor';
+    if (role === 'guidance_staff' || role === 'hod') return '/guidance';
+    return '/landing';
+  }
 
   get links() {
     const user = this.authService.currentUser;
+
     if (!user) {
       return [
         { path: '/landing', label: 'Home', icon: 'home' },
         { path: '/campus-selection', label: 'Campuses', icon: 'compass' },
         { path: '/events', label: 'Events', icon: 'calendar' },
+        { path: '/contact', label: 'Contact', icon: 'mail' },
         { path: '/login', label: 'Log in', icon: 'logout' },
         { path: '/register', label: 'Join', icon: 'plus' }
       ];
     }
 
     const role = user.roles[0];
-    if (role === 'student') {
+
+    if (role === 'student' || role === 'peer_counselor' || role === 'guidance_staff' || role === 'hod') {
       return [
-        { path: '/student', label: 'Home', icon: 'home' },
-        { path: '/student/quick-help', label: 'Help', icon: 'compass' },
-        { path: '/student/goals', label: 'Vision', icon: 'target' },
-        { path: '/student/challenges', label: 'Challenges', icon: 'trophy' },
-        { path: '/student/peer-counselors', label: 'Peers', icon: 'users' },
-        { path: '/student/appointments', label: 'Book', icon: 'calendar' },
-        { path: '/student/notifications', label: 'Alerts', icon: 'bell' }
+        { path: this.roleHomePath, label: 'Home', icon: 'home' },
+        ...this.commonLinks,
       ];
     }
-    if (role === 'peer_counselor') {
-      return [
-        { path: '/peer-counselor', label: 'Home', icon: 'home' },
-        { path: '/peer-counselor/requests', label: 'Requests', icon: 'bell' },
-        { path: '/peer-counselor/conversations', label: 'Chat', icon: 'chat' },
-        { path: '/peer-counselor/training', label: 'Academy', icon: 'graduation' },
-        { path: '/student/profile', label: 'Profile', icon: 'heart' }
-      ];
-    }
-    if (role === 'guidance_staff') {
-      return [
-        { path: '/guidance', label: 'Home', icon: 'home' },
-        { path: '/guidance/escalations', label: 'Escalations', icon: 'alert' },
-        { path: '/guidance/appointments', label: 'Appointments', icon: 'calendar' },
-        { path: '/guidance/resources', label: 'Resources', icon: 'book' },
-        { path: '/student/profile', label: 'Profile', icon: 'heart' }
-      ];
-    }
+
     if (role === 'admin') {
       return [
         { path: '/admin', label: 'Home', icon: 'home' },
@@ -65,10 +80,12 @@ export class MobileNavComponent {
         { path: '/student/profile', label: 'Profile', icon: 'heart' }
       ];
     }
+
     return [
       { path: '/landing', label: 'Home', icon: 'home' },
       { path: '/campus-selection', label: 'Campuses', icon: 'compass' },
       { path: '/events', label: 'Events', icon: 'calendar' },
+      { path: '/contact', label: 'Contact', icon: 'mail' },
       { path: '/login', label: 'Log in', icon: 'logout' },
       { path: '/register', label: 'Join', icon: 'plus' }
     ];

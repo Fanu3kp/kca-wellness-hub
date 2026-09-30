@@ -23,15 +23,6 @@ export class LandingComponent {
   readonly campuses = this.campusService.getCampuses();
   readonly pathways = this.wellnessService.pathways.slice(0, 4);
 
-  readonly supportCategories = [
-    { label: 'Stress', icon: 'sparkles' },
-    { label: 'Academic pressure', icon: 'book' },
-    { label: 'Relationships', icon: 'heart' },
-    { label: 'Career guidance', icon: 'compass' },
-    { label: 'Sleep & wellbeing', icon: 'moon' },
-    { label: 'General support', icon: 'users' }
-  ];
-
   constructor(
     private readonly campusService: CampusService,
     private readonly authService: AuthService,

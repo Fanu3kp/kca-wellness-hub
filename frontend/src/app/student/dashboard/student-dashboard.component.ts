@@ -1,34 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { CampusService } from '../../core/services/campus.service';
 import { AuthService } from '../../core/services/auth.service';
 import { WellnessService } from '../../core/services/wellness.service';
 import { NotificationService } from '../../core/services/notification.service';
-import { ChallengeService } from '../../core/services/challenge.service';
-import { ResourceStateService } from '../../core/services/resource-state.service';
+import { ReportService } from '../../core/services/report.service';
 import { UiIconComponent } from '../../shared/components/ui-icon/ui-icon.component';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { BadgeComponent } from '../../shared/components/badge/badge.component';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
+import { BarChartComponent } from '../../shared/components/charts/bar-chart.component';
 
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
-  imports: [RouterLink, AsyncPipe, UiIconComponent, CardComponent, BadgeComponent, AlertComponent],
+  imports: [CommonModule, RouterLink, AsyncPipe, UiIconComponent, CardComponent, BadgeComponent, AlertComponent, BarChartComponent],
   templateUrl: './student-dashboard.component.html',
   styleUrl: './student-dashboard.component.scss'
 })
-export class StudentDashboardComponent {
+export class StudentDashboardComponent implements OnInit {
   readonly user$ = this.authService.currentUser$;
   readonly campus$ = this.campusService.selectedCampus$;
   readonly moods = ['Great', 'Good', 'Okay', 'Low', 'Stressed', 'Very low'];
   selectedMood = '';
   moodMessage = '';
   readonly pathways = this.wellnessService.pathways;
-  readonly resources = this.wellnessService.resources.slice(0, 3);
-  readonly joinedChallenges = this.challengeService.joinedIds.length;
-  readonly favoriteCount = this.resourceState.state.favoriteIds.length;
   today = new Intl.DateTimeFormat('en-KE', { weekday: 'long', day: 'numeric', month: 'short' }).format(new Date());
 
   community = [
@@ -42,15 +39,35 @@ export class StudentDashboardComponent {
     { icon: 'heart', title: 'Wellness', description: 'Mental health awareness activities' }
   ];
 
+  dashboard: any = null;
+  campusBreakdown: any[] = [];
+  loadingStats = true;
+  reportDate = new Date();
+
   constructor(
     readonly authService: AuthService,
     readonly campusService: CampusService,
     readonly wellnessService: WellnessService,
     readonly notificationService: NotificationService,
-    readonly challengeService: ChallengeService,
-    readonly resourceState: ResourceStateService
+    private readonly reportService: ReportService
   ) {
     this.notificationService.getNotifications().subscribe();
+  }
+
+  ngOnInit(): void {
+    const campusId = this.authService.currentUser?.campusId;
+    if (campusId) {
+      this.reportService.loadDashboard(campusId).subscribe({
+        next: (data) => { this.dashboard = data; this.loadingStats = false; },
+        error: () => { this.loadingStats = false; }
+      });
+      this.reportService.loadCampusBreakdown().subscribe({
+        next: (data) => { this.campusBreakdown = data; },
+        error: () => {}
+      });
+    } else {
+      this.loadingStats = false;
+    }
   }
 
   checkMood(mood: string): void {
@@ -60,9 +77,34 @@ export class StudentDashboardComponent {
       Good: 'A good moment is worth noticing. Keep making space for what supports you.',
       Okay: 'It is okay to be in the middle. A small pause or conversation can help.',
       Low: 'Thank you for naming that. You do not have to handle it alone.',
-      Stressed: 'Let’s slow things down. A quiet exercise or a listening peer may help.',
+      Stressed: 'Let us slow things down. A quiet exercise or a listening peer may help.',
       'Very low': 'Your safety matters. Consider reaching out to urgent support now.'
     };
     this.moodMessage = messages[mood] ?? '';
+  }
+
+  statCards(): { label: string; value: string }[] {
+    if (!this.dashboard) return [];
+    const s = this.dashboard.stats;
+    return [
+      { label: 'My campus students', value: this.formatNumber(s.total_students) },
+      { label: 'Active peer counselors', value: this.formatNumber(s.active_peer_counselors) },
+      { label: 'Support requests', value: this.formatNumber(s.support_requests_period) },
+      { label: 'Appointments booked', value: this.formatNumber(s.appointments_booked) },
+    ];
+  }
+
+  campusBars() {
+    if (!this.campusBreakdown.length) return [];
+    return this.reportService.campusStatsBars(this.campusBreakdown);
+  }
+
+  private formatNumber(n: number): string {
+    return new Intl.NumberFormat('en-KE').format(n);
+  }
+
+  printReport(): void {
+    this.reportDate = new Date();
+    window.print();
   }
 }

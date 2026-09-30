@@ -1,13 +1,10 @@
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-copy">
-      <div class="eyebrow"><span class="eyebrow-dot"></span> A calmer way to ask for support</div>
-      <h1>Your wellbeing belongs here.</h1>
-      <p class="hero-lede">KCA University Peer Counselling &amp; Wellness Hub connects students with trained peer counselors, professional guidance, and practical wellness resources across every campus.</p>
-      <div class="hero-actions">
-        <a class="button button-primary" routerLink="/campus-selection"><app-ui-icon name="compass" /> Find your campus</a>
-        <a class="button button-secondary" routerLink="/student/quick-help"><app-ui-icon name="heart" /> I need support</a>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> A calmer way to ask for support
       </div>
+      <h1>Your wellbeing belongs here.</h1>
+      <p class="hero-lede">KCA University Peer Counselling &amp; Wellness Hub connects students with trained peer counselors, professional guidance, and practical support across every campus.</p>
       <div class="hero-trust"><app-ui-icon name="shield" /><span>Private, respectful and student-focused support</span></div>
     </div>
     <div class="hero-visual" aria-label="Wellness support illustration">
@@ -20,27 +17,21 @@
   </div>
 </section>
 
-<section class="support-strip">
-  <div class="support-strip-inner">
-    <div class="strip-label"><app-ui-icon name="compass" /> Start with what feels true today</div>
-    <div class="category-list">
-      @for (category of supportCategories; track category.label) {
-        <a routerLink="/student/quick-help"><app-ui-icon [name]="category.icon" /> {{ category.label }}</a>
-      }
-    </div>
-  </div>
-</section>
-
 <section class="section campuses-section">
   <div class="section-inner">
     <div class="section-heading"><div><span class="eyebrow">ONE HUB, THREE CAMPUSES</span><h2>Support that meets you where you are</h2><p>Choose your campus to see local contacts, events and support options.</p></div><a class="text-link" routerLink="/campus-selection">View all campuses <app-ui-icon name="arrow" /></a></div>
     <div class="campus-grid">
       @for (campus of campuses; track campus.id) {
-        <a class="campus-card" [routerLink]="['/campus-selection']" [style.--campus-accent]="campus.accent">
+        <a class="campus-card" [routerLink]="['/' + campus.slug]" [style.--campus-accent]="campus.accent">
           <div class="campus-card-top"><span class="campus-mark"><app-ui-icon name="home" /></span><app-badge tone="calm">{{ campus.physicalSupport && campus.virtualSupport ? 'Physical + virtual' : 'Campus support' }}</app-badge></div>
           <h3>{{ campus.name }}</h3>
           <p>{{ campus.description }}</p>
-          <div class="campus-meta"><span><app-ui-icon name="clock" /> Mon–Fri, 9–4</span><span><app-ui-icon name="chevron" /> Explore</span></div>
+          <div class="campus-meta">
+            <span><app-ui-icon name="clock" /> Mon–Fri, 9–4</span>
+            <a class="campus-dashboard-button" [routerLink]="['/' + campus.slug, 'dashboard']" [style.--campus-accent]="campus.accent">
+              Dashboard <app-ui-icon name="arrow" />
+            </a>
+          </div>
         </a>
       }
     </div>
@@ -72,8 +63,8 @@
 
 <section class="section closing-section">
   <div class="section-inner closing-inner">
-    <div><span class="eyebrow">YOUR WELLNESS JOURNEY</span><h2>Progress can be quiet, personal and entirely yours.</h2><p>Track non-clinical activities, return to calming exercises, and keep useful resources close—without turning wellbeing into a score.</p></div>
-    <a class="button button-primary button-large" routerLink="/student/wellness">Open my wellness journey <app-ui-icon name="arrow" /></a>
+    <div><span class="eyebrow">YOUR WELLNESS JOURNEY</span><h2>Progress can be quiet, personal and entirely yours.</h2><p>Track non-clinical activities and return to calming exercises without turning wellbeing into a score.</p></div>
+    <a class="button button-primary button-large" routerLink="/wellness-videos">Explore support videos <app-ui-icon name="arrow" /></a>
   </div>
 </section>
 

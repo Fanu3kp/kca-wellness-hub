@@ -1,10 +1,75 @@
 <section class="role-dashboard">
-  <div class="role-hero admin-hero"><div><span class="eyebrow light">SYSTEM ADMINISTRATION</span><h1>Keep the wellness hub safe and useful.</h1><p>Manage campuses, roles, content and aggregated reporting while keeping confidential counselling information out of unnecessary views.</p></div><app-badge tone="professional">Administrator</app-badge></div>
+  <div class="role-hero admin-hero">
+    <div>
+      <span class="eyebrow light">SYSTEM ADMINISTRATION</span>
+      <h1>Keep the wellness hub safe and useful.</h1>
+      <p>Manage campuses, roles, content and aggregated reporting while keeping confidential counselling information out of unnecessary views.</p>
+    </div>
+    <app-badge tone="professional">Administrator</app-badge>
+  </div>
+
   <div class="role-grid">
     <section class="role-main">
-      <div class="stat-grid"><app-card [compact]="true" *ngFor="let stat of stats"><span class="stat-icon" [ngClass]="stat.tone"><app-ui-icon [name]="stat.icon" /></span><div><strong>{{ stat.value }}</strong><small>{{ stat.label }}</small></div></app-card></div>
-      <div class="admin-grid"><section><div class="mini-heading"><div><span class="eyebrow">SYSTEM CONFIGURATION</span><h2>Manage the platform</h2></div></div><div class="admin-links"><a routerLink="/admin/users"><app-ui-icon name="users" /><span><strong>User management</strong><small>Students, peer counselors, staff and administrators</small></span><app-ui-icon name="arrow" /></a><a routerLink="/admin/campuses"><app-ui-icon name="home" /><span><strong>Campus management</strong><small>Profiles, locations and support availability</small></span><app-ui-icon name="arrow" /></a><a routerLink="/admin/social-links"><app-ui-icon name="website" /><span><strong>Social links</strong><small>Facebook, Instagram, TikTok, LinkedIn, X, YouTube, WhatsApp and website</small></span><app-ui-icon name="arrow" /></a><a routerLink="/admin/resources"><app-ui-icon name="book" /><span><strong>Wellness content</strong><small>Resources, events, announcements</small></span><app-ui-icon name="arrow" /></a><a routerLink="/admin/reports"><app-ui-icon name="chart" /><span><strong>Reports and audit logs</strong><small>Aggregated statistics and system activity</small></span><app-ui-icon name="arrow" /></a></div></section><section><div class="mini-heading"><div><span class="eyebrow">SAFETY FIRST</span><h2>Privacy controls</h2></div></div><app-alert tone="professional" icon="shield" title="Least-privilege access" message="Professional records are restricted to authorized Guidance &amp; Counselling staff. Administrators see configuration and aggregated data, not confidential counselling conversations." /><app-card [compact]="true" class="admin-check"><app-ui-icon name="check" /><div><strong>Role-based access controls</strong><p>Student, peer counselor, guidance staff and administrator permissions remain separate.</p></div></app-card><app-card [compact]="true" class="admin-check"><app-ui-icon name="check" /><div><strong>Secure data architecture</strong><p>Production data stays in the Laravel API and MySQL database with encryption and audit controls.</p></div></app-card></section></div>
+      <div class="stat-grid">
+        @for (stat of statCards(); track stat.label) {
+          <app-card [compact]="true">
+            <span class="stat-icon" [ngClass]="stat.tone"><app-ui-icon [name]="stat.icon" /></span>
+            <div><strong>{{ stat.value }}</strong><small>{{ stat.label }}</small></div>
+          </app-card>
+        }
+      </div>
+
+      <div class="admin-grid">
+        <section>
+          <div class="mini-heading">
+            <div><span class="eyebrow">SYSTEM CONFIGURATION</span><h2>Manage the platform</h2></div>
+          </div>
+          <div class="admin-links">
+            <a routerLink="/admin/users"><app-ui-icon name="users" /><span><strong>User management</strong><small>Students, peer counselors, staff and administrators</small></span><app-ui-icon name="arrow" /></a>
+            <a routerLink="/admin/campuses"><app-ui-icon name="home" /><span><strong>Campus management</strong><small>Profiles, locations and support availability</small></span><app-ui-icon name="arrow" /></a>
+            <a routerLink="/admin/social-links"><app-ui-icon name="website" /><span><strong>Social links</strong><small>Facebook, Instagram, TikTok, LinkedIn, X, YouTube, WhatsApp and website</small></span><app-ui-icon name="arrow" /></a>
+            <a routerLink="/admin/resources"><app-ui-icon name="book" /><span><strong>Wellness content</strong><small>Resources, events, announcements</small></span><app-ui-icon name="arrow" /></a>
+            <a routerLink="/admin/reports"><app-ui-icon name="chart" /><span><strong>Reports and audit logs</strong><small>Aggregated statistics and system activity</small></span><app-ui-icon name="arrow" /></a>
+          </div>
+        </section>
+        <section>
+          <div class="mini-heading">
+            <div><span class="eyebrow">SAFETY FIRST</span><h2>Privacy controls</h2></div>
+          </div>
+          <app-alert tone="professional" icon="shield" title="Least-privilege access" message="Professional records are restricted to authorized Guidance &amp; Counselling staff. Administrators see configuration and aggregated data, not confidential counselling conversations." />
+          <app-card [compact]="true" class="admin-check"><app-ui-icon name="check" /><div><strong>Role-based access controls</strong><p>Student, peer counselor, guidance staff and administrator permissions remain separate.</p></div></app-card>
+          <app-card [compact]="true" class="admin-check"><app-ui-icon name="check" /><div><strong>Secure data architecture</strong><p>Production data stays in the Laravel API and MySQL database.</p></div></app-card>
+        </section>
+      </div>
+
+      @if (campusBreakdown.length) {
+      <div class="admin-grid" style="margin-top: 1.5rem;">
+        <section>
+          <div class="mini-heading"><div><span class="eyebrow">STUDENTS BY CAMPUS</span><h2>Across all KCA campuses</h2></div></div>
+          <app-bar-chart [series]="campusBars()" [height]="22" [legend]="true" />
+        </section>
+        <section>
+          <div class="mini-heading"><div><span class="eyebrow">SUPPORT REQUEST STATUS</span><h2>Your campus breakdown</h2></div></div>
+          <app-pie-chart *ngIf="statusSegments().segments.length" [segments]="statusSegments().segments" [size]="160" />
+          <p *ngIf="!statusSegments().segments.length" class="chart-placeholder">No request data available.</p>
+        </section>
+      </div>
+      }
     </section>
-    <aside class="role-aside"><app-card [compact]="true"><h3>System health</h3><div class="health-row"><span>API connection</span><app-badge tone="calm">Ready</app-badge></div><div class="health-row"><span>Database</span><app-badge tone="calm">MySQL</app-badge></div><div class="health-row"><span>Realtime</span><app-badge tone="neutral">Reverb ready</app-badge></div><div class="health-row"><span>Mobile</span><app-badge tone="neutral">Capacitor ready</app-badge></div></app-card><app-card [compact]="true"><h3>Quick actions</h3><a class="button button-secondary button-block" routerLink="/admin/social-links">Social links <app-ui-icon name="arrow" /></a><a class="button button-primary button-block" routerLink="/admin/reports">View reports <app-ui-icon name="arrow" /></a></app-card></aside>
+
+    <aside class="role-aside">
+      <app-card [compact]="true">
+        <h3>System health</h3>
+        <div class="health-row"><span>API connection</span><app-badge tone="calm">Ready</app-badge></div>
+        <div class="health-row"><span>Database</span><app-badge tone="calm">MySQL</app-badge></div>
+        <div class="health-row"><span>Realtime</span><app-badge tone="neutral">Reverb ready</app-badge></div>
+        <div class="health-row"><span>Mobile</span><app-badge tone="neutral">Capacitor ready</app-badge></div>
+      </app-card>
+      <app-card [compact]="true">
+        <h3>Quick actions</h3>
+        <a class="button button-secondary button-block" routerLink="/admin/social-links">Social links <app-ui-icon name="arrow" /></a>
+        <a class="button button-primary button-block" routerLink="/admin/reports">View reports <app-ui-icon name="arrow" /></a>
+      </app-card>
+    </aside>
   </div>
 </section>

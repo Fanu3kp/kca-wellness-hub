@@ -26,6 +26,19 @@ class ConnectController extends Controller
             return response()->json(['message' => 'Cannot follow yourself.'], 422);
         }
 
+        if (! $follower->hasRole('admin')) {
+            $followerCampusId = $follower->profile?->campus_id;
+            $followedCampusId = $followed->profile?->campus_id;
+
+            if ($followerCampusId && $followedCampusId && (int) $followerCampusId !== (int) $followedCampusId) {
+                return response()->json(['message' => 'You can only connect with users on your own campus.'], 403);
+            }
+        }
+
+        if ($follower->id === $followed->id) {
+            return response()->json(['message' => 'Cannot follow yourself.'], 422);
+        }
+
         $exists = Connect::where('follower_id', $follower->id)
             ->where('followed_id', $followed->id)
             ->first();

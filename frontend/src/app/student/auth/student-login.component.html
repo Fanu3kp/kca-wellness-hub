@@ -1,0 +1,54 @@
+<section class="auth-page student-auth">
+  <div class="auth-card">
+    <div class="auth-heading">
+      <span class="eyebrow">STUDENT ACCESS</span>
+      <h1>Welcome back, student.</h1>
+      <p>Sign in to access peer support, wellbeing resources, and appointment booking.</p>
+    </div>
+    <form (ngSubmit)="submit()">
+      <label for="email">University email</label>
+      <input id="email" name="email" type="email" placeholder="you@student.kca.ac.ke" required [(ngModel)]="email" />
+
+      <label for="campus">Your campus</label>
+      <div class="campus-select-wrapper" (click)="campusSelectOpen = !campusSelectOpen">
+        <span>{{ campusService.getCampus(campusId)?.shortName ?? campusService.selectedCampus.shortName }} Campus</span>
+        <app-ui-icon name="chevron" />
+      </div>
+      @if (campusSelectOpen) {
+        <div class="campus-dropdown">
+          @for (campus of campusService.getCampuses(); track campus.id) {
+            <button
+              type="button"
+              class="campus-option"
+              [class.active]="campusId === campus.id"
+              (click)="selectCampus(campus.id)"
+            >
+              <span class="campus-name">{{ campus.shortName }}</span>
+              <small>{{ campus.location }}</small>
+            </button>
+          }
+        </div>
+      }
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" placeholder="Enter your password" required [(ngModel)]="password" />
+      <button class="auth-submit student-submit" type="submit" [disabled]="submitting">{{ submitting ? 'Opening your space...' : 'Continue securely' }}<app-ui-icon name="arrow" /></button>
+      @if (error) { <app-alert tone="urgent" icon="alert" title="Sign-in failed" message="{{ error }}" /> }
+    </form>
+    <app-alert tone="calm" icon="shield" title="Your privacy matters" message="Your credentials are checked against the secure KCA authentication service. Students are limited to their registered campus." />
+    <div class="auth-alternate">
+      <p class="auth-alternate-title">New to the hub?</p>
+      <div class="auth-alternate-list">
+        <a routerLink="/student/register">Create a student account</a>
+      </div>
+    </div>
+  </div>
+  <aside class="auth-aside student-aside">
+    <div class="aside-inner">
+      <span class="aside-mark"><app-ui-icon name="heart" /></span>
+      <h2>Your wellbeing journey starts here.</h2>
+      <p>Access peer counseling, professional support, wellness resources, and a safe space to connect.</p>
+      <div class="aside-quote">“You are not alone. Support is always available.”</div>
+    </div>
+  </aside>
+</section>

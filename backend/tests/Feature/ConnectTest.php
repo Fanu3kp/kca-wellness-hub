@@ -338,4 +338,27 @@ class ConnectTest extends TestCase
 
         $response->assertNotFound();
     }
+
+    public function test_user_cannot_connect_with_different_campus(): void
+    {
+        $campusA = \App\Models\Campus::create([
+            'name' => 'Campus A', 'code' => 'CAMP-A', 'location' => 'Location A', 'is_active' => true,
+        ]);
+        $campusB = \App\Models\Campus::create([
+            'name' => 'Campus B', 'code' => 'CAMP-B', 'location' => 'Location B', 'is_active' => true,
+        ]);
+
+        $actor = User::factory()->create(['is_active' => true]);
+        \App\Models\Profile::create(['user_id' => $actor->id, 'campus_id' => $campusA->id]);
+
+        $target = User::factory()->create(['is_active' => true]);
+        \App\Models\Profile::create(['user_id' => $target->id, 'campus_id' => $campusB->id]);
+
+        $token = $actor->createToken('test')->plainTextToken;
+
+        $response = $this->withToken($token)
+            ->postJson('/api/connects', ['followed_id' => $target->id]);
+
+        $response->assertForbidden();
+    }
 }

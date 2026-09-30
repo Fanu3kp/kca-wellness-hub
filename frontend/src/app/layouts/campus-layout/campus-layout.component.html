@@ -1,0 +1,23 @@
+<ng-container *ngIf="campus as campus; else fallback">
+  <header class="campus-header" [style.--campus-accent]="campus.accent">
+    <div class="campus-header-inner">
+      <a class="campus-brand" routerLink="/landing" aria-label="KCA University Wellness Hub">
+        <span class="campus-brand-text"><strong>KCA University</strong><small>Peer Counselling &amp; Wellness</small></span>
+      </a>
+      <nav class="campus-nav">
+        <a class="campus-nav-link" [class.active]="isActive('/' + campus.slug)" [routerLink]="'/' + campus.slug">Home</a>
+        <a class="campus-nav-link" [class.active]="isActive('/' + campus.slug + '/events')" [routerLink]="'/' + campus.slug + '/events'">Events</a>
+        <a class="campus-nav-link" [class.active]="isActive('/' + campus.slug + '/dashboard')" [routerLink]="'/' + campus.slug + '/dashboard'">Dashboard</a>
+        <a class="campus-nav-link" [class.active]="isActive('/' + campus.slug + '/contact')" [routerLink]="'/' + campus.slug + '/contact'">Contact</a>
+        <a class="campus-nav-link" [class.active]="isActive('/' + campus.slug + '/login')" [routerLink]="'/' + campus.slug + '/login'">Login</a>
+        <app-badge tone="calm">{{ campus.shortName }}</app-badge>
+      </nav>
+    </div>
+  </header>
+  <main class="campus-layout-outlet" [style.--campus-accent]="campus.accent">
+    <router-outlet />
+  </main>
+</ng-container>
+<ng-template #fallback>
+  <router-outlet />
+</ng-template>

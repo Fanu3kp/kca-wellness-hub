@@ -18,7 +18,7 @@ class MessagePolicy
             ->where('user_id', $user->id)
             ->whereNull('left_at')
             ->exists()
-            || $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'admin']);
+            || $user->hasAnyRole(['peer_counselor', 'guidance_staff', 'hod', 'admin']);
     }
 
     public function create(User $user): bool
@@ -29,13 +29,13 @@ class MessagePolicy
     public function update(User $user, Message $message): bool
     {
         return $message->sender_id === $user->id
-            || $user->hasAnyRole(['guidance_staff', 'admin']);
+            || $user->hasAnyRole(['guidance_staff', 'hod', 'admin']);
     }
 
     public function delete(User $user, Message $message): bool
     {
         return $message->sender_id === $user->id
-            || $user->hasAnyRole(['guidance_staff', 'admin']);
+            || $user->hasAnyRole(['guidance_staff', 'hod', 'admin']);
     }
 
     public function restore(User $user, Message $message): bool

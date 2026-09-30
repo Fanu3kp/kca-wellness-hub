@@ -630,7 +630,9 @@ npm run build
 - **Phone numbers** and **emergency contact phones** are encrypted at the model level (`Profile.php` casts).
 - **API tokens** are issued as plain-text Sanctum tokens and should be transmitted over HTTPS only.
 - **CORS** is restricted to configured origins only.
-- **Rate limiting** is applied to the API (60 requests/minute per IP) and login endpoint (throttle:login — 5 attempts per 60 seconds, 30-minute lockout after 5 failed attempts).
+- **Rate limiting** is applied to the API (60 requests/minute per IP), login endpoint (throttle:login — 10 attempts per 60 seconds, 15-minute lockout after 10 failed attempts), and contact form (10 requests/minute per IP).
+- **Email domain validation** restricts registration: student and peer_counselor roles require `@students.kcau.ac.ke` emails; guidance_staff, hod, and admin roles require non-student `@kcau.ac.ke` emails. Non-university emails are rejected.
+- **Duplicate email registration** now merges roles: an existing user can register for an additional role using the same email within the valid domain, rather than receiving a conflict error.
 - **Audit logging** records all authentication events, data mutations, and administrative actions with IP address and user agent.
 - **CSRF protection** is active for stateful API routes via `ValidateCsrfToken` middleware (Sanctum configuration).
 - **Cookies** are encrypted via `EncryptCookies` middleware.

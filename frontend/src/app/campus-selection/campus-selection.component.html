@@ -5,7 +5,12 @@
       <article class="campus-row" [class.selected]="(selectedCampus$ | async)?.id === campus.id" [style.--campus-accent]="campus.accent">
         <div class="campus-row-icon"><app-ui-icon name="home" /></div>
         <div class="campus-row-copy"><div class="campus-row-title"><h2>{{ campus.name }}</h2><app-badge tone="calm">{{ campus.physicalSupport && campus.virtualSupport ? 'Physical + virtual' : 'Campus support' }}</app-badge></div><p>{{ campus.description }}</p><div class="campus-details"><span><app-ui-icon name="compass" /> {{ campus.location }}</span><span><app-ui-icon name="clock" /> Mon–Fri, 9:00–16:00 EAT</span><span><app-ui-icon name="mail" /> {{ campus.email }}</span></div></div>
-        <button type="button" [class.selected]="(selectedCampus$ | async)?.id === campus.id" (click)="select(campus.id)">{{ (selectedCampus$ | async)?.id === campus.id ? 'Selected' : 'Choose campus' }} <app-ui-icon name="arrow" /></button>
+        <div class="action-buttons">
+          <button type="button" [class.selected]="(selectedCampus$ | async)?.id === campus.id" (click)="select(campus.id)">{{ (selectedCampus$ | async)?.id === campus.id ? 'Selected' : 'Choose campus' }} <app-ui-icon name="arrow" /></button>
+          <a class="dashboard-button" [routerLink]="['/' + campus.slug, 'dashboard']" [style.--campus-accent]="campus.accent" [attr.aria-label]="'Open ' + campus.name + ' dashboard'">
+            Dashboard <app-ui-icon name="arrow" />
+          </a>
+        </div>
       </article>
     }
   </div>

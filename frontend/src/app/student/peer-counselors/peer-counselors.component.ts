@@ -20,6 +20,7 @@ export class PeerCounselorsComponent implements OnInit {
   campus: Campus | null = null;
   search = '';
   supportArea = 'All';
+  availableOnly = false;
   supportAreas = ['All', 'Academic pressure', 'Relationships', 'Adjustment', 'Friendship', 'General wellbeing'];
   counselors = [
     { id: 'p1', name: 'Amina Mohamed', campus: 'Ruaraka Main', areas: ['Academic pressure', 'Adjustment'], available: true, virtual: true, initials: 'AM', bio: 'Second-year psychology student with 2 years of peer support training. Focused on academic stress and adjustment issues.', languages: ['English', 'Swahili'] },
@@ -37,6 +38,7 @@ export class PeerCounselorsComponent implements OnInit {
   ngOnInit(): void {
     this.campusId = this.route.snapshot.params['campusId'] ?? this.campusService.selectedCampus.id;
     this.campus = this.campusService.getCampus(this.campusId ?? '') ?? this.campusService.selectedCampus;
+    this.availableOnly = this.route.snapshot.queryParamMap.get('available') === 'true';
   }
 
   get filteredCounselors() {
@@ -45,7 +47,8 @@ export class PeerCounselorsComponent implements OnInit {
       const matchesSearch = !query || `${counselor.name} ${counselor.campus} ${counselor.areas.join(' ')}`.toLowerCase().includes(query);
       const matchesArea = this.supportArea === 'All' || counselor.areas.includes(this.supportArea);
       const matchesCampus = !this.campus || counselor.campus.toLowerCase() === this.campus.name.toLowerCase();
-      return matchesSearch && matchesArea && matchesCampus;
+      const matchesAvailability = !this.availableOnly || counselor.available;
+      return matchesSearch && matchesArea && matchesCampus && matchesAvailability;
     });
   }
 

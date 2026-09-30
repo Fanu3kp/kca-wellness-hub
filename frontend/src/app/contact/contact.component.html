@@ -1,0 +1,74 @@
+<section class="contact-page">
+  <div class="contact-hero">
+    <div>
+      <span class="eyebrow light">GET IN TOUCH</span>
+      <h1>Contact Us</h1>
+      <p>Ask a question, request information or tell the Wellness Hub team how we can support you.</p>
+    </div>
+    <app-badge tone="calm">We reply within 2 working days</app-badge>
+  </div>
+
+  <div class="contact-grid">
+    <app-card class="contact-form-card">
+      <div class="form-heading">
+        <div><span class="eyebrow">SEND A MESSAGE</span><h2>How can we help?</h2></div>
+        <app-ui-icon name="mail" />
+      </div>
+
+      @if (success) {
+        <app-alert tone="calm" icon="check" title="Message received" [message]="success" />
+      }
+      @if (error) {
+        <app-alert tone="urgent" icon="alert" title="Message not sent" [message]="error" />
+      }
+
+      <form (ngSubmit)="submitContact()">
+        <div class="form-grid">
+          <label class="field"><span>Your Full Name</span><input type="text" [(ngModel)]="fullName" name="fullName" placeholder="e.g. Jane Wanjiku" required /></label>
+          <label class="field"><span>Your Contact Email</span><input type="email" [(ngModel)]="contactEmail" name="contactEmail" placeholder="you@students.kcau.ac.ke" required /></label>
+        </div>
+        <label class="field"><span>Subject</span><input type="text" [(ngModel)]="subject" name="subject" placeholder="What is your message about?" required /></label>
+        <label class="field"><span>Your message <small>optional</small></span><textarea rows="6" [(ngModel)]="message" name="message" placeholder="Share a little more detail..."></textarea></label>
+        <button class="button button-primary submit-button" type="submit" [disabled]="submitting"><app-ui-icon name="send" /> {{ submitting ? 'Sending...' : 'Submit' }}</button>
+        <p class="form-note"><app-ui-icon name="shield" /> Your message is handled respectfully and shared only with the Wellness Hub team.</p>
+      </form>
+    </app-card>
+
+    <aside class="contact-side">
+      <app-card class="contact-details-card">
+        <div class="contact-details-heading"><span class="contact-icon"><app-ui-icon name="home" /></span><div><span class="eyebrow">WELLNESS HUB</span><h2>Visit or write to us</h2></div></div>
+        <div class="contact-detail"><app-ui-icon name="mail" /><div><strong>Email</strong><a href="mailto:wellness&#64;kca.ac.ke">wellness&#64;kca.ac.ke</a></div></div>
+        <div class="contact-detail"><app-ui-icon name="phone" /><div><strong>Phone</strong><a href="tel:+254711814000">+254 711 814 000</a></div></div>
+        <div class="contact-detail"><app-ui-icon name="clock" /><div><strong>Support hours</strong><span>Mon–Fri, 09:00–16:00 EAT</span></div></div>
+        <app-alert tone="professional" icon="shield" title="Private support" message="For urgent safety concerns, use Urgent Help instead of waiting for an email reply." />
+      </app-card>
+
+      <app-card class="map-card">
+        <div class="map-heading"><div><span class="eyebrow">CAMPUS MAP</span><h2>Find your nearest support point</h2></div><app-badge tone="peer">3 campuses</app-badge></div>
+        <div class="map-canvas" aria-label="Map of KCA University wellness support campuses">
+          <svg viewBox="0 0 700 430" role="img" aria-label="Stylized map showing Ruaraka Main, Town and Kitengela campuses">
+            <rect width="700" height="430" rx="18" fill="#e9f0ec" />
+            <path d="M0 315 C115 285 160 335 260 315 C365 294 400 350 505 326 C600 305 640 340 700 318 L700 430 L0 430 Z" fill="#c9e0d8" />
+            <path d="M0 75 C120 95 190 55 300 78 C405 100 470 55 700 88" fill="none" stroke="#f5f2e8" stroke-width="20" stroke-linecap="round" />
+            <path d="M85 0 C105 95 70 205 120 430" fill="none" stroke="#f5f2e8" stroke-width="16" stroke-linecap="round" />
+            <path d="M285 0 C270 110 330 225 300 430" fill="none" stroke="#f5f2e8" stroke-width="16" stroke-linecap="round" />
+            <path d="M500 0 C480 100 545 210 520 430" fill="none" stroke="#f5f2e8" stroke-width="16" stroke-linecap="round" />
+            <path d="M0 190 C150 165 250 210 390 185 C510 164 600 205 700 180" fill="none" stroke="#d8cfae" stroke-width="8" stroke-linecap="round" />
+            <path d="M150 0 C180 120 120 260 180 430" fill="none" stroke="#d8cfae" stroke-width="6" stroke-linecap="round" />
+            <path d="M620 0 C590 120 650 250 610 430" fill="none" stroke="#d8cfae" stroke-width="6" stroke-linecap="round" />
+            <text x="34" y="382" fill="#52635f" font-size="13" font-weight="700">KITENGELA ROAD</text>
+            <text x="350" y="48" fill="#52635f" font-size="13" font-weight="700">NAIROBI</text>
+            <text x="555" y="382" fill="#52635f" font-size="13" font-weight="700">KITENGELA</text>
+          </svg>
+          @for (marker of markers; track marker.campus.slug) {
+            <button type="button" class="map-marker" [class.selected]="selectedCampus.slug === marker.campus.slug" [style.left.%]="marker.x" [style.top.%]="marker.y" (click)="selectCampus(marker.campus)" [attr.aria-label]="'Show ' + marker.campus.name">
+              <span class="marker-pin"><app-ui-icon name="home" /></span>
+              <span class="marker-label">{{ marker.campus.shortName }}</span>
+            </button>
+          }
+        </div>
+        <div class="map-details"><span class="map-details-icon" [style.background]="selectedCampus.accent + '20'"><app-ui-icon name="compass" /></span><div><strong>{{ selectedCampus.name }}</strong><span>{{ selectedCampus.location }} · {{ selectedCampus.physicalSupport && selectedCampus.virtualSupport ? 'Physical + virtual support' : 'Campus support' }}</span></div><a [routerLink]="['/campuses', selectedCampus.id]" aria-label="Open campus details"><app-ui-icon name="arrow" /></a></div>
+      </app-card>
+    </aside>
+  </div>
+</section>
